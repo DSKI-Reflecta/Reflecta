@@ -2,9 +2,16 @@ import React from "react";
 import { BookOpen, Calendar, CheckSquare, BarChart } from "lucide-react";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
+  const navItems = [
+    { id: "journal", icon: BookOpen, label: "Journal" },
+    { id: "goals", icon: CheckSquare, label: "Goals" },
+    { id: "calendar", icon: Calendar, label: "Calendar" },
+    { id: "analytics", icon: BarChart, label: "Analytics" },
+  ];
+
   return (
-    <div className="w-16 md:w-64 bg-white border-r border-gray-200 flex flex-col">
-      <div className="px-4 py-[0.37rem] border-b border-gray-200 flex items-center justify-center md:justify-start">
+    <div className="w-16 md:w-64 bg-gray-50 flex flex-col">
+      <div className="px-4 py-5 flex items-center justify-center md:justify-start">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 200 60"
@@ -59,64 +66,31 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           <text
             x="60"
             y="38"
-            fontFamily="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-            fontWeight="600"
+            fontFamily="'DM Serif Display', serif"
+            fontWeight="400"
             fontSize="24"
-            fill="#333333"
+            fill="#171717"
           >
             Reflecta
           </text>
         </svg>
       </div>
 
-      <nav className="flex-1 pt-2">
-        <button
-          onClick={() => setActiveTab("journal")}
-          className={`flex items-center w-full p-3 ${
-            activeTab === "journal"
-              ? "bg-blue-50 text-blue-600"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          <BookOpen className="h-5 w-5 mx-auto md:ml-2 md:mr-3" />
-          <span className="hidden md:inline">Journal</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("goals")}
-          className={`flex items-center w-full p-3 ${
-            activeTab === "goals"
-              ? "bg-blue-50 text-blue-600"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          <CheckSquare className="h-5 w-5 mx-auto md:ml-2 md:mr-3" />
-          <span className="hidden md:inline">Goals</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("calendar")}
-          className={`flex items-center w-full p-3 ${
-            activeTab === "calendar"
-              ? "bg-blue-50 text-blue-600"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          <Calendar className="h-5 w-5 mx-auto md:ml-2 md:mr-3" />
-          <span className="hidden md:inline">Calendar</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("analytics")}
-          className={`flex items-center w-full p-3 ${
-            activeTab === "analytics"
-              ? "bg-blue-50 text-blue-600"
-              : "hover:bg-gray-100"
-          }`}
-        >
-          <BarChart className="h-5 w-5 mx-auto md:ml-2 md:mr-3" />
-          <span className="hidden md:inline">Analytics</span>
-        </button>
+      <nav className="flex-1 pt-4 px-2">
+        {navItems.map(({ id, icon: Icon, label }) => (
+          <button
+            key={id}
+            onClick={() => setActiveTab(id)}
+            className={`flex items-center w-full p-3 mb-1 rounded-xl transition-all duration-150 ${
+              activeTab === id
+                ? "bg-purple-100 text-purple-700 font-medium"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            }`}
+          >
+            <Icon className="h-5 w-5 mx-auto md:mx-0 md:mr-3" />
+            <span className="hidden md:inline text-sm">{label}</span>
+          </button>
+        ))}
       </nav>
     </div>
   );

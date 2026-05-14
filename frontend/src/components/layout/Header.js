@@ -1,13 +1,17 @@
 import React from "react";
 
 const Header = ({ activeTab }) => {
+  const titles = {
+    journal: "My Journal",
+    goals: "My Goals",
+    calendar: "Calendar",
+    analytics: "Analytics",
+  };
+
   return (
-    <header className="bg-white border-b border-gray-200 flex items-center justify-between p-4">
-      <h2 className="text-xl font-semibold">
-        {activeTab === "journal" && "My Journal"}
-        {activeTab === "goals" && "My Goals"}
-        {activeTab === "calendar" && "Journal Calendar"}
-        {activeTab === "analytics" && "Analytics Overview"}
+    <header className="flex items-center px-8 py-6">
+      <h2 className="text-2xl font-display text-gray-900">
+        {titles[activeTab]}
       </h2>
     </header>
   );

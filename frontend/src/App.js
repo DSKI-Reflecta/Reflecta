@@ -17,7 +17,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex h-screen bg-gray-50 text-gray-800">
+      <div className="flex h-screen bg-white text-gray-900">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -25,7 +25,7 @@ function App() {
 
           <main className="flex-1 flex overflow-hidden">
             <div
-              className={`flex-1 overflow-y-auto p-6 ${
+              className={`flex-1 overflow-y-auto p-8 ${
                 showAIChat ? "md:pr-4" : ""
               }`}
             >
@@ -36,9 +36,8 @@ function App() {
             </div>
 
             {showAIChat && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
                 <div className="relative">
-                  {" "}
                   <AIChat onClose={() => setShowAIChat(false)} />
                 </div>
               </div>
@@ -46,7 +45,7 @@ function App() {
           </main>
 
           <div className="fixed bottom-6 right-6 z-40">
-            <FloatingAIButton onClick={() => setShowAIChat(!showAIChat)} />{" "}
+            <FloatingAIButton onClick={() => setShowAIChat(!showAIChat)} />
           </div>
         </div>
       </div>
