@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -9,8 +8,6 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  ScatterChart,
-  Scatter,
   ComposedChart,
   Legend,
 } from "recharts";
@@ -19,7 +16,6 @@ import {
   Target,
   FileText,
   Moon,
-  AlertCircle,
   Smile,
   Users,
   TrendingUp,
@@ -278,7 +274,6 @@ const AnalyticsDashboard = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                   <XAxis dataKey="date" stroke="#64748b" />
                   <YAxis domain={[1, 5]} stroke="#64748b" />
-                  <Tooltip content={<CustomTooltip />} />
                   {visibleTrends.sleep && (
                     <Line
                       type="monotone"
@@ -399,13 +394,17 @@ const AnalyticsDashboard = () => {
                       <ComposedChart data={value.data}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                         <XAxis dataKey="date" stroke="#64748b" />
-                        <YAxis yAxisId="left" stroke="#8884d8" />
+                        <YAxis
+                          yAxisId="left"
+                          stroke="#8884d8"
+                          allowDecimals={false}
+                        />
                         <YAxis
                           yAxisId="right"
                           orientation="right"
-                          stroke="#82ca9d"
+                          stroke="#ff7300"
+                          allowDecimals={false}
                         />
-                        <Tooltip />
                         <Legend />
                         <Bar
                           yAxisId="left"
@@ -413,6 +412,7 @@ const AnalyticsDashboard = () => {
                           barSize={20}
                           fill="#413ea0"
                           name={value.x_label}
+                          label={false}
                         />
                         <Line
                           yAxisId="right"
@@ -420,6 +420,8 @@ const AnalyticsDashboard = () => {
                           dataKey="y_avg"
                           stroke="#ff7300"
                           name={value.y_label}
+                          label={false}
+                          dot={false}
                         />
                       </ComposedChart>
                     </ResponsiveContainer>

@@ -101,7 +101,8 @@ class AnalyticsService:
             Dict[str, Any]: Dictionary containing the 2 strongest correlations with their data points.
         """
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-        entries = get_journal_entries(self.db, from_date=cutoff_date)
+        entries = sorted(get_journal_entries(
+            self.db, from_date=cutoff_date), key=lambda x: x.date)
 
         # Create aligned data (same entries for all metrics)
         aligned_data = []
