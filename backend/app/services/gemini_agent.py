@@ -122,13 +122,33 @@ def extract_goals(content: str, goals: str) -> str:
     """Extract goals from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
-        contents=f"""This is a journal entry. \n{content}\n.
-        Here is the list of goals (each with an ID, title and description):
-        \n{goals}\n
-        Based on the entry, list the relevant goal IDs as a
-        comma-separated list of numbers.
-        Do not include any list formatting, quotes, or explanations.
-        Example output: 1, 3, 5"""
+        contents=f"""You are a goal-matching assistant.
+
+Journal entry:
+{content}
+
+Here is a list of goals with their IDs, titles, and descriptions:
+{goals}
+
+Your task is to return a comma-separated list of IDs of goals that the journal entry shows **clear and positive progress** toward.
+
+⚠️ Important rules:
+- Do NOT include a goal if the journal entry expresses **doubt, failure, uncertainty, or opposite behavior**.
+- Do NOT include a goal just because the topic is mentioned.
+- If the entry says: "I didn’t sleep well", "I probably didn’t get enough sleep", or "My sleep was bad", then do **NOT** assign the goal "Get enough sleep".
+- Only assign goals if the journal clearly shows effort or success related to the goal.
+
+Examples:
+- Entry: "I didn’t sleep enough." → No goals matched.
+- Entry: "I probably didn’t sleep enough." → No goals matched.
+- Entry: "I slept well and feel rested." → Match goal: "Get enough sleep".
+- Entry: "I went to the gym." → Match goal: "Exercise regularly".
+
+Format:
+Return only the IDs of matching goals as a comma-separated list. Do not include any text, quotes, or formatting.
+
+Example output: 1, 3, 5
+""",
     )
     # Convert the response text to a list of integers
     try:
