@@ -18,6 +18,7 @@ def get_journal_entries(
     skip: int = 0,
     limit: int = 100,
     from_date: Optional[datetime] = None,
+    to_date: Optional[datetime] = None,
 ) -> List[JournalEntryModel]:
     """
     Retrieves a list of journal entries with optional filtering and pagination.
@@ -27,6 +28,7 @@ def get_journal_entries(
         skip (int): The number of entries to skip (for pagination).
         limit (int): The maximum number of entries to return (for pagination).
         from_date (Optional[datetime]): If provided, only entries on or after this date will be returned.
+        to_date (Optional[datetime]): If provided, only entries on or before this date will be returned.
 
     Returns:
         List[JournalEntryModel]: A list of journal entry SQLAlchemy models.
@@ -35,6 +37,8 @@ def get_journal_entries(
 
     if from_date:
         query = query.filter(JournalEntryModel.date >= from_date)
+    if to_date:
+        query = query.filter(JournalEntryModel.date <= to_date)
 
     return query.order_by(
         JournalEntryModel.date.desc(),

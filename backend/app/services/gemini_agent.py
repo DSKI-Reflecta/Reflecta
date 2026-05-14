@@ -393,6 +393,47 @@ Output: "Embark on a journey to master a new skill that aligns with your persona
     return response.parsed.text.strip()
 
 
+def summarize_journal_entries(entries: str) -> str:
+    """
+    Generates an in-depth summary of a list of journal entries.
+
+    Args:
+        entries (str): A string containing the user's recent journal entries.
+
+    Returns:
+        str: A detailed summary of the journal entries.
+    """
+    response = genai_client.models.generate_content(
+        model=model,
+        contents=f"""You are a thoughtful journaling assistant.
+
+Your job is to analyze the user's recent journal entries and return an in-depth summary that captures the emotional patterns, recurring thoughts, key themes, and significant moments in their reflections.
+
+Here are the journal entries:
+{entries}
+
+Write a multi-paragraph summary that:
+- Opens with a natural sentence like "You talked a lot about..." or "Over the past entries, you reflected deeply on..."
+- Describes recurring topics and themes in depth
+- Identifies emotional patterns (e.g., increasing stress, hopefulness, confusion, motivation)
+- Mentions any important or transformative experiences
+- Uses a reflective, human tone — not clinical or robotic
+- Avoids generic summaries; make it feel like you're truly "listening"
+
+Format:
+- Return ONLY a JSON object with this structure:
+  {{ "summary": "<your detailed summary text here>" }}
+
+Do NOT include any introductory explanations or additional metadata.
+""",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": FormattedText,
+        },
+    )
+    return response.parsed.text.strip()
+
+
 def analyze_entry(content: str, goals: str) -> tuple:
     """
     Analyzes the journal entry content using concurrent tasks to extract formatted content,

@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.db.crud.journal import get_journal_entries
 from app.models.analytics import TsTrends, Averages
+from app.services.gemini_agent import summarize_journal_entries
 
 
 router = APIRouter(
@@ -137,21 +138,30 @@ def get_weekly_patterns(
 @router.get("/summary/")
 def generate_summary(
     db: Session = Depends(get_db),
-    past_days: int = Query(
-        7, ge=1, description="Number of past days to consider for summary generation.")
+    from_date: Optional[datetime] = None,
+    to_date: Optional[datetime] = None,
 ):
     """
-    Placeholder endpoint to generate a summary of journal entries.
+    Generates a summary of journal entries for a specified period.
 
     Args:
         db (Session): The database session dependency.
-        past_days (int): The number of past days to consider for the summary.
+        from_date (Optional[datetime]): The start date of the period.
+        to_date (Optional[datetime]): The end date of the period.
 
     Returns:
-        None: Currently returns None. Implement actual summary generation logic here.
+        dict: A dictionary containing the summary.
     """
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-    get_journal_entries(db, from_date=cutoff_date)
+    if from_date is None:
+        from_date = datetime.now(timezone.utc) - timedelta(days=7)
+    if to_date is None:
+        to_date = datetime.now(timezone.utc)
 
-    # Generate summary
-    return {"message": "Summary generation not yet implemented."}
+    entries = get_journal_entries(db, from_date=from_date, to_date=to_date)
+    if not entries:
+        return {"summary": "No journal entries found for the specified period."}
+
+    entry_content = "\n".join([entry.content for entry in entries])
+    summary = summarize_journal_entries(entry_content)
+
+    return {"summary": summary}

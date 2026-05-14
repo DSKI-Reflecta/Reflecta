@@ -58,4 +58,4 @@ def read_root() -> dict:
     Returns:
         dict: A welcome message.
     """
-    return {"message": "Welcome to the Reflecta API"}
+    return {"message": "Welcome to the Reflecta API!"}
