@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { clientsClaim } from 'workbox-core';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
