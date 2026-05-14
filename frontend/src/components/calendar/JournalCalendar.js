@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
+import React, { useState} from 'react'; // Import useState and useEffect
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // Import icons for navigation
 
 // Accept journalEntries and goals as props
