@@ -3,10 +3,8 @@ API routes for managing goals, including CRUD operations
 and AI-driven recommendations.
 """
 
-from typing import List, Optional
-
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -19,19 +17,12 @@ from app.db.crud.goal import (
 )
 from app.db.crud.journal import get_journal_entries
 from app.models.entry_goal import GoalCreate, Goal, GoalUpdate
+from app.models.chat_agent import EnhanceDescriptionRequest
 from app.services.gemini_agent import (
     recommend_goals,
     RecommendedGoal,
     enhance_goal_description,
 )
-
-
-class EnhanceDescriptionRequest(BaseModel):
-    """
-    Request model for enhancing a goal description.
-    """
-    title: str
-    description: Optional[str] = None
 
 
 router = APIRouter(

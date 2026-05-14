@@ -7,7 +7,7 @@ import os
 
 from dotenv import load_dotenv
 from google import genai
-from pydantic import BaseModel, Field
+from app.models.chat_agent import ChatResponse
 
 
 # Load environment variables
@@ -16,20 +16,6 @@ api_key = os.getenv("GEMINI_API_KEY")
 # Initialize Gemini client
 genai_client = genai.Client(api_key=api_key)
 model = "gemini-2.0-flash"
-
-
-class Answer(BaseModel):
-    """
-    Pydantic model for the chatbot's response.
-    """
-    text: str = Field(..., description="The response text from the chatbot")
-
-
-class Request(BaseModel):
-    """
-    Pydantic model for the user's request to the chatbot.
-    """
-    message: str = Field(..., description="The user message to the chatbot")
 
 
 SYSTEM_PROMPT = """
@@ -63,7 +49,7 @@ def get_chatbot_response(user_message: str) -> str:
         model=model,
         config={"system_instruction": SYSTEM_PROMPT,
                 "response_mime_type": "application/json",
-                "response_schema": Answer},
+                "response_schema": ChatResponse},
         contents=user_message,
     )
     return chat_message.parsed.text.strip()

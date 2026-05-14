@@ -3,44 +3,16 @@ API routes for AI chatbot interactions and journal question generation.
 """
 
 from fastapi import APIRouter
-from pydantic import BaseModel
 
 from app.services.gemini_chatbot import get_chatbot_response
 from app.services.gemini_agent import generate_journal_question
+from app.models.chat_agent import ChatRequest, ChatResponse, JournalQuestionRequest, JournalQuestionResponse
 
 
 router = APIRouter(
     prefix="/ai",
     tags=["ai"]
 )
-
-
-class ChatRequest(BaseModel):
-    """
-    Request model for chatbot interaction.
-    """
-    message: str
-
-
-class ChatResponse(BaseModel):
-    """
-    Response model for chatbot interaction.
-    """
-    response: str
-
-
-class JournalQuestionRequest(BaseModel):
-    """
-    Request model for generating a journal question.
-    """
-    content: str
-
-
-class JournalQuestionResponse(BaseModel):
-    """
-    Response model for a generated journal question.
-    """
-    question: str
 
 
 @router.post("/chat/", response_model=ChatResponse)
@@ -56,7 +28,7 @@ async def chat_with_assistant(request: ChatRequest):
     """
     user_message = request.message
     chatbot_response = get_chatbot_response(user_message)
-    return ChatResponse(response=chatbot_response)
+    return ChatResponse(text=chatbot_response)
 
 
 @router.post("/journal-question/", response_model=JournalQuestionResponse)

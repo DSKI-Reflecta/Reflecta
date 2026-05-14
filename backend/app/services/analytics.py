@@ -4,7 +4,6 @@ Analytics service for calculating journal entry metrics and patterns.
 
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
-from collections import defaultdict
 import json
 
 import numpy as np
@@ -271,9 +270,7 @@ class AnalyticsService:
         current_date = datetime.now(timezone.utc).date()
         streak = 0
 
-        # Check each day backwards from today
         while True:
-            # Get entries for this specific date
             entries = get_journal_entries(
                 self.db,
                 from_date=datetime.combine(

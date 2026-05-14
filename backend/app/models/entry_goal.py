@@ -82,7 +82,6 @@ class GoalBase(BaseModel):
 class GoalCreate(GoalBase):
     """Model for creating a new Goal.
     Inherits all fields from GoalBase."""
-    pass
 
 
 class GoalUpdate(BaseModel):

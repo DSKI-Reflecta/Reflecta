@@ -3,35 +3,21 @@ API routes for retrieving and analyzing journal entry analytics.
 """
 
 from datetime import datetime, timedelta
-from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
 from app.models.analytics import TsTrends, Averages
 from app.services.analytics import AnalyticsService
 from app.services.gemini_agent import summarize_journal_entries
+from app.utils.analytics import parse_period_to_days
 
 
 router = APIRouter(
     prefix="/analytics",
     tags=["analytics"]
 )
-
-
-def _parse_period_to_days(period: str) -> int:
-    """Converts a period string (e.g., '7days') to an integer of days."""
-    if period.endswith("days"):
-        return int(period.replace("days", ""))
-    elif period.endswith("months"):
-        return int(period.replace("months", "")) * 30
-    elif period.endswith("years"):
-        return int(period.replace("years", "")) * 365
-    try:
-        return int(period)
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid period format.")
 
 
 @router.get("/trends/", response_model=TsTrends)
@@ -46,7 +32,7 @@ def get_trends(
     Retrieves time series data for sentiment, sleep, stress, and social
     engagement from journal entries over a specified period.
     """
-    past_days = _parse_period_to_days(period)
+    past_days = parse_period_to_days(period)
     analytics_service = AnalyticsService(db)
     return analytics_service.calculate_trends(past_days)
 
@@ -63,7 +49,7 @@ def get_stats(
     Calculates and retrieves average values for key metrics over a
     specified period.
     """
-    past_days = _parse_period_to_days(period)
+    past_days = parse_period_to_days(period)
     analytics_service = AnalyticsService(db)
     return analytics_service.calculate_averages(past_days)
 
@@ -79,7 +65,7 @@ def get_correlations(
     """
     Calculates and retrieves correlations between state tracking fields.
     """
-    past_days = _parse_period_to_days(period)
+    past_days = parse_period_to_days(period)
     analytics_service = AnalyticsService(db)
     return analytics_service.calculate_correlations(past_days)
 
@@ -95,7 +81,7 @@ def generate_summary(
     """
     Generates a summary of journal entries for a specified period.
     """
-    past_days = _parse_period_to_days(period)
+    past_days = parse_period_to_days(period)
     to_date = datetime.now()
     from_date = to_date - timedelta(days=past_days)
 
