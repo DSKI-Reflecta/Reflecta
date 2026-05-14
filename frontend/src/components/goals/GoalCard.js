@@ -36,14 +36,14 @@ const GoalCard = ({ goal, onEdit, onDelete, onClick }) => {
 
   return (
     <div
-      className="bg-white rounded-lg shadow p-2 hover:shadow-md transition-shadow flex flex-col h-40 cursor-pointer"
+      className="bg-white rounded-2xl shadow-sm p-4 hover:shadow-md transition-all duration-200 flex flex-col h-40 cursor-pointer"
       onClick={() => onClick(goal)}
     >
       <div className="flex justify-between items-start mb-1">
         <div className="overflow-hidden">
           <div className="flex items-center text-xs text-gray-500 mb-1 space-x-2">
             {goal.category && (
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 truncate max-w-24">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-purple-50 text-purple-700 truncate max-w-24">
                 <Tag className="h-4 w-4 mr-1" /> {goal.category}
               </span>
             )}
@@ -87,7 +87,7 @@ const GoalCard = ({ goal, onEdit, onDelete, onClick }) => {
         <div className="mt-auto">
           <div className="w-full bg-gray-200 rounded-full h-1.5">
             <div
-              className="bg-green-500 h-1.5 rounded-full"
+              className="bg-purple-500 h-1.5 rounded-full"
               style={{ width: `${goal.progress}%` }}
             ></div>
           </div>

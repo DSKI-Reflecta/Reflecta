@@ -150,7 +150,7 @@ const GoalsPage = () => {
           </button>
           <button
             onClick={() => openAddGoalModal()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="px-5 py-2.5 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 active:scale-[0.98] transition-all duration-150"
           >
             New Goal
           </button>

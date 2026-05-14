@@ -291,13 +291,13 @@ const JournalCalendar = ({
                            ? ""
                            : "text-gray-400 bg-gray-50"
                        }
-                       ${dayInfo.isToday ? "border-blue-500 border-2" : ""}
+                       ${dayInfo.isToday ? "ring-2 ring-purple-500" : ""}
                        hover:bg-gray-100 transition-colors duration-100`}
           >
             <div className="flex justify-between items-center mb-1">
               <span
                 className={`font-medium ${
-                  dayInfo.isToday ? "text-blue-600" : "text-gray-900"
+                  dayInfo.isToday ? "text-purple-600" : "text-gray-900"
                 }`}
               >
                 {dayInfo.day}
@@ -315,7 +315,7 @@ const JournalCalendar = ({
               {getLimitedItems(dayInfo.entries).map((entry) => (
                 <div
                   key={`entry-${entry.id}`}
-                  className="bg-blue-100 text-blue-800 text-xs p-1 rounded truncate cursor-pointer hover:bg-blue-200"
+                  className="bg-purple-50 text-purple-700 text-xs p-1 rounded truncate cursor-pointer hover:bg-purple-100"
                   title={entry.title}
                   onClick={() => onEntryClick(entry)}
                 >

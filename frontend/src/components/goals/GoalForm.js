@@ -155,7 +155,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
           value={goal.title}
           onChange={handleChange}
           placeholder="What do you want to achieve?"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-xl border-0 bg-gray-50 px-4 py-2.5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-purple-500 transition-all duration-150"
           required
         />
       </div>
@@ -172,7 +172,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
               value="One-time"
               checked={goal.type === "One-time"}
               onChange={handleChange}
-              className="form-radio text-blue-600"
+              className="form-radio text-purple-600"
             />
             <span className="ml-2 text-gray-700">One-time</span>
           </label>
@@ -183,7 +183,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
               value="Recurring"
               checked={goal.type === "Recurring"}
               onChange={handleChange}
-              className="form-radio text-blue-600"
+              className="form-radio text-purple-600"
             />
             <span className="ml-2 text-gray-700">Recurring</span>
           </label>
@@ -204,7 +204,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
           value={goal.category}
           onChange={handleChange}
           placeholder="e.g., Health, Career, Personal"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-xl border-0 bg-gray-50 px-4 py-2.5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-purple-500 transition-all duration-150"
           required
         />
       </div>
@@ -225,7 +225,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
           value={goal.targetDate}
           onChange={handleChange}
           disabled={goal.type === "Recurring"}
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${
+          className={`mt-1 block w-full rounded-xl border-0 bg-gray-50 px-4 py-2.5 text-gray-900 ring-1 ring-inset ring-gray-200 focus:bg-white focus:ring-2 focus:ring-purple-500 transition-all duration-150 ${
             goal.type === "Recurring" ? "bg-gray-100 cursor-not-allowed" : ""
           }`}
         />
@@ -245,7 +245,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
           onChange={handleChange}
           rows="3"
           placeholder="Add details about your goal..."
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          className="mt-1 block w-full rounded-xl border-0 bg-gray-50 px-4 py-2.5 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-purple-500 transition-all duration-150"
         ></textarea>
         <button
           type="button"
