@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
 from enum import Enum, IntEnum
-
+from datetime import date as date_type # Import date type with an alias
 
 class SentimentLevel(IntEnum):
     VERY_NEGATIVE = 1
@@ -37,6 +37,10 @@ class SocialEngagement(IntEnum):
 
 
 class JournalEntryBase(BaseModel):
+    # Added title and date to the base model
+    title: str = Field(..., description="The title of the journal entry")
+    date: date_type = Field(..., description="The date of the journal entry") # Use the alias date_type
+
     content: str = Field(..., description="The main content of the journal entry")
     sentiment_level: Optional[SentimentLevel] = None
     sleep_quality: Optional[SleepQuality] = None
@@ -45,10 +49,15 @@ class JournalEntryBase(BaseModel):
 
 
 class JournalEntryCreate(JournalEntryBase):
+    # JournalEntryCreate inherits title and date from JournalEntryBase
     pass
 
 
 class JournalEntryUpdate(BaseModel):
+    # Allow optional update for all base fields including title and date
+    title: Optional[str] = None
+    date: Optional[date_type] = None # Use the alias date_type and make it Optional
+
     content: Optional[str] = None
     sentiment_level: Optional[SentimentLevel] = None
     sleep_quality: Optional[SleepQuality] = None
@@ -57,15 +66,17 @@ class JournalEntryUpdate(BaseModel):
 
 
 class JournalEntry(JournalEntryBase):
+    # JournalEntry includes all fields from base, plus backend-managed fields
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
 
     # AI-generated analysis fields
     formatted_content: Optional[str] = None
+    # Activities and keywords are lists in the Pydantic model
     activities: Optional[list[str]] = None
     sentiment_analysis: Optional[str] = None
     keywords: Optional[list[str]] = None
 
     class Config:
-        from_attributes = True
+        from_attributes = True # Use from_attributes instead of orm_mode for Pydantic V2+

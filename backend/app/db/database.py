@@ -1,9 +1,10 @@
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Enum, Float
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Enum, Float, Date # Import Date
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from datetime import datetime, timezone
-from ..models.entry import SentimentLevel, SleepQuality, StressLevel, SocialEngagement
+# Import the enums if needed for column types, although Integer is used below
+# from ..models.entry import SentimentLevel, SleepQuality, StressLevel, SocialEngagement
 
 # Get the directory of the current file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -20,11 +21,15 @@ class JournalEntryModel(Base):
     __tablename__ = "journal_entries"
 
     id = Column(Integer, primary_key=True, index=True)
+    # Added title and date columns
+    title = Column(String, nullable=False) # Store title as String
+    date = Column(Date, nullable=False)   # Store date as Date type
+
     content = Column(Text, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, nullable=True)
 
-    # State tracking fields
+    # State tracking fields (stored as Integer as per your model)
     sentiment_level = Column(Integer, nullable=True)
     sleep_quality = Column(Integer, nullable=True)
     stress_level = Column(Integer, nullable=True)
@@ -39,7 +44,11 @@ class JournalEntryModel(Base):
 
 # Create the database tables
 def create_tables():
+    # This will create the new columns if the table doesn't exist.
+    # If the table already exists, you'll need to handle schema migrations (e.g., using Alembic).
+    print("Creating database tables...")
     Base.metadata.create_all(bind=engine)
+    print("Tables created.")
 
 
 # Dependency to get the database session
