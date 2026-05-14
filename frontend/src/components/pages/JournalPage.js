@@ -12,155 +12,170 @@ import {
     deleteJournalEntry
 } from '../../api/api';
 
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+
+
 const JournalPage = () => {
   const [showEntryFormModal, setShowEntryFormModal] = useState(false); // Renamed form modal state
   const [showEntryDetailModal, setShowEntryDetailModal] = useState(false); // New state for detail modal
   const [editingEntry, setEditingEntry] = useState(null);
   const [selectedEntry, setSelectedEntry] = useState(null); // New state for the selected entry for detail view
-  const [allEntries, setAllEntries] = useState([]); // State to hold ALL journal entries fetched from API
-  const [filteredEntries, setFilteredEntries] = useState([]); // State to hold filtered entries for display
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
 
   // State for search and filter criteria
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  // Removed the state for showAdvancedFilters
+
+  // State for local error handling (for mutations) - Corrected destructuring
+  const [error, setError] = useState(null);
 
 
-  // --- Data Fetching ---
+  // Get QueryClient instance
+  const queryClient = useQueryClient();
 
-  // Fetch entries from the backend using the API service
-  const loadEntries = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const fetchedEntries = await fetchJournalEntries();
-      setAllEntries(fetchedEntries); // Store all fetched entries
-      // Do NOT set filteredEntries here initially, useEffect will handle the initial filter
-    } catch (error) {
-      console.error("Error loading entries:", error);
-      setError("Failed to load journal entries.");
-      setAllEntries([]); // Ensure state is empty on error
-    } finally {
-      setLoading(false);
-    }
-  };
+  // --- Data Fetching with useQuery ---
+  const { data: allEntries, isLoading, isError, error: fetchError } = useQuery({ // Renamed error from useQuery to fetchError
+      queryKey: ['journalEntries'], // Unique key for this query
+      queryFn: fetchJournalEntries, // Function to fetch data
+      staleTime: 5 * 60 * 1000, // Data is considered fresh for 5 minutes
+      // initialData: [] // Optional: provide initial data if available
+  });
 
-  // --- Filtering Logic ---
+
+  // --- Filtering Logic (applied to fetched data) ---
+  const [filteredEntries, setFilteredEntries] = useState([]);
 
   useEffect(() => {
-    const filterEntries = () => {
-      let updatedFilteredEntries = allEntries;
+    if (!allEntries) {
+        setFilteredEntries([]); // Handle case where allEntries is not yet loaded
+        return;
+    }
 
-      // Filter by search term (title)
-      if (searchTerm) {
-        updatedFilteredEntries = updatedFilteredEntries.filter(entry =>
-          entry.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+    let updatedFilteredEntries = allEntries;
 
-      // Filter by date range
-      if (startDate || endDate) {
-        updatedFilteredEntries = updatedFilteredEntries.filter(entry => {
-          const entryDate = new Date(entry.date);
-          let isWithinRange = true;
+    // Filter by search term (title)
+    if (searchTerm) {
+      updatedFilteredEntries = updatedFilteredEntries.filter(entry =>
+        entry.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-          if (startDate) {
-            const start = new Date(startDate);
-            // Set time to start of day for accurate comparison
-            start.setHours(0, 0, 0, 0);
-            if (entryDate < start) {
-              isWithinRange = false;
-            }
+    // Filter by date range
+    if (startDate || endDate) {
+      updatedFilteredEntries = updatedFilteredEntries.filter(entry => {
+        const entryDate = new Date(entry.date);
+        let isWithinRange = true;
+
+        if (startDate) {
+          const start = new Date(startDate);
+          // Set time to start of day for accurate comparison
+          start.setHours(0, 0, 0, 0);
+          if (entryDate < start) {
+            isWithinRange = false;
           }
+        }
 
-          if (endDate) {
-            const end = new Date(endDate);
-             // Set time to end of day for accurate comparison
-            end.setHours(23, 59, 59, 999);
-            if (entryDate > end) {
-              isWithinRange = false;
-            }
+        if (endDate) {
+          const end = new Date(endDate);
+           // Set time to end of day for accurate comparison
+          end.setHours(23, 59, 59, 999);
+          if (entryDate > end) {
+            isWithinRange = false;
           }
+        }
 
-          return isWithinRange;
-        });
-      }
+        return isWithinRange;
+      });
+    }
 
-      // Sort entries by date descending before setting filtered state
-      const sortedFilteredEntries = updatedFilteredEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setFilteredEntries(sortedFilteredEntries);
+    // Sort entries by date descending before setting filtered state
+    const sortedFilteredEntries = updatedFilteredEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+    setFilteredEntries(sortedFilteredEntries);
+
+  }, [searchTerm, startDate, endDate, allEntries]); // Depend on filter criteria and allEntries from useQuery
+
+
+  // --- Data Mutations with useMutation ---
+
+  // Mutation for creating an entry
+  const createEntryMutation = useMutation({
+    mutationFn: createJournalEntry,
+    onSuccess: () => {
+      // Invalidate the 'journalEntries' query to refetch data after creation
+      queryClient.invalidateQueries({ queryKey: ['journalEntries'] });
+      closeFormModal(); // Close modal on success
+    },
+    onError: (err) => { // Renamed error parameter to err to avoid conflict
+        console.error("Error creating entry:", err);
+        setError(`Failed to create entry: ${err.message}`); // Use local setError
+         // Keep modal open to allow user to fix input or try again
+    }
+  });
+
+  // Mutation for updating an entry
+  const updateEntryMutation = useMutation({
+    mutationFn: ({ entryId, entryData }) => updateJournalEntry(entryId, entryData),
+    onSuccess: () => {
+      // Invalidate the 'journalEntries' query to refetch data after update
+      queryClient.invalidateQueries({ queryKey: ['journalEntries'] });
+      closeFormModal(); // Close modal on success
+    },
+     onError: (err) => { // Renamed error parameter to err
+        console.error("Error updating entry:", err);
+        setError(`Failed to update entry: ${err.message}`); // Use local setError
+         // Keep modal open to allow user to fix input or try again
+    }
+  });
+
+  // Mutation for deleting an entry
+  const deleteEntryMutation = useMutation({
+    mutationFn: deleteJournalEntry,
+    onSuccess: () => {
+      // Invalidate the 'journalEntries' query to refetch data after deletion
+      queryClient.invalidateQueries({ queryKey: ['journalEntries'] });
+    },
+     onError: (err) => { // Renamed error parameter to err
+        console.error("Error deleting entry:", err);
+        setError(`Failed to delete entry: ${err.message}`); // Use local setError
+    }
+  });
+
+
+  // --- API Interaction Handlers (using mutations) ---
+
+  const handleSaveEntry = async (entryToSave) => {
+    setError(null); // Clear previous local errors before mutation
+    // Prepare data to send, matching backend model expectations
+    const entryData = {
+        content: entryToSave.content,
+        sentiment_level: entryToSave.sentiment,
+        sleep_quality: entryToSave.sleep,
+        stress_level: entryToSave.stress,
+        social_engagement: entryToSave.socialEngagement,
+        date: entryToSave.date,
+        title: entryToSave.title
     };
 
-    filterEntries(); // Apply filter whenever search term, start date, end date, or allEntries changes
-  }, [searchTerm, startDate, endDate, allEntries]); // Depend on filter criteria and allEntries
-
-
-  // --- API Interaction Handlers ---
-
-  // Create or update an entry using the API service
-  const handleSaveEntry = async (entryToSave) => {
-    setError(null); // Clear previous errors
-    try {
-      let savedEntry;
-      // Prepare data to send, matching backend model expectations
-      const entryData = {
-          content: entryToSave.content,
-          sentiment_level: entryToSave.sentiment,
-          sleep_quality: entryToSave.sleep,
-          stress_level: entryToSave.stress,
-          social_engagement: entryToSave.socialEngagement,
-          date: entryToSave.date,
-          title: entryToSave.title
-      };
-
-      if (entryToSave.id) {
-        // Update existing entry
-        savedEntry = await updateJournalEntry(entryToSave.id, entryData);
-        // Update the entry in the local state (allEntries)
-        setAllEntries(allEntries.map(entry =>
-          entry.id === savedEntry.id ? savedEntry : entry
-        ));
-      } else {
-        // Create new entry
-        savedEntry = await createJournalEntry(entryData);
-        // Add new entry to the top of the local state (allEntries)
-        setAllEntries([savedEntry, ...allEntries]);
-      }
-
-      closeFormModal(); // Close form modal on successful save
-
-    } catch (error) {
-      console.error("Error saving entry:", error);
-      setError(`Failed to save entry: ${error.message}`);
-      // Keep modal open to allow user to fix input or try again
+    if (entryToSave.id) {
+      // Update existing entry using mutation
+      updateEntryMutation.mutate({ entryId: entryToSave.id, entryData });
+    } else {
+      // Create new entry using mutation
+      createEntryMutation.mutate(entryData);
     }
   };
 
-  // Delete an entry using the API service
   const handleDeleteEntry = async (entryId) => {
       if (window.confirm("Are you sure you want to delete this entry?")) {
-          setError(null); // Clear previous errors
-          try {
-              await deleteJournalEntry(entryId);
-              // Remove the entry from the local state (allEntries)
-              setAllEntries(allEntries.filter(entry => entry.id !== entryId));
-          } catch (error) {
-              console.error("Error deleting entry:", error);
-              setError(`Failed to delete entry: ${error.message}`);
-          }
+          setError(null); // Clear previous local errors before mutation
+          // Delete entry using mutation
+          deleteEntryMutation.mutate(entryId);
       }
   };
 
 
-  // --- Component Lifecycle and Modal Handling ---
-
-  // Load entries when the component mounts
-  useEffect(() => {
-    loadEntries();
-  }, []);
+  // --- Modal Handling ---
 
   // Handler for opening the Add Entry form modal
   const openAddEntryModal = () => {
@@ -184,7 +199,7 @@ const JournalPage = () => {
   const closeFormModal = () => {
     setShowEntryFormModal(false);
     setEditingEntry(null); // Clear editingEntry when form modal closes
-    setError(null); // Clear errors when form modal closes
+    setError(null); // Clear local errors when form modal closes
   };
 
    // Handler for closing the Detail modal
@@ -278,11 +293,13 @@ const JournalPage = () => {
 
 
       {/* Loading and Error Messages */}
-      {loading && <p className="text-center text-gray-500">Loading entries...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
+      {isLoading && <p className="text-center text-gray-500">Loading entries...</p>} {/* Use isLoading from useQuery */}
+      {/* Display local error from mutations or fetch error */}
+      {(isError || error) && <p className="text-center text-red-500">Error: {error?.message || fetchError?.message}</p>}
 
       {/* Entry List - Pass FILTERED entries and handlers */}
-      {!loading && !error && (
+      {/* Render only when not loading and no fetch error, and allEntries data is available */}
+      {!isLoading && !isError && allEntries && (
           <EntryList
             entries={filteredEntries} // Pass the filtered entries
             onEditEntry={openEditEntryModal} // Edit button opens form modal
@@ -317,3 +334,4 @@ const JournalPage = () => {
 };
 
 export default JournalPage;
+

@@ -1,41 +1,113 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState} from 'react'; // Import useEffect
 import GoalList from '../goals/GoalList';
 import GoalForm from '../goals/GoalForm';
 import Modal from '../common/Modal'; 
 
-// Define the base URL for your backend API
-const API_BASE_URL = 'http://localhost:8000'; // Adjust if your backend runs on a different port or host
+
+
+// Import API functions and react-query hooks
+import {
+    fetchGoals,
+    createGoal,
+    updateGoal,
+    deleteGoal
+} from '../../api/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 
 const GoalsPage = () => {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [editingGoal, setEditingGoal] = useState(null);
-  const [goals, setGoals] = useState([]); // Initialize goals as an empty array
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState(null); // Add error state
 
-  // Function to fetch goals from the backend
-  const fetchGoals = async () => {
-    setLoading(true);
-    setError(null); // Clear previous errors
-    try {
-      const response = await fetch(`${API_BASE_URL}/goals/`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setGoals(data);
-    } catch (error) {
-      console.error("Error fetching goals:", error);
-      setError("Failed to fetch goals. Please try again.");
-    } finally {
-      setLoading(false);
+  // Get QueryClient instance
+  const queryClient = useQueryClient();
+
+  // --- Data Fetching with useQuery ---
+  const { data: goals, isLoading, isError, error } = useQuery({
+      queryKey: ['goals'], // Unique key for this query
+      queryFn: fetchGoals, // Function to fetch data
+      staleTime: 5 * 60 * 1000, // Data is considered fresh for 5 minutes
+      // initialData: [] // Optional: provide initial data if available
+  });
+
+
+  // --- Data Mutations with useMutation ---
+
+  // Mutation for creating a goal
+  const createGoalMutation = useMutation({
+    mutationFn: createGoal,
+    onSuccess: () => {
+      // Invalidate the 'goals' query to refetch data after creation
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      closeModal(); // Close modal on success
+    },
+     onError: (error) => {
+        console.error("Error creating goal:", error);
+        // Handle error state or display a message to the user
+    }
+  });
+
+  // Mutation for updating a goal
+  const updateGoalMutation = useMutation({
+    mutationFn: ({ goalId, goalData }) => updateGoal(goalId, goalData),
+    onSuccess: () => {
+      // Invalidate the 'goals' query to refetch data after update
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      closeModal(); // Close modal on success
+    },
+     onError: (error) => {
+        console.error("Error updating goal:", error);
+        // Handle error state or display a message to the user
+    }
+  });
+
+  // Mutation for deleting a goal
+  const deleteGoalMutation = useMutation({
+    mutationFn: deleteGoal,
+    onSuccess: () => {
+      // Invalidate the 'goals' query to refetch data after deletion
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+    },
+     onError: (error) => {
+        console.error("Error deleting goal:", error);
+        // Handle error state or display a message to the user
+    }
+  });
+
+
+  // --- API Interaction Handlers (using mutations) ---
+
+  const handleSaveGoal = async (goalToSave) => {
+    // Prepare data to send, matching backend model expectations
+    const goalData = {
+        title: goalToSave.title,
+        type: goalToSave.type,
+        targetDate: goalToSave.targetDate, // Can be null for recurring
+        category: goalToSave.category,
+        priority: goalToSave.priority,
+        description: goalToSave.description,
+        // progress is only sent on update if it exists
+        ...(goalToSave.id && { progress: goalToSave.progress })
+    };
+
+    if (goalToSave.id) {
+      // Update existing goal using mutation
+      updateGoalMutation.mutate({ goalId: goalToSave.id, goalData });
+    } else {
+      // Add new goal using mutation
+      createGoalMutation.mutate(goalData);
     }
   };
 
-  // Fetch goals when the component mounts
-  useEffect(() => {
-    fetchGoals();
-  }, []); // Empty dependency array means this runs once on mount
+  const handleDeleteGoal = async (goalId) => {
+    if (window.confirm("Are you sure you want to delete this goal?")) {
+      // Delete goal using mutation
+      deleteGoalMutation.mutate(goalId);
+    }
+  };
+
+
+  // --- Modal Handling ---
 
   const openAddGoalModal = () => {
     setEditingGoal(null); // Ensure editingGoal is null for adding
@@ -47,84 +119,12 @@ const GoalsPage = () => {
     setShowGoalModal(true);
   };
 
-  const handleSaveGoal = async (goalToSave) => {
-    setError(null); // Clear previous errors
-    try {
-      let response;
-      let method;
-      let url;
-
-      // Determine if we are creating or updating
-      if (goalToSave.id) {
-        // Update existing goal
-        method = 'PUT';
-        url = `${API_BASE_URL}/goals/${goalToSave.id}`;
-        // For PUT, send the updated data including progress
-        response = await fetch(url, {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(goalToSave), // Send the entire goal object
-        });
-      } else {
-        // Add new goal
-        method = 'POST';
-        url = `${API_BASE_URL}/goals/`;
-         // For POST, exclude the ID as it's generated by the backend
-         const { id, progress, ...goalDataForCreate } = goalToSave;
-        response = await fetch(url, {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(goalDataForCreate), // Send data without the temporary ID
-        });
-      }
-
-      if (!response.ok) {
-         const errorData = await response.json();
-         throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || response.statusText}`);
-      }
-
-      // After saving, refetch the goals to update the list
-      fetchGoals();
-      closeModal(); // Close modal after saving
-
-    } catch (error) {
-      console.error("Error saving goal:", error);
-      setError(`Failed to save goal: ${error.message}`);
-    }
-  };
-
-  const handleDeleteGoal = async (goalId) => {
-    if (window.confirm("Are you sure you want to delete this goal?")) {
-      setError(null); // Clear previous errors
-      try {
-        const response = await fetch(`${API_BASE_URL}/goals/${goalId}`, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) {
-           const errorData = await response.json();
-           throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || response.statusText}`);
-        }
-
-        // After deleting, refetch the goals to update the list
-        fetchGoals();
-
-      } catch (error) {
-        console.error("Error deleting goal:", error);
-        setError(`Failed to delete goal: ${error.message}`);
-      }
-    }
-  };
-
   const closeModal = () => {
     setShowGoalModal(false);
     setEditingGoal(null); // Clear editingGoal when modal closes
-    setError(null); // Clear error when modal closes
+    // Clear any mutation errors when modal closes if you add error state to mutations
   };
+
 
   return (
     <div>
@@ -139,9 +139,10 @@ const GoalsPage = () => {
       </div>
 
       {/* Display loading, error, or goals list */}
-      {loading && <p className="text-center text-gray-500 italic">Loading goals...</p>}
-      {error && <p className="text-center text-red-500 italic">Error: {error}</p>}
-      {!loading && !error && (
+      {isLoading && <p className="text-center text-gray-500 italic">Loading goals...</p>} {/* Use isLoading from useQuery */}
+      {isError && <p className="text-center text-red-500 italic">Error: {error?.message}</p>} {/* Use isError and error from useQuery */}
+      {/* Render only when not loading and no error, and goals data is available */}
+      {!isLoading && !isError && goals && (
         <GoalList
           goals={goals}
           onEditGoal={openEditGoalModal}

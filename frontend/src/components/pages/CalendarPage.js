@@ -1,48 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import JournalCalendar from '../calendar/JournalCalendar';
 
-// Define the base URL for your backend API
-const API_BASE_URL = 'http://localhost:8000'; // Adjust if your backend runs on a different port or host
+
+// Import API function and react-query hook
+import { fetchCalendarData } from '../../api/api';
+import { useQuery } from '@tanstack/react-query';
+
 
 const CalendarPage = () => {
-  const [journalEntries, setJournalEntries] = useState([]);
-  const [goals, setGoals] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // --- Data Fetching with useQuery ---
+  const { data, isLoading, isError, error } = useQuery({
+      queryKey: ['calendarData'], // Unique key for this query
+      queryFn: fetchCalendarData, // Function to fetch data
+      staleTime: 5 * 60 * 1000, // Data is considered fresh for 5 minutes
+      // initialData: { journalEntries: [], goals: [] } // Optional: provide initial data
+  });
 
-  // Function to fetch both journal entries and goals
-  const fetchData = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Fetch journal entries
-      const entriesResponse = await fetch(`${API_BASE_URL}/journal/entries/`);
-      if (!entriesResponse.ok) {
-        throw new Error(`HTTP error fetching entries! status: ${entriesResponse.status}`);
-      }
-      const entriesData = await entriesResponse.json();
-      setJournalEntries(entriesData);
+  // Destructure data once it's available
+  const journalEntries = data?.journalEntries || [];
+  const goals = data?.goals || [];
 
-      // Fetch goals
-      const goalsResponse = await fetch(`${API_BASE_URL}/goals/`);
-      if (!goalsResponse.ok) {
-        throw new Error(`HTTP error fetching goals! status: ${goalsResponse.status}`);
-      }
-      const goalsData = await goalsResponse.json();
-      setGoals(goalsData);
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to load calendar data. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Fetch data when the component mounts
-  useEffect(() => {
-    fetchData();
-  }, []); // Empty dependency array means this runs once on mount
 
   return (
     <div>
@@ -52,9 +29,10 @@ const CalendarPage = () => {
       </div>
 
       {/* Display loading, error, or calendar */}
-      {loading && <p className="text-center text-gray-500 italic">Loading calendar data...</p>}
-      {error && <p className="text-center text-red-500 italic">Error: {error}</p>}
-      {!loading && !error && (
+      {isLoading && <p className="text-center text-gray-500 italic">Loading calendar data...</p>} {/* Use isLoading from useQuery */}
+      {isError && <p className="text-center text-red-500 italic">Error: {error?.message}</p>} {/* Use isError and error from useQuery */}
+      {/* Render only when not loading and no error, and data is available */}
+      {!isLoading && !isError && data && (
         <JournalCalendar
           journalEntries={journalEntries}
           goals={goals}
@@ -65,3 +43,4 @@ const CalendarPage = () => {
 };
 
 export default CalendarPage;
+
