@@ -31,6 +31,9 @@ Set, organize, and evolve your direction.
 Visualize your journal entries, plans and goal due dates
 * 🗓️ Views: Month / Week / Tomorrow
 
+---
+To be completed:
+
 📈 4. Analytics
 Gain personal insights from your data
 * 🎯 Goal alignment tracking
