@@ -65,7 +65,8 @@ async def get_journal_question(request: JournalQuestionRequest):
     Endpoint to get an AI-generated follow-up question for a journal entry.
 
     Args:
-        request (JournalQuestionRequest): The request containing the journal entry content.
+        request (JournalQuestionRequest):
+        The request containing the journal entry content.
 
     Returns:
         JournalQuestionResponse: The AI-generated question.

@@ -146,4 +146,6 @@ def delete_entry(
     success = delete_journal_entry(db, entry_id)
     if not success:
         raise HTTPException(status_code=404, detail="Journal entry not found")
-    return {"message": f"Journal entry with id {entry_id} deleted successfully"}
+    return {
+        "message": f"Journal entry with id {entry_id} deleted successfully"
+        }
