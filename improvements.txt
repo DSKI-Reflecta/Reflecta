@@ -1,11 +1,8 @@
 Backend:
-- 
+- Update goals per entry or entries per goal upon PUT: Tristan
+- remove keywords as they are probably not needed: Tristan
 
 Frontend:
-- Enable markdown for Formatted entry: Chris
-- Editing on detailed view throws an error, deleting as well: Chris
-- More filter and sorting opportunities for journal entries. Make start and end date smaller: Chris
-- Social Engagement without unnecessary text: Chris
 - Bigger box to write the Journal in and bigger box in general: Chris
 - Fix Calendar alignment: Chris
 - Allow weekly and daily view: Chris

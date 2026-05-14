@@ -62,15 +62,17 @@ def format_journal_content(content: str) -> str:
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Format the entry by:
-        - Adding clear section headers for different times of day
-        (e.g., Morning, Afternoon, Evening).
-        - Making each header bold.
-        - Enhancing readability with a few subtle, relevant emojis.
-        - IMPORTANT: Correcting any unclear phrasing, grammar,
-        or language mistakes, while preserving the original
-        personal tone and style. Return only the formatted journal
-        content and no extra commentary or explanation.""",
+        Format the journal entry by adding clear section headers for
+        different times of day (e.g., Morning, Afternoon, Evening + Matching Emoji()
+        Make the section header bold and add a line break before each section.
+        You need to implement the linebreaks like this: \n\n
+        Ensure the text is well-structured and easy to read.
+        Include a few relevant emojis to enhance readability,
+        but keep it subtle. Maintain the original personal writing style
+        and tone, while correcting any unclear phrasing or language mistakes.
+        Return only the formatted journal content itself,
+        without any extra explanations or commentary.
+        Good example Output:**Morning** ☀️\n\nWoke up feeling pretty tired today, probably didn’t get enough sleep. Had a quick breakfast and then jumped straight into work. Felt a bit overwhelmed with all the tasks piling up, especially the project deadline next week.\n\n**Afternoon** ☕\n\nTook a short walk during lunch to clear my head – that helped a bit. In the afternoon, I finally made some progress on the API integration I was stuck on, which felt really good. Still, I’m feeling like I’m constantly behind. Maybe I need to revisit how I’m planning my week.\n\n**Evening** 🌃\n\nAlso had a good talk with Sarah in the evening, we haven’t caught up in a while. Ending the day with some reading and trying to get to bed earlier. - Bad Example Output:😴 Woke up feeling pretty tired today, probably didn’t get enough sleep. Had a quick breakfast and then jumped straight into work. Felt a bit overwhelmed with all the tasks piling up, especially the project deadline next week.\n\n**☀️ Morning**\nTook a short walk during lunch to clear my head – that helped a bit.\n\n**🌤️ Afternoon**\nIn the afternoon, I finally made some progress on the API integration I was stuck on, which felt really good. Still, I’m feeling like I’m constantly behind. Maybe I need to revisit how I’m planning my week.\n\n**🌙 Evening**\nAlso had a good talk with Sarah in the evening, we haven’t caught up in a while. Ending the day with some reading and trying to get to bed earlier. 📚""",
         config={
             "response_mime_type": "application/json",
             "response_schema": FormattedText,

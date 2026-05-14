@@ -157,7 +157,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
          {renderSlider('sentiment', 'Sentiment', 1, 5, <Frown className="h-5 w-5 text-gray-500" />, <Smile className="h-5 w-5 text-gray-500" />)}
          {renderSlider('sleep', 'Sleep Quality', 1, 5, <Moon className="h-5 w-5 text-gray-500" />, <Sun className="h-5 w-5 text-gray-500" />)}
          {renderSlider('stress', 'Stress Level', 1, 5, <Feather className="h-5 w-5 text-gray-500" />, <Zap className="h-5 w-5 text-gray-500" />)}
-         {renderSlider('socialEngagement', 'Social Engagement (1=Alone, 5=Very Social)', 1, 5, <User className="h-5 w-5 text-gray-500" />, <Users className="h-5 w-5 text-gray-500" />)}
+         {renderSlider('socialEngagement', 'Social Engagement', 1, 5, <User className="h-5 w-5 text-gray-500" />, <Users className="h-5 w-5 text-gray-500" />)}
       </div>
 
 

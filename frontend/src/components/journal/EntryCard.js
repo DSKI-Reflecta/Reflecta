@@ -15,19 +15,19 @@ const EntryCard = ({ entry, onEdit, onDelete, onSelect }) => {
             return <Meh className="h-4 w-4 text-yellow-500" />;
         }
         if (type === 'sleep') {
-            if (numericValue >= 4) return <Sun className="h-4 w-4 text-yellow-500" />;
-            if (numericValue <= 2) return <Moon className="h-4 w-4 text-blue-500" />;
-            return <Moon className="h-4 w-4 text-gray-500" />;
+            if (numericValue >= 4) return <Sun className="h-4 w-4 text-green-500" />;
+            if (numericValue <= 2) return <Moon className="h-4 w-4 text-red-500" />;
+            return <Moon className="h-4 w-4 text-yellow-500" />;
         }
         if (type === 'stress') {
             if (numericValue >= 4) return <Zap className="h-4 w-4 text-red-500" />;
             if (numericValue <= 2) return <Feather className="h-4 w-4 text-green-500" />;
-            return <Feather className="h-4 w-4 text-gray-500" />;
+            return <Feather className="h-4 w-4 text-yellow-500" />;
         }
             if (type === 'social_engagement') {
-            if (numericValue >= 4) return <Users className="h-4 w-4 text-blue-500" />;
-            if (numericValue <= 2) return <User className="h-4 w-4 text-gray-500" />;
-            return <User className="h-4 w-4 text-gray-500" />;
+            if (numericValue >= 4) return <Users className="h-4 w-4 text-green-500" />;
+            if (numericValue <= 2) return <User className="h-4 w-4 text-red-500" />;
+            return <User className="h-4 w-4 text-yellow-500" />;
         }
         return null;
     };
