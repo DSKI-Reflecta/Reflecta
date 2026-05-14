@@ -92,8 +92,8 @@ class JournalEntry(JournalEntryBase):
 
     # AI-generated analysis fields
     formatted_content: Optional[str] = None
-    activities: Optional[list[str]] = None
-    sentiment_analysis: Optional[str] = None
+    activities: Optional[str] = None
+    sentiments: Optional[str] = None
     keywords: Optional[list[str]] = None
 
     # model can be directly created from SQLAlchemy object

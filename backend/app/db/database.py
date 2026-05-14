@@ -52,7 +52,7 @@ class JournalEntryModel(Base):
     # AI-generated analysis fields
     formatted_content = Column(Text, nullable=True)
     activities = Column(Text, nullable=True)  # Stored as JSON string
-    sentiment_analysis = Column(String, nullable=True)
+    sentiments = Column(String, nullable=True)
     keywords = Column(Text, nullable=True)  # Stored as JSON string
 
 

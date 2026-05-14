@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from ...models.entry import JournalEntryCreate, JournalEntryUpdate
 from ..database import JournalEntryModel
-from ...services.gemini_agent import format_journal_content
+from ...services.gemini_agent import analyze_entry
 
 
 # --- Journal Entry CRUD  ---
@@ -34,8 +34,8 @@ def create_journal_entry(db: Session,
                          ) -> JournalEntryModel:
     """Create a new journal entry with AI-formatted content"""
     # Format the content using the formatter service
-    formatted_content = format_journal_content(entry.content)
-
+    formatted_content, activities, sentiments = analyze_entry(entry.content)
+    print("activities", activities)
     db_entry = JournalEntryModel(
         title=entry.title,
         date=entry.date,  # Pass the date object
@@ -61,7 +61,9 @@ def create_journal_entry(db: Session,
             if entry.social_engagement is not None
             else None
         ),
-        formatted_content=formatted_content
+        formatted_content=formatted_content,
+        activities=activities,
+        sentiments=sentiments,
     )
     db.add(db_entry)
     db.commit()
@@ -90,8 +92,11 @@ def update_journal_entry(
 
         # Format the content using the formatter service if provided
         if entry_update.content:
-            formatted = format_journal_content(entry_update.content)
+            formatted, activities, sentiments = analyze_entry(
+                entry_update.content)
             db_entry.formatted_content = formatted
+            db_entry.activities = activities
+            db_entry.sentiments = sentiments
 
         # Update the updated_at timestamp
         db_entry.updated_at = datetime.now(timezone.utc)

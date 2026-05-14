@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
-import json
 
 from ..db.database import get_db
 from ..db.crud.journal import (
@@ -30,17 +29,12 @@ def read_entries(
     db: Session = Depends(get_db)
 ):
     """Get all journal entries with pagination"""
-    # Convert the activities and keywords from JSON strings to lists
     entries = get_journal_entries(db, skip=skip, limit=limit)
-    results = []
-    for entry in entries:
-        result = JournalEntry.from_orm(entry)
-        if entry.activities:
-            result.activities = json.loads(entry.activities)
-        if entry.keywords:
-            result.keywords = json.loads(entry.keywords)
-        results.append(result)
-    return results
+    # return as list of JournalEntry models (Pydantic)
+    return [
+        JournalEntry.model_validate(entry, from_attributes=True)
+        for entry in entries
+    ]
 
 
 @router.get("/entries/{entry_id}", response_model=JournalEntry)
@@ -50,13 +44,7 @@ def read_entry(entry_id: int, db: Session = Depends(get_db)):
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
 
-    # Convert the activities and keywords from JSON strings to lists
-    result = JournalEntry.from_orm(db_entry)
-    if db_entry.activities:
-        result.activities = json.loads(db_entry.activities)
-    if db_entry.keywords:
-        result.keywords = json.loads(db_entry.keywords)
-    return result
+    return JournalEntry.model_validate(db_entry, from_attributes=True)
 
 
 @router.post("/entries/", response_model=JournalEntry)
@@ -64,14 +52,7 @@ def create_entry(entry: JournalEntryCreate, db: Session = Depends(get_db)):
     """Create a new journal entry"""
     # create_journal_entry now expects and handles title and date
     db_entry = create_journal_entry(db, entry)
-
-    # Convert the activities and keywords from JSON strings
-    result = JournalEntry.from_orm(db_entry)
-    if db_entry.activities:
-        result.activities = json.loads(db_entry.activities)
-    if db_entry.keywords:
-        result.keywords = json.loads(db_entry.keywords)
-    return result
+    return JournalEntry.model_validate(db_entry, from_attributes=True)
 
 
 @router.put("/entries/{entry_id}", response_model=JournalEntry)
@@ -85,13 +66,7 @@ def update_entry(
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
 
-    # Convert the activities and keywords from JSON strings to lists
-    result = JournalEntry.from_orm(db_entry)
-    if db_entry.activities:
-        result.activities = json.loads(db_entry.activities)
-    if db_entry.keywords:
-        result.keywords = json.loads(db_entry.keywords)
-    return result
+    return JournalEntry.model_validate(db_entry, from_attributes=True)
 
 
 @router.delete("/entries/{entry_id}", response_model=bool)

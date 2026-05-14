@@ -1,5 +1,5 @@
 Backend:
-- result = JournalEntry.from_orm(db_entry) this is deprecated, have a look at is again when it gets important with agent
+- 
 
 Frontend:
 - Editing on detailed view throws an error, deleting as well
