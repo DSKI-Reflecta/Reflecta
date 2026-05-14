@@ -31,11 +31,14 @@ def create_journal_entry(db: Session,
                          entry: JournalEntryCreate
                          ) -> JournalEntryModel:
     """Create a new journal entry with AI-formatted content"""
-    # Get all goal titles from the database
-    goal_titles = [goal.title for goal in db.query(GoalModel).all()]
+    # Get all goal information from the database
+    goal_info = [
+        {"id": goal.id, "title": goal.title, "description": goal.description}
+        for goal in db.query(GoalModel).all()
+    ]
     # Analyze the entry content using the AI service
     formatted_content, activities, sentiments, goal_ids = analyze_entry(
-        entry.content, goal_titles
+        entry.content, goal_info
     )
     # Get the goals with the specified IDs
     goals = db.query(GoalModel).filter(

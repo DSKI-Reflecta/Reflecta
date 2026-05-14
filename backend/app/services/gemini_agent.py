@@ -121,7 +121,7 @@ def extract_goals(content: str, goals: str) -> str:
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n{content}\n.
-        Here is the list of goals (each with an ID and description):
+        Here is the list of goals (each with an ID, title and description):
         \n{goals}\n
         Based on the entry, list the relevant goal IDs as a
         comma-separated list of numbers.
