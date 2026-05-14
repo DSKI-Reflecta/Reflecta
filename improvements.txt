@@ -1,10 +1,9 @@
 Backend:
 - Update goals per entry or entries per goal upon PUT: Tristan
-- remove keywords as they are probably not needed: Tristan
 - Add example env to github: Chris
 
 Frontend:
-- Enable markdown for Formatted entry
+- Enable markdown for Formatted entry: Chris
 - Editing on detailed view throws an error, deleting as well: Chris
 - More filter and sorting opportunities for journal entries. Make start and end date smaller: Chris
 - Social Engagement without unnecessary text: Chris

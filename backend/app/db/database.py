@@ -61,7 +61,6 @@ class JournalEntryModel(Base):
     formatted_content = Column(Text, nullable=True)
     activities = Column(Text, nullable=True)  # Stored as JSON string
     sentiments = Column(String, nullable=True)
-    keywords = Column(Text, nullable=True)  # Stored as JSON string
 
     # Many-to-many relationship with goals
     goals = relationship(

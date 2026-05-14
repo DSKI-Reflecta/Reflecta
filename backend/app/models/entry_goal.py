@@ -135,7 +135,6 @@ class JournalEntryBasic(JournalEntryBase):
     formatted_content: Optional[str] = None
     activities: Optional[str] = None
     sentiments: Optional[str] = None
-    keywords: Optional[List[str]] = None
 
     # model can be directly created from SQLAlchemy object
     class Config:

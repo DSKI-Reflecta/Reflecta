@@ -15,25 +15,8 @@ genai_client = genai.Client(api_key=api_key)
 model = "gemini-2.0-flash"
 
 
-# Define enums for activities and sentiments
-class Activity(str, Enum):
-    WORKING = "Working"
-    STUDYING = "Studying"
-    READING = "Reading"
-    EXERCISING = "Exercising"
-    SOCIALIZING = "Socializing"
-    COOKING = "Cooking"
-    CLEANING = "Cleaning"
-    SHOPPING = "Shopping"
-    TRAVELING = "Traveling"
-    MEDITATING = "Meditating"
-    WATCHING_TV = "Watching TV"
-    GAMING = "Gaming"
-    SLEEPING = "Sleeping"
-    EATING = "Eating"
-    HOBBIES = "Pursuing hobbies"
-    FAMILY_TIME = "Spending time with family"
-    OTHER = "Other activities"
+class Activity(BaseModel):
+    value: str
 
 
 class Sentiment(str, Enum):
@@ -79,14 +62,15 @@ def format_journal_content(content: str) -> str:
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Format the journal entry by adding clear section headers for
-        different times of day (e.g., Morning, Afternoon, Evening).
-        Make the section header bold.
-        Include a few relevant emojis to enhance readability,
-        but keep it subtle. Maintain the original personal writing style
-        and tone, while correcting any unclear phrasing or language mistakes.
-        Return only the formatted journal content itself,
-        without any extra explanations or commentary.""",
+        Format the entry by:
+        - Adding clear section headers for different times of day
+        (e.g., Morning, Afternoon, Evening).
+        - Making each header bold.
+        - Enhancing readability with a few subtle, relevant emojis.
+        - IMPORTANT: Correcting any unclear phrasing, grammar,
+        or language mistakes, while preserving the original
+        personal tone and style. Return only the formatted journal
+        content and no extra commentary or explanation.""",
         config={
             "response_mime_type": "application/json",
             "response_schema": FormattedText,
@@ -95,13 +79,17 @@ def format_journal_content(content: str) -> str:
     return response.parsed.text.strip()
 
 
-def extract_activities(content: str) -> str:
+def extract_activities(content: str, amount: int) -> str:
     """Extract activities from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Extract up to 5 key activities mentioned in the text.
-        Select the most relevant activities that match the journal content.""",
+        Extract up to {amount} key activities mentioned in the text.
+        Only include an activity if it's clearly present and meaningful.
+        Fewer, highly relevant activities are better than many vague or
+        marginal ones. Focus on what truly matters
+        in the context of the entry.
+        Prioritize QUALITY and clarity over quantity.""",
         config={
             "response_mime_type": "application/json",
             "response_schema": ActivityList,
@@ -111,13 +99,13 @@ def extract_activities(content: str) -> str:
         [activity.value for activity in response.parsed.activities])
 
 
-def extract_sentiments(content: str) -> str:
+def extract_sentiments(content: str, amount: int) -> str:
     """Extract sentiments from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
         Identify the main emotions or feelings expressed in
-        this journal entry. Select up to 5 sentiments that best
+        this journal entry. Select up to {amount} sentiments that best
         match the emotional tone of the entry.""",
         config={
             "response_mime_type": "application/json",
@@ -152,7 +140,7 @@ def analyze_entry(content: str, goals: str) -> tuple:
     This means that the tasks will run in parallel."""
     with concurrent.futures.ThreadPoolExecutor() as executor:
         f1 = executor.submit(format_journal_content, content)
-        f2 = executor.submit(extract_activities, content)
-        f3 = executor.submit(extract_sentiments, content)
+        f2 = executor.submit(extract_activities, content, 8)
+        f3 = executor.submit(extract_sentiments, content, 5)
         f4 = executor.submit(extract_goals, content, goals)
         return f1.result(), f2.result(), f3.result(), f4.result()

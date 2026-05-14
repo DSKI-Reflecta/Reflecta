@@ -4,7 +4,7 @@ from ...models.entry_goal import Goal
 
 def get_recent_entries(
     goals: List[Goal],
-    max_entries_per_goal: int = 5
+    max_entries_per_goal: int = 3
 ):
     # For each goal, filter to keep only the most recent entries
     for goal in goals:
