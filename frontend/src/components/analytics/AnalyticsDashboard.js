@@ -37,10 +37,10 @@ const StatCard = ({
   title,
   value,
   subtitle,
-  color = "blue",
+  color = "purple",
   isRating = false,
 }) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+  <div className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition-all duration-200">
     <div className="flex items-center justify-between">
       <div className={`p-3 rounded-lg bg-${color}-50`}>
         <Icon className={`w-6 h-6 text-${color}-600`} />
@@ -164,8 +164,8 @@ const AnalyticsDashboard = () => {
                 onClick={() => setSelectedPeriod(period)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedPeriod === period
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                    ? "bg-purple-600 text-white"
+                    : "bg-white text-gray-600 hover:bg-gray-50 ring-1 ring-inset ring-gray-200"
                 }`}
               >
                 {period === "7days" && "Last 7 Days"}
@@ -203,7 +203,7 @@ const AnalyticsDashboard = () => {
                     title="Total Entries"
                     value={stats.total_entries}
                     subtitle="Journal entries logged"
-                    color="blue"
+                    color="purple"
                   />
                   <StatCard
                     icon={Target}
@@ -259,7 +259,7 @@ const AnalyticsDashboard = () => {
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Trends
                 </h2>
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="bg-white rounded-2xl shadow-sm p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Wellbeing Trends Over Time
                   </h3>
@@ -383,7 +383,7 @@ const AnalyticsDashboard = () => {
                     ([key, value]) => (
                       <div
                         key={key}
-                        className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex"
+                        className="bg-white rounded-2xl shadow-sm p-6 flex"
                       >
                         <div className="w-2/3">
                           <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -441,7 +441,7 @@ const AnalyticsDashboard = () => {
                           {value.insights &&
                             value.insights.map((insight, index) => {
                               const colors = [
-                                "bg-blue-50 text-blue-800",
+                                "bg-purple-50 text-purple-800",
                                 "bg-green-50 text-green-800",
                                 "bg-yellow-50 text-yellow-800",
                               ];
@@ -467,19 +467,19 @@ const AnalyticsDashboard = () => {
 
             {/* Summary Section */}
             {summary && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="bg-white rounded-2xl shadow-sm p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
                   Summary
                 </h2>
                 {summary.summary ? (
-                  <div className="p-4 bg-blue-50 rounded-lg">
+                  <div className="p-4 bg-purple-50 rounded-xl">
                     <div className="flex items-center mb-2">
-                      <TrendingUp className="w-5 h-5 text-blue-600 mr-2" />
-                      <h4 className="font-medium text-blue-900">
+                      <TrendingUp className="w-5 h-5 text-purple-600 mr-2" />
+                      <h4 className="font-medium text-purple-900">
                         Key Insights
                       </h4>
                     </div>
-                    <p className="text-sm text-blue-800">{summary.summary}</p>
+                    <p className="text-sm text-purple-800">{summary.summary}</p>
                   </div>
                 ) : (
                   <div className="p-4 bg-yellow-50 rounded-lg">
