@@ -133,3 +133,16 @@ export const fetchCalendarData = async () => {
         goals: goalsData
     };
 };
+
+// --- AI Chat API Function ---
+export const sendChatMessage = async (message) => {
+  const response = await fetch(`${API_BASE_URL}/ai/chat/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message: message }),
+  });
+  const data = await handleResponse(response);
+  return data.response; // Assuming the backend returns { response: "..." }
+};
