@@ -106,6 +106,10 @@ const GoalsPage = () => {
     }
   };
 
+  const handleDeclineRecommendation = (index) => {
+    setRecommendedGoals((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const openAddGoalModal = (goal = null) => {
     setEditingGoal(goal);
     setShowGoalModal(true);
@@ -169,12 +173,23 @@ const GoalsPage = () => {
               >
                 <h4 className="font-bold">{rec.title}</h4>
                 <p className="text-sm text-gray-600 mt-1">{rec.description}</p>
-                <button
-                  onClick={() => openAddGoalModal(rec)}
-                  className="mt-2 px-3 py-1 text-sm bg-green-500 text-white rounded-md hover:bg-green-600"
-                >
-                  Accept
-                </button>
+                <div className="mt-2">
+                  <button
+                    onClick={() => {
+                      openAddGoalModal(rec);
+                      handleDeclineRecommendation(index);
+                    }}
+                    className="px-3 py-1 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 mr-2"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleDeclineRecommendation(index)}
+                    className="px-3 py-1 text-sm bg-red-500 text-white rounded-md hover:bg-red-600"
+                  >
+                    Decline
+                  </button>
+                </div>
               </div>
             ))}
           </div>
