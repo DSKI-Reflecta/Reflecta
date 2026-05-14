@@ -1,8 +1,17 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
-from enum import Enum, IntEnum
-from datetime import date as date_type # Import date type with an alias
+from enum import IntEnum  # for mapping enums to integers
+from datetime import date as date_type
+
+"""
+IntEnum members behave like integers, e.g.:
+SentimentLevel.NEGATIVE < SentimentLevel.POSITIVE  # True
+int(SentimentLevel.NEUTRAL)  # 3
+"""
+
+
+# --- State Tracking Fields (IntEnums) ---
 
 class SentimentLevel(IntEnum):
     VERY_NEGATIVE = 1
@@ -36,12 +45,16 @@ class SocialEngagement(IntEnum):
     VERY_SOCIAL = 5
 
 
-class JournalEntryBase(BaseModel):
-    # Added title and date to the base model
-    title: str = Field(..., description="The title of the journal entry")
-    date: date_type = Field(..., description="The date of the journal entry") # Use the alias date_type
+# --- Journal Entry Models (for different CRUD operations) ---
 
-    content: str = Field(..., description="The main content of the journal entry")
+class JournalEntryBase(BaseModel):
+    """Base model for journal entries."""
+    #  ... stands for required fields
+    title: str = Field(..., description="The title of the journal entry")
+    date: date_type = Field(..., description="The date of the journal entry")
+    content: str = Field(...,
+                         description="The main content of the journal entry")
+
     sentiment_level: Optional[SentimentLevel] = None
     sleep_quality: Optional[SleepQuality] = None
     stress_level: Optional[StressLevel] = None
@@ -49,16 +62,18 @@ class JournalEntryBase(BaseModel):
 
 
 class JournalEntryCreate(JournalEntryBase):
-    # JournalEntryCreate inherits title and date from JournalEntryBase
+    """Model for creating a new journal entry,
+    inherits all fields from JournalEntryBase"""
     pass
 
 
 class JournalEntryUpdate(BaseModel):
-    # Allow optional update for all base fields including title and date
+    """Model for updating an existing journal entry,
+    all fields are hence optional"""
     title: Optional[str] = None
-    date: Optional[date_type] = None # Use the alias date_type and make it Optional
-
+    date: Optional[date_type] = None
     content: Optional[str] = None
+
     sentiment_level: Optional[SentimentLevel] = None
     sleep_quality: Optional[SleepQuality] = None
     stress_level: Optional[StressLevel] = None
@@ -66,17 +81,20 @@ class JournalEntryUpdate(BaseModel):
 
 
 class JournalEntry(JournalEntryBase):
-    # JournalEntry includes all fields from base, plus backend-managed fields
+    """Model for a journal entry,
+    inherits all fields from JournalEntryBase and
+    adds additional fields used in the backend"""
+    # Database fields
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
 
     # AI-generated analysis fields
     formatted_content: Optional[str] = None
-    # Activities and keywords are lists in the Pydantic model
     activities: Optional[list[str]] = None
     sentiment_analysis: Optional[str] = None
     keywords: Optional[list[str]] = None
 
+    # model can be directly created from SQLAlchemy object
     class Config:
-        from_attributes = True # Use from_attributes instead of orm_mode for Pydantic V2+
+        from_attributes = True

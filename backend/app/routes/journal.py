@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List, Optional
-import json # Keep json import for handling activities/keywords on read
+from typing import List
+import json
 
 from ..db.database import get_db
 from ..db.crud import (
@@ -16,40 +16,22 @@ from ..models.entry import JournalEntryCreate, JournalEntry, JournalEntryUpdate
 
 router = APIRouter(
     prefix="/journal",
-    tags=["journal"],
-    responses={404: {"description": "Not found"}},
+    tags=["journal"],  # for swagger UI
+    responses={404: {"description": "Not found"}},  # default response
 )
-
-# The endpoint functions should now correctly use the updated Pydantic models
-# and pass the data to the updated CRUD functions.
-
-@router.post("/entries/", response_model=JournalEntry)
-def create_entry(entry: JournalEntryCreate, db: Session = Depends(get_db)):
-    """Create a new journal entry"""
-    # create_journal_entry now expects and handles title and date
-    db_entry = create_journal_entry(db, entry)
-
-    # Convert the activities and keywords from JSON strings to lists for the response
-    result = JournalEntry.from_orm(db_entry)
-    if db_entry.activities:
-        result.activities = json.loads(db_entry.activities)
-    if db_entry.keywords:
-        result.keywords = json.loads(db_entry.keywords)
-
-    return result
 
 
 @router.get("/entries/", response_model=List[JournalEntry])
 def read_entries(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=100),
+    skip: int = Query(0, ge=0,
+                      description="Number of items to skip (where to start)"),
+    limit: int = Query(100, ge=1, le=100,
+                       description="Max number of items to return"),
     db: Session = Depends(get_db)
 ):
     """Get all journal entries with pagination"""
-    # get_journal_entries now orders by date and created_at
+    # Convert the activities and keywords from JSON strings to lists
     entries = get_journal_entries(db, skip=skip, limit=limit)
-
-    # Convert the activities and keywords from JSON strings to lists for each entry in the response
     results = []
     for entry in entries:
         result = JournalEntry.from_orm(entry)
@@ -58,7 +40,6 @@ def read_entries(
         if entry.keywords:
             result.keywords = json.loads(entry.keywords)
         results.append(result)
-
     return results
 
 
@@ -69,13 +50,27 @@ def read_entry(entry_id: int, db: Session = Depends(get_db)):
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
 
-    # Convert the activities and keywords from JSON strings to lists for the response
+    # Convert the activities and keywords from JSON strings to lists
     result = JournalEntry.from_orm(db_entry)
     if db_entry.activities:
         result.activities = json.loads(db_entry.activities)
     if db_entry.keywords:
         result.keywords = json.loads(db_entry.keywords)
+    return result
 
+
+@router.post("/entries/", response_model=JournalEntry)
+def create_entry(entry: JournalEntryCreate, db: Session = Depends(get_db)):
+    """Create a new journal entry"""
+    # create_journal_entry now expects and handles title and date
+    db_entry = create_journal_entry(db, entry)
+
+    # Convert the activities and keywords from JSON strings
+    result = JournalEntry.from_orm(db_entry)
+    if db_entry.activities:
+        result.activities = json.loads(db_entry.activities)
+    if db_entry.keywords:
+        result.keywords = json.loads(db_entry.keywords)
     return result
 
 
@@ -86,18 +81,16 @@ def update_entry(
     db: Session = Depends(get_db)
 ):
     """Update a journal entry"""
-    # update_journal_entry now expects and handles title and date
     db_entry = update_journal_entry(db, entry_id, entry_update)
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
 
-    # Convert the activities and keywords from JSON strings to lists for the response
+    # Convert the activities and keywords from JSON strings to lists
     result = JournalEntry.from_orm(db_entry)
     if db_entry.activities:
         result.activities = json.loads(db_entry.activities)
     if db_entry.keywords:
         result.keywords = json.loads(db_entry.keywords)
-
     return result
 
 

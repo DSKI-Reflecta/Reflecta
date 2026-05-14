@@ -1,7 +1,6 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List, Optional
-
 from ..db.database import get_db
 from ..db.crud import (
     create_goal,
@@ -10,19 +9,13 @@ from ..db.crud import (
     update_goal,
     delete_goal
 )
-# Import Goal Pydantic models
 from ..models.goal import GoalCreate, Goal, GoalUpdate
 
 router = APIRouter(
-    prefix="/goals", # Prefix for goal endpoints
+    prefix="/goals",  # Prefix for goal endpoints
     tags=["goals"],
     responses={404: {"description": "Goal not found"}},
 )
-
-@router.post("/", response_model=Goal)
-def create_new_goal(goal: GoalCreate, db: Session = Depends(get_db)):
-    """Create a new goal"""
-    return create_goal(db, goal)
 
 
 @router.get("/", response_model=List[Goal])
@@ -42,6 +35,12 @@ def read_goal(goal_id: int, db: Session = Depends(get_db)):
     if db_goal is None:
         raise HTTPException(status_code=404, detail="Goal not found")
     return db_goal
+
+
+@router.post("/", response_model=Goal)
+def create_new_goal(goal: GoalCreate, db: Session = Depends(get_db)):
+    """Create a new goal"""
+    return create_goal(db, goal)
 
 
 @router.put("/{goal_id}", response_model=Goal)
@@ -64,4 +63,3 @@ def delete_existing_goal(goal_id: int, db: Session = Depends(get_db)):
     if not success:
         raise HTTPException(status_code=404, detail="Goal not found")
     return success
-
