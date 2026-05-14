@@ -17,8 +17,42 @@ const handleResponse = async (response) => {
   return response.json();
 };
 
-// --- Journal Entry API Functions ---
+// --- Calendar Data API Function ---
+export const fetchCalendarData = async () => {
+    // Fetch both entries and goals concurrently
+    const [entriesResponse, goalsResponse] = await Promise.all([
+        fetch(`${API_BASE_URL}/journal/entries/`),
+        fetch(`${API_BASE_URL}/goals/`)
+    ]);
 
+    const entriesData = await handleResponse(entriesResponse);
+    const goalsData = await handleResponse(goalsResponse);
+
+    return {
+        journalEntries: entriesData,
+        goals: goalsData
+    };
+};
+
+// --- Event emitter for calendar updates ---
+const calendarUpdateListeners = [];
+
+export const addCalendarUpdateListener = (listener) => {
+  calendarUpdateListeners.push(listener);
+};
+
+export const removeCalendarUpdateListener = (listener) => {
+  const index = calendarUpdateListeners.indexOf(listener);
+  if (index !== -1) {
+    calendarUpdateListeners.splice(index, 1);
+  }
+};
+
+const notifyCalendarUpdate = () => {
+  calendarUpdateListeners.forEach(listener => listener());
+};
+
+// --- Journal Entry API Functions ---
 export const fetchJournalEntries = async () => {
   const response = await fetch(`${API_BASE_URL}/journal/entries/`);
   const data = await handleResponse(response);
@@ -35,7 +69,10 @@ export const createJournalEntry = async (entryData) => {
     },
     body: JSON.stringify(entryData),
   });
-  return handleResponse(response);
+  const result = await handleResponse(response);
+  // Notify listeners that calendar data should be refreshed
+  notifyCalendarUpdate();
+  return result;
 };
 
 export const updateJournalEntry = async (entryId, entryData) => {
@@ -46,31 +83,33 @@ export const updateJournalEntry = async (entryId, entryData) => {
     },
     body: JSON.stringify(entryData),
   });
-  return handleResponse(response);
+  const result = await handleResponse(response);
+  // Notify listeners that calendar data should be refreshed
+  notifyCalendarUpdate();
+  return result;
 };
 
 export const deleteJournalEntry = async (entryId) => {
   const response = await fetch(`${API_BASE_URL}/journal/entries/${entryId}`, {
     method: 'DELETE',
   });
-  // For DELETE, the backend might return a boolean or status, handle accordingly
-  // Assuming it returns a boolean or successful status
   if (!response.ok) {
-       const contentType = response.headers.get("content-type");
-       if (contentType && contentType.indexOf("application/json") !== -1) {
-           const errorData = await response.json();
-           throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || JSON.stringify(errorData)}`);
-       } else {
-           const errorText = await response.text();
-           throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
-       }
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const errorData = await response.json();
+      throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || JSON.stringify(errorData)}`);
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
-    // Return true on successful deletion (assuming backend returns 200/204)
-    return true;
+  }
+  // Notify listeners that calendar data should be refreshed
+  notifyCalendarUpdate();
+  // Return true on successful deletion (assuming backend returns 200/204)
+  return true;
 };
 
 // --- Goal API Functions ---
-
 export const fetchGoals = async () => {
   const response = await fetch(`${API_BASE_URL}/goals/`);
   return handleResponse(response);
@@ -84,7 +123,10 @@ export const createGoal = async (goalData) => {
     },
     body: JSON.stringify(goalData),
   });
-  return handleResponse(response);
+  const result = await handleResponse(response);
+  // Notify listeners that calendar data should be refreshed
+  notifyCalendarUpdate();
+  return result;
 };
 
 export const updateGoal = async (goalId, goalData) => {
@@ -95,43 +137,30 @@ export const updateGoal = async (goalId, goalData) => {
     },
     body: JSON.stringify(goalData),
   });
-  return handleResponse(response);
+  const result = await handleResponse(response);
+  // Notify listeners that calendar data should be refreshed
+  notifyCalendarUpdate();
+  return result;
 };
 
 export const deleteGoal = async (goalId) => {
   const response = await fetch(`${API_BASE_URL}/goals/${goalId}`, {
     method: 'DELETE',
   });
-   if (!response.ok) {
-       const contentType = response.headers.get("content-type");
-       if (contentType && contentType.indexOf("application/json") !== -1) {
-           const errorData = await response.json();
-           throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || JSON.stringify(errorData)}`);
-       } else {
-           const errorText = await response.text();
-           throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
-       }
+  if (!response.ok) {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const errorData = await response.json();
+      throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || JSON.stringify(errorData)}`);
+    } else {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
-    // Return true on successful deletion
-    return true;
-};
-
-// --- Calendar Data API Function ---
-
-export const fetchCalendarData = async () => {
-    // Fetch both entries and goals concurrently
-    const [entriesResponse, goalsResponse] = await Promise.all([
-        fetch(`${API_BASE_URL}/journal/entries/`),
-        fetch(`${API_BASE_URL}/goals/`)
-    ]);
-
-    const entriesData = await handleResponse(entriesResponse);
-    const goalsData = await handleResponse(goalsResponse);
-
-    return {
-        journalEntries: entriesData,
-        goals: goalsData
-    };
+  }
+  // Notify listeners that calendar data should be refreshed
+  notifyCalendarUpdate();
+  // Return true on successful deletion
+  return true;
 };
 
 // --- AI Chat API Function ---
