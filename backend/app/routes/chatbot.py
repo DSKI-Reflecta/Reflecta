@@ -1,9 +1,6 @@
 """
 API routes for AI chatbot interactions and journal question generation.
 """
-
-from fastapi import APIRouter
-
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 

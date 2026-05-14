@@ -11,6 +11,7 @@ backend/
 │   ├── models/     # Pydantic models for data validation and serialization
 │   ├── routes/     # API endpoint definitions
 │   ├── services/   # Business logic and services (e.g., AI agents)
+│   ├── utils/      # Utility functions and helpers
 │   └── main.py     # FastAPI application entry point
 ├── Dockerfile      # Docker configuration for the backend
 ├── README.md       # This file

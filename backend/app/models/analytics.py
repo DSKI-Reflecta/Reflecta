@@ -2,8 +2,8 @@
 Pydantic models for analytics data.
 """
 
-from pydantic import BaseModel
 from typing import List, Optional
+from pydantic import BaseModel
 
 
 class TsTrends(BaseModel):

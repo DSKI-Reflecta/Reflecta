@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import EntryList from "../journal/EntryList";
 import EntryForm from "../journal/EntryForm";
 import EntryDetail from "../journal/EntryDetail";
-import {
-  Search as SearchIcon,
-  Calendar as CalendarIcon,
-  X,
-} from "lucide-react";
+import { Search as SearchIcon, X } from "lucide-react";
 import {
   fetchJournalEntries,
   createJournalEntry,

@@ -5,7 +5,6 @@ import FloatingAIButton from "./components/ai/AIButton";
 import JournalPage from "./components/pages/JournalPage";
 import CalendarPage from "./components/pages/CalendarPage";
 import GoalPage from "./components/pages/GoalPage";
-import AnalyticsPage from "./components/pages/AnalyticsPage";
 import AnalyticsDashboard from "./components/analytics/AnalyticsDashboard";
 import AIChat from "./components/ai/AIChat";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
