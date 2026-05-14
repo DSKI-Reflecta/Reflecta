@@ -1,7 +1,17 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routes import journal, goal  # Import routers
 from .db.database import create_tables
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan event for FastAPI app"""
+    create_tables()
+    yield
+    # optional shutdown code here
+
 
 # Create the FastAPI app
 app = FastAPI(
@@ -9,6 +19,7 @@ app = FastAPI(
     description="API for a smart AI-driven journal, reflection assistant, "
                 "and goal tracker",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 # CORS configuration to allow frontend calls from localhost:3000
@@ -23,12 +34,6 @@ app.add_middleware(
 # Register routers
 app.include_router(journal.router)
 app.include_router(goal.router)
-
-
-@app.on_event("startup")
-def startup_event() -> None:
-    """Create database tables on startup"""
-    create_tables()
 
 
 @app.get("/")

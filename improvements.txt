@@ -1,5 +1,5 @@
 Backend:
-- Include lifespan instead of onevent("start") as it is deprecated
+- Included lifespan instead of onevent("start")
 - def get_journal_entry: return (
         db.query(JournalEntryModel)
         .filter(JournalEntryModel.id == entry_id)
