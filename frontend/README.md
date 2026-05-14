@@ -46,44 +46,17 @@ The frontend project follows a component-based architecture. Here's an overview 
 ```
 frontend/
 ├── public/
-│   └── index.html          # The main HTML file
+│   └── index.html              # Main HTML file
 ├── src/
-│   ├── api/                # API service files (for interacting with the backend)
-│   ├── components/         # Reusable UI components
-│   │   ├── ai/             # Components related to the AI chat feature
-│   │   │   ├── AIButton.js
-│   │   │   └── AIChat.js
-│   │   ├── calendar/       # Components for the calendar feature
-│   │   │   └── JournalCalendar.js
-│   │   ├── common/         # Generic, reusable components (e.g., Modal)
-│   │   │   └── Modal.js
-│   │   ├── goals/          # Components for the goals feature
-│   │   │   ├── GoalCard.js
-│   │   │   ├── GoalForm.js
-│   │   │   └── GoalList.js
-│   │   ├── journal/        # Components for the journal feature
-│   │   │   ├── EntryCard.js
-│   │   │   ├── EntryForm.js
-│   │   │   └── EntryList.js
-│   │   └── layout/         # Layout components (Sidebar, Header)
-│   │       ├── Header.js
-│   │       └── Sidebar.js
-│   ├── pages/              # Top-level components for each page/route
-│   │   ├── CalendarPage.js
-│   │   ├── GoalPage.js
-│   │   └── JournalPage.js
-│   ├── App.js              # The main application component
-│   ├── FloatingButton.js   # Component for the floating action button
-│   ├── index.css           # Global CSS styles (likely includes Tailwind directives)
-│   └── index.js            # Entry point of the React application
-├── .env                    # Environment variables (if used)
-├── .gitignore              # Specifies intentionally untracked files
-├── package-lock.json       # Records the exact versions of dependencies
-├── package.json            # Project dependencies and scripts
-├── postcss.config.js       # PostCSS configuration (used by Tailwind)
-├── README.md               # This file
-└── tailwind.config.js      # Tailwind CSS configuration
-
+│   ├── api/                    # API service files for backend communication
+│   ├── components/             # Reusable UI components (AI, calendar, goals, etc.)
+│   ├── pages/                  # Top-level components for each page/route
+│   ├── App.js                  # Main application component
+│   ├── index.css               # Global CSS styles
+│   └── index.js                # Entry point of the React application
+├── Dockerfile                  # Docker configuration for the frontend
+├── package.json                # Project dependencies and scripts
+└── tailwind.config.js          # Tailwind CSS configuration
 ```
 
 ## Technologies Used

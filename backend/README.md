@@ -6,16 +6,15 @@ This is the backend component of the Advanced Programming Project. It is built w
 
 ```
 backend/
-├── .venv/
 ├── app/
-│   ├── db/
-│   │   ├── crud/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   └── main.py
-├── .env  ← required
-└── requirements.txt
+│   ├── db/         # Database setup, connection, and CRUD operations
+│   ├── models/     # Pydantic models for data validation and serialization
+│   ├── routes/     # API endpoint definitions
+│   ├── services/   # Business logic and services (e.g., AI agents)
+│   └── main.py     # FastAPI application entry point
+├── Dockerfile      # Docker configuration for the backend
+├── README.md       # This file
+└── requirements.txt# Python dependencies
 ```
 
 ## Setup Instructions
