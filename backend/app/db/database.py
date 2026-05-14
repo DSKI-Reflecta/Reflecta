@@ -11,12 +11,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from datetime import datetime, timezone
-# from ..models.entry import (
-#   SentimentLevel,
-#   SleepQuality,
-#   StressLevel,
-#   SocialEngagement
-# )
 
 # Get the directory of the current file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,9 +31,12 @@ class JournalEntryModel(Base):
     __tablename__ = "journal_entries"
     id = Column(Integer, primary_key=True, index=True)
 
+    # Main fields
     title = Column(String, nullable=False)
     date = Column(Date, nullable=False)
     content = Column(Text, nullable=False)
+
+    # Timestamps
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, nullable=True)
 

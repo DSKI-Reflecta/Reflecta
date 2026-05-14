@@ -1,5 +1,5 @@
 Backend:
-- 
+- remove keywords as they are probably not needed
 
 Frontend:
 - Editing on detailed view throws an error, deleting as well

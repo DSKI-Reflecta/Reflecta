@@ -28,7 +28,7 @@ def format_journal_content(content: str) -> str:
     return response.text.strip()
 
 
-def extract_activities(content: str) -> list:
+def extract_activities(content: str) -> str:
     """Extract activities from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
@@ -41,7 +41,7 @@ def extract_activities(content: str) -> list:
     return response.text.strip()
 
 
-def extract_sentiments(content: str) -> list:
+def extract_sentiments(content: str) -> str:
     """Extract sentiments from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
@@ -56,8 +56,9 @@ def extract_sentiments(content: str) -> list:
     return response.text.strip()
 
 
-def analyze_entry(content: str):
-    """Analyze the journal entry content using concurrent tasks."""
+def analyze_entry(content: str) -> tuple:
+    """Analyze the journal entry content using concurrent tasks.
+    This means that the tasks will run in parallel."""
     with concurrent.futures.ThreadPoolExecutor() as executor:
         f1 = executor.submit(format_journal_content, content)
         f2 = executor.submit(extract_activities, content)

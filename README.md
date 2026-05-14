@@ -1,4 +1,4 @@
-🧠 Reflecta
+## 🧠 Reflecta
 
 A private, intelligent journaling system to reflect, track emotional patterns, and stay aligned with your goals — guided by an AI agent.
 

@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-import json
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
@@ -7,8 +6,6 @@ from ...models.entry import JournalEntryCreate, JournalEntryUpdate
 from ..database import JournalEntryModel
 from ...services.gemini_agent import analyze_entry
 
-
-# --- Journal Entry CRUD  ---
 
 def get_journal_entries(
     db: Session,
@@ -25,6 +22,7 @@ def get_journal_entries(
 
 def get_journal_entry(db: Session,
                       entry_id: int) -> Optional[JournalEntryModel]:
+    # Optional[JournalEntryModel] == Union[JournalEntryModel, None]
     """Get a specific journal entry by ID"""
     return db.get(JournalEntryModel, entry_id)
 
@@ -33,9 +31,9 @@ def create_journal_entry(db: Session,
                          entry: JournalEntryCreate
                          ) -> JournalEntryModel:
     """Create a new journal entry with AI-formatted content"""
-    # Format the content using the formatter service
+    # Analyze the entry content using the AI service
     formatted_content, activities, sentiments = analyze_entry(entry.content)
-    print("activities", activities)
+
     db_entry = JournalEntryModel(
         title=entry.title,
         date=entry.date,  # Pass the date object
@@ -65,6 +63,7 @@ def create_journal_entry(db: Session,
         activities=activities,
         sentiments=sentiments,
     )
+
     db.add(db_entry)
     db.commit()
     db.refresh(db_entry)  # Refresh instance to get the new ID and timestamp
@@ -84,6 +83,7 @@ def update_journal_entry(
 
         # Update the entry with the new data
         for key, value in update_data.items():
+            # Handle IntEnum fields separately to store their integer values
             if key in ['sentiment_level', 'sleep_quality', 'stress_level',
                        'social_engagement'] and value is not None:
                 setattr(db_entry, key, value.value)
@@ -114,33 +114,3 @@ def delete_journal_entry(db: Session, entry_id: int) -> bool:
         db.commit()
         return True
     return False
-
-
-# --- AI Analysis CRUD ---
-
-def update_entry_analysis(
-    db: Session,
-    entry_id: int,
-    formatted_content: Optional[str] = None,
-    activities: Optional[List[str]] = None,
-    sentiment_analysis: Optional[str] = None,
-    keywords: Optional[List[str]] = None
-) -> Optional[JournalEntryModel]:
-    """Update AI analysis fields for a journal entry"""
-    db_entry = get_journal_entry(db, entry_id)
-    if db_entry:
-        if formatted_content is not None:
-            db_entry.formatted_content = formatted_content
-
-        if activities is not None:
-            db_entry.activities = json.dumps(activities)
-
-        if sentiment_analysis is not None:
-            db_entry.sentiment_analysis = sentiment_analysis
-
-        if keywords is not None:
-            db_entry.keywords = json.dumps(keywords)
-
-        db.commit()
-        db.refresh(db_entry)
-    return db_entry
