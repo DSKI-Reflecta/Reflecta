@@ -61,18 +61,28 @@ def format_journal_content(content: str) -> str:
     """Format the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
-        contents=f"""This is a journal entry. \n\n{content}.
-        Format the journal entry by adding clear section headers for
-        different times of day (e.g., Morning, Afternoon, Evening + Matching Emoji()
-        Make the section header bold and add a line break before each section.
-        You need to implement the linebreaks like this: \n\n
-        Ensure the text is well-structured and easy to read.
-        Include a few relevant emojis to enhance readability,
-        but keep it subtle. Maintain the original personal writing style
-        and tone, while correcting any unclear phrasing or language mistakes.
-        Return only the formatted journal content itself,
-        without any extra explanations or commentary.
-        Good example Output:**Morning** ☀️\n\nWoke up feeling pretty tired today, probably didn’t get enough sleep. Had a quick breakfast and then jumped straight into work. Felt a bit overwhelmed with all the tasks piling up, especially the project deadline next week.\n\n**Afternoon** ☕\n\nTook a short walk during lunch to clear my head – that helped a bit. In the afternoon, I finally made some progress on the API integration I was stuck on, which felt really good. Still, I’m feeling like I’m constantly behind. Maybe I need to revisit how I’m planning my week.\n\n**Evening** 🌃\n\nAlso had a good talk with Sarah in the evening, we haven’t caught up in a while. Ending the day with some reading and trying to get to bed earlier. - Bad Example Output:😴 Woke up feeling pretty tired today, probably didn’t get enough sleep. Had a quick breakfast and then jumped straight into work. Felt a bit overwhelmed with all the tasks piling up, especially the project deadline next week.\n\n**☀️ Morning**\nTook a short walk during lunch to clear my head – that helped a bit.\n\n**🌤️ Afternoon**\nIn the afternoon, I finally made some progress on the API integration I was stuck on, which felt really good. Still, I’m feeling like I’m constantly behind. Maybe I need to revisit how I’m planning my week.\n\n**🌙 Evening**\nAlso had a good talk with Sarah in the evening, we haven’t caught up in a while. Ending the day with some reading and trying to get to bed earlier. 📚""",
+        contents=f"""This is a journal entry:\n\n{content}
+
+Your task:
+Format the journal entry by adding clear section headers for different times of day, such as:
+- Morning ☀️
+- Afternoon ☕
+- Evening 🌙
+
+**Key Instructions:**
+- Make section headers bold (**like this**) and include a relevant, subtle emoji next to each header.
+- Insert a line break before every section like this: `\\n\\n` (exactly two newlines, no extra characters).
+- Organize the text logically into these time-based sections, **only if the content naturally contains events from multiple times of day**. If the entry is short or only mentions one time of day, do NOT force extra sections.
+- Keep the text easy to read and improve unclear phrasing or fix language mistakes carefully, without changing the original personal tone or meaning.
+- Add a few relevant emojis inside the text (subtly) to enhance readability—but don't overuse them.
+- Return only the **formatted journal entry** itself—no extra commentary or notes.
+
+**Example Good Output (for a longer entry):**
+**Morning** ☀️\\n\\nWoke up feeling pretty tired today, probably didn’t get enough sleep. Had a quick breakfast and then jumped straight into work. Felt a bit overwhelmed with all the tasks piling up, especially the project deadline next week.\\n\\n
+**Afternoon** ☕\\n\\nTook a short walk during lunch to clear my head – that helped a bit. In the afternoon, I finally made some progress on the API integration I was stuck on, which felt really good. Still, I’m feeling like I’m constantly behind. Maybe I need to revisit how I’m planning my week.\\n\\n
+**Evening** 🌙\\n\\nAlso had a good talk with Sarah in the evening, we haven’t caught up in a while. Ending the day with some reading and trying to get to bed earlier.
+
+**Important:** Do NOT copy or reuse this example in your output. Every output must be based ONLY on the provided journal entry content. If the entry is too short or only covers one time of day, do not artificially expand or add sections.""",
         config={
             "response_mime_type": "application/json",
             "response_schema": FormattedText,
@@ -130,24 +140,34 @@ Journal entry:
 Here is a list of goals with their IDs, titles, and descriptions:
 {goals}
 
-Your task is to return a comma-separated list of IDs of goals that the journal entry shows **clear and positive progress** toward.
+Your task:
+Identify and return the IDs of goals (comma-separated) toward which the journal entry shows **clear, positive progress**.
 
-⚠️ Important rules:
-- Do NOT include a goal if the journal entry expresses **doubt, failure, uncertainty, or opposite behavior**.
-- Do NOT include a goal just because the topic is mentioned.
-- If the entry says: "I didn’t sleep well", "I probably didn’t get enough sleep", or "My sleep was bad", then do **NOT** assign the goal "Get enough sleep".
-- Only assign goals if the journal clearly shows effort or success related to the goal.
+⚠️ Strict Rules:
+- Match a goal ONLY if the entry shows clear **positive action**, effort, or success related to that goal.
+- Do NOT match goals if the entry mentions:
+  - Doubt, uncertainty, or hesitation.
+  - Failure, struggle, or opposite behavior.
+  - Neutral mentions of the topic without clear positive effort or results.
+- Do NOT match goals just because the topic appears casually.
 
-Examples:
-- Entry: "I didn’t sleep enough." → No goals matched.
-- Entry: "I probably didn’t sleep enough." → No goals matched.
-- Entry: "I slept well and feel rested." → Match goal: "Get enough sleep".
-- Entry: "I went to the gym." → Match goal: "Exercise regularly".
+❗ Examples:
+1. Entry: "I didn’t sleep enough." → No match.
+2. Entry: "I probably didn’t get enough sleep." → No match.
+3. Entry: "I slept well and feel rested." → Match: Goal 'Get enough sleep'.
+4. Entry: "I went to the gym." → Match: Goal 'Exercise regularly'.
+5. Entry: "I was planning to exercise but didn’t." → No match.
+6. Entry: "I thought about eating healthier." → No match.
 
-Format:
-Return only the IDs of matching goals as a comma-separated list. Do not include any text, quotes, or formatting.
+⚡ Special Note:
+If the entry says something like “I’m trying to improve X” or “I made an effort to Y”, only match if actual **concrete positive action** or result is clearly described.
 
-Example output: 1, 3, 5
+✅ Output Format:
+- Return ONLY a comma-separated list of matched goal IDs.
+- No text, no explanations, no quotes.
+- Example output: 2, 5, 7
+
+🚫 Do NOT copy from the examples above. Match goals ONLY based on the actual journal entry provided.
 """,
     )
     # Convert the response text to a list of integers
