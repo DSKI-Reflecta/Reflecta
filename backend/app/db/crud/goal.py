@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date as date_type # Import date_type and datetime
 from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import case  # for custom ordering
@@ -62,9 +62,13 @@ def get_goal(
 
 def create_goal(db: Session, goal: GoalCreate) -> GoalModel:
     """Create a new goal"""
+
+    # Rely on Pydantic to have already parsed the target_date string
+    # into a date object if it was provided and the type is correct.
     db_goal = GoalModel(
         title=goal.title,
         type=goal.type,
+        # Assign the date object directly from the Pydantic model
         target_date=goal.target_date,
         category=goal.category,
         # Store the string value of the Enum
@@ -87,17 +91,16 @@ def update_goal(
     db_goal = get_goal(db, goal_id)
     if db_goal:
         # only include fields that are set in the update
+        # Pydantic should have already parsed the date string if provided
         update_data: dict = goal_update.model_dump(exclude_unset=True)
 
         # Update the goal with the new data
         for key, value in update_data.items():
             if key == 'priority' and value is not None:
+                # Ensure priority is stored as its string value
                 setattr(db_goal, key, value.value)
+            # No explicit date parsing needed here, rely on Pydantic
             else:
-                setattr(db_goal, key, value)
-
-        # Handle the case where targetDate might be None in the update
-            if key == 'target_date':
                 setattr(db_goal, key, value)
 
         # Update the updated_at timestamp

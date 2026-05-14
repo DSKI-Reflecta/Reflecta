@@ -1,8 +1,8 @@
 import React, { useState} from 'react'; // Import useEffect
 import GoalList from '../goals/GoalList';
 import GoalForm from '../goals/GoalForm';
-import Modal from '../common/Modal'; 
-
+import Modal from '../common/Modal';
+import GoalDetail from '../goals/GoalDetail'; // Import GoalDetail component
 
 
 // Import API functions and react-query hooks
@@ -18,6 +18,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 const GoalsPage = () => {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [editingGoal, setEditingGoal] = useState(null);
+  // State for managing the Goal Detail modal
+  const [showGoalDetailModal, setShowGoalDetailModal] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState(null);
+
 
   // Get QueryClient instance
   const queryClient = useQueryClient();
@@ -125,6 +129,17 @@ const GoalsPage = () => {
     // Clear any mutation errors when modal closes if you add error state to mutations
   };
 
+  // Handlers for the Goal Detail modal
+  const openGoalDetailModal = (goal) => {
+    setSelectedGoal(goal);
+    setShowGoalDetailModal(true);
+  };
+
+  const closeGoalDetailModal = () => {
+    setSelectedGoal(null);
+    setShowGoalDetailModal(false);
+  };
+
 
   return (
     <div>
@@ -145,8 +160,10 @@ const GoalsPage = () => {
       {!isLoading && !isError && goals && (
         <GoalList
           goals={goals}
-          onEditGoal={openEditGoalModal}
-          onDeleteGoal={handleDeleteGoal}
+          // Modified handlers to close detail modal if open when editing/deleting
+          onEditGoal={(goal) => { openEditGoalModal(goal); closeGoalDetailModal(); }}
+          onDeleteGoal={(goalId) => { handleDeleteGoal(goalId); closeGoalDetailModal(); }}
+          onGoalClick={openGoalDetailModal} // Pass the handler for card clicks
         />
       )}
 
@@ -160,6 +177,17 @@ const GoalsPage = () => {
             editGoal={editingGoal}
           />
         </Modal>
+      )}
+
+      {/* Modal for Goal Detail - Renders only when showGoalDetailModal is true */}
+      {showGoalDetailModal && selectedGoal && (
+        <GoalDetail
+          goal={selectedGoal}
+          onClose={closeGoalDetailModal}
+          // Pass handlers to the detail view, ensuring modals are managed correctly
+          onEdit={(goal) => { openEditGoalModal(goal); closeGoalDetailModal(); }}
+          onDelete={(goalId) => { handleDeleteGoal(goalId); closeGoalDetailModal(); }}
+        />
       )}
     </div>
   );
