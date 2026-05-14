@@ -1,7 +1,8 @@
 """
-Module for interacting with the Gemini AI model for various journaling and goal-setting tasks.
-This includes recommending goals, formatting journal content, extracting activities and sentiments,
-and generating follow-up questions.
+Module for interacting with the Gemini AI model for
+various journaling and goal-setting tasks. This includes
+recommending goals, formatting journal content, extracting
+activities and sentiments, and generating follow-up questions.
 """
 
 import os
@@ -88,7 +89,8 @@ class RecommendedGoal(BaseModel):
         description="A brief, motivating description of the goal."
     )
     category: str = Field(
-        description="A relevant category for the goal (e.g., Health, Career, Personal Growth)."
+        description="A relevant category for the goal "
+        "(e.g., Health, Career, Personal Growth)."
     )
 
 
@@ -97,13 +99,14 @@ class RecommendedGoalList(BaseModel):
     Pydantic model for a list of recommended goals.
     """
     goals: List[RecommendedGoal] = Field(
-        description="A list of recommended goals based on the user's journal entries."
+        description="A list of recommended goals based on "
+        "the user's journal entries."
     )
 
 
 def recommend_goals(entries: str) -> List[RecommendedGoal]:
     """
-    Recommends 3-5 specific, actionable, and positive goals based on journal entries.
+    Recommends 3-5 specific and actionable goals based on journal entries.
 
     Args:
         entries (str): A string containing the user's recent journal entries.
@@ -151,7 +154,8 @@ Your task is to recommend 3-5 specific, actionable, and positive goals based on 
 
 def format_journal_content(content: str) -> str:
     """
-    Formats the journal entry content by adding section headers and subtle emojis.
+    Formats the journal entry content
+    by adding section headers and subtle emojis.
 
     Args:
         content (str): The raw journal entry content.
@@ -248,11 +252,13 @@ def extract_sentiments(content: str, amount: int) -> str:
 
 def extract_goals(content: str, goals: str) -> List[int]:
     """
-    Identifies and returns the IDs of goals toward which the journal entry shows clear, positive progress.
+    Identifies and returns the IDs of goals toward
+    which the journal entry shows clear, positive progress.
 
     Args:
         content (str): The journal entry content.
-        goals (str): A string representation of available goals with their IDs, titles, and descriptions.
+        goals (str): A string representation of available goals
+        with their IDs, titles, and descriptions.
 
     Returns:
         List[int]: A list of integer IDs of matched goals.
@@ -350,13 +356,16 @@ Question:"""
     return response.parsed.text.strip()
 
 
-def enhance_goal_description(title: str, description: Optional[str] = None) -> str:
+def enhance_goal_description(
+    title: str,
+    description: Optional[str] = None
+) -> str:
     """
     Enhances an existing goal description or generates a new one using AI.
 
     Args:
         title (str): The title of the goal.
-        description (Optional[str]): The current description of the goal, if any.
+        description (Optional[str]): The current description of the goal.
 
     Returns:
         str: The enhanced or newly generated goal description.
@@ -436,15 +445,16 @@ Do NOT include any introductory explanations or additional metadata.
 
 def analyze_entry(content: str, goals: str) -> tuple:
     """
-    Analyzes the journal entry content using concurrent tasks to extract formatted content,
-    activities, sentiments, and associated goals.
+    Analyzes the journal entry content using concurrent tasks to extract
+    formatted content, activities, sentiments, and associated goals.
 
     Args:
         content (str): The journal entry content to analyze.
         goals (str): A string representation of available goals for extraction.
 
     Returns:
-        tuple: A tuple containing (formatted_content, activities, sentiments, goal_ids).
+        tuple: A tuple containing:
+        (formatted_content, activities, sentiments, goal_ids).
     """
     with concurrent.futures.ThreadPoolExecutor() as executor:
         f1 = executor.submit(format_journal_content, content)

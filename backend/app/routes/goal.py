@@ -1,5 +1,6 @@
 """
-API routes for managing goals, including CRUD operations and AI-driven recommendations.
+API routes for managing goals, including CRUD operations
+and AI-driven recommendations.
 """
 
 from typing import List, Optional
@@ -18,7 +19,11 @@ from app.db.crud.goal import (
 )
 from app.db.crud.journal import get_journal_entries
 from app.models.entry_goal import GoalCreate, Goal, GoalUpdate
-from app.services.gemini_agent import recommend_goals, RecommendedGoal, enhance_goal_description
+from app.services.gemini_agent import (
+    recommend_goals,
+    RecommendedGoal,
+    enhance_goal_description,
+)
 
 
 class EnhanceDescriptionRequest(BaseModel):
@@ -151,7 +156,9 @@ def delete_goal_route(
 
 
 @router.post("/recommend", response_model=List[RecommendedGoal])
-def recommend_new_goals(db: Session = Depends(get_db)) -> List[RecommendedGoal]:
+def recommend_new_goals(
+    db: Session = Depends(get_db)
+) -> List[RecommendedGoal]:
     """
     Recommends new goals based on existing journal entries.
 
@@ -180,7 +187,8 @@ def enhance_description_endpoint(
     Enhances or generates a goal description using AI.
 
     Args:
-        request (EnhanceDescriptionRequest): The request containing the goal title and optional description.
+        request (EnhanceDescriptionRequest): The request containing
+        the goal title and optional description.
         db (Session): The database session dependency.
 
     Returns:

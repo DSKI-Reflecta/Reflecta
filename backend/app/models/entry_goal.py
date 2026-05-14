@@ -1,5 +1,6 @@
 """
-Pydantic models for journal entries and goals, including enums for various metrics.
+Pydantic models for journal entries and goals,
+including enums for various metrics.
 """
 
 from datetime import datetime, date as date_type

@@ -105,7 +105,7 @@ class GoalModel(Base):
 def create_tables():
     """
     Creates all defined database tables if they do not already exist.
-    This function binds to the engine and creates tables based on Base.metadata.
+    This function binds to the engine and creates tables based on metadata.
     """
     print("Creating database tables...")
     Base.metadata.create_all(bind=engine)

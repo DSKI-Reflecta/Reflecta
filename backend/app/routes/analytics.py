@@ -3,7 +3,6 @@ API routes for retrieving and analyzing journal entry analytics.
 """
 
 from datetime import datetime, timedelta, timezone
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
@@ -24,18 +23,22 @@ router = APIRouter(
 def get_trends(
     db: Session = Depends(get_db),
     past_days: int = Query(
-        30, ge=1, description="Number of past days to include in the trend analysis.")
+        30,
+        ge=1,
+        description="Number of past days to include in the trend analysis.")
 ) -> TsTrends:
     """
-    Retrieves time series data for sentiment, sleep, stress, and social engagement
-    from journal entries over a specified number of past days.
+    Retrieves time series data for sentiment, sleep, stress, and social
+    engagement from journal entries over a specified number of past days.
 
     Args:
         db (Session): The database session dependency.
-        past_days (int): The number of past days to consider for the trend analysis.
+        past_days (int): The number of past days to consider
+        for the trend analysis.
 
     Returns:
-        TsTrends: An object containing lists of dates and corresponding metric values.
+        TsTrends: An object containing lists of dates
+        and corresponding metric values.
     """
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
     entries = get_journal_entries(db, from_date=cutoff_date)
@@ -53,15 +56,19 @@ def get_trends(
 def get_averages(
     db: Session = Depends(get_db),
     past_days: int = Query(
-        30, ge=1, description="Number of past days to include in the average calculation.")
+        30,
+        ge=1,
+        description="Number of past days to include "
+        "in the average calculation.")
 ) -> Averages:
     """
-    Calculates and retrieves average values for sentiment, sleep, stress, and social engagement
-    from journal entries over a specified number of past days.
+    Calculates and retrieves average values for sentiment, sleep, stress, and
+    social engagement from journal entries over specified number of past days.
 
     Args:
         db (Session): The database session dependency.
-        past_days (int): The number of past days to consider for the average calculation.
+        past_days (int): The number of past days to consider
+        for the average calculation.
 
     Returns:
         Averages: An object containing the average values for each metric.
@@ -70,7 +77,8 @@ def get_averages(
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
     entries = get_journal_entries(db, from_date=cutoff_date)
 
-    # Calculate averages, handling cases where lists might be empty to avoid ZeroDivisionError
+    # Calculate averages
+    # handling cases where lists are empty to avoid zero division
     num_entries = len(entries)
     sentiment_avg = sum(e.sentiment_level for e in entries if e.sentiment_level is not None) / \
         num_entries if num_entries > 0 else 0.0
@@ -93,17 +101,20 @@ def get_averages(
 def get_correlations(
     db: Session = Depends(get_db),
     past_days: int = Query(
-        30, ge=1, description="Number of past days to consider for correlation analysis.")
+        30,
+        ge=1,
+        description="Num of past days to consider for correlation analysis.")
 ):
     """
-    Placeholder endpoint to calculate and retrieve correlations between state tracking fields.
+    Placeholder endpoint to calculate and retrieve
+    correlations between state tracking fields.
 
     Args:
         db (Session): The database session dependency.
         past_days (int): The number of past days to consider for the analysis.
 
     Returns:
-        None: Currently returns None. Implement actual correlation calculation logic here.
+        None: Currently returns None.
     """
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
     get_journal_entries(db, from_date=cutoff_date)
@@ -116,7 +127,9 @@ def get_correlations(
 def get_weekly_patterns(
     db: Session = Depends(get_db),
     past_days: int = Query(
-        30, ge=1, description="Number of past days to consider for weekly pattern analysis.")
+        30,
+        ge=1,
+        description="Num of past days to consider for weekly analysis.")
 ):
     """
     Placeholder endpoint to show average values per weekday.
@@ -126,7 +139,7 @@ def get_weekly_patterns(
         past_days (int): The number of past days to consider for the analysis.
 
     Returns:
-        None: Currently returns None. Implement actual weekly pattern calculation logic here.
+        None: Currently returns None.
     """
     cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
     get_journal_entries(db, from_date=cutoff_date)
