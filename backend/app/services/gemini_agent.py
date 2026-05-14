@@ -14,6 +14,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 genai_client = genai.Client(api_key=api_key)
 model = "gemini-2.0-flash"
 
+
 # Define enums for activities and sentiments
 class Activity(str, Enum):
     WORKING = "Working"
@@ -33,6 +34,7 @@ class Activity(str, Enum):
     HOBBIES = "Pursuing hobbies"
     FAMILY_TIME = "Spending time with family"
     OTHER = "Other activities"
+
 
 class Sentiment(str, Enum):
     HAPPY = "Happy"
@@ -56,15 +58,21 @@ class Sentiment(str, Enum):
     PEACEFUL = "Peaceful"
     DISAPPOINTED = "Disappointed"
 
+
 # Simple response classes for structured output
 class FormattedText(BaseModel):
     text: str
 
+
 class ActivityList(BaseModel):
-    activities: List[Activity] = Field(description="List of activities extracted from the journal entry")
+    activities: List[Activity] = Field(
+        description="List of activities extracted from the journal entry")
+
 
 class SentimentList(BaseModel):
-    sentiments: List[Sentiment] = Field(description="List of sentiments extracted from the journal entry")
+    sentiments: List[Sentiment] = Field(
+        description="List of sentiments extracted from the journal entry")
+
 
 def format_journal_content(content: str) -> str:
     """Format the journal entry content."""
@@ -85,6 +93,7 @@ def format_journal_content(content: str) -> str:
     )
     return response.parsed.text.strip()
 
+
 def extract_activities(content: str) -> str:
     """Extract activities from the journal entry content."""
     response = genai_client.models.generate_content(
@@ -97,21 +106,26 @@ def extract_activities(content: str) -> str:
             "response_schema": ActivityList,
         },
     )
-    return ", ".join([activity.value for activity in response.parsed.activities])
+    return ", ".join(
+        [activity.value for activity in response.parsed.activities])
+
 
 def extract_sentiments(content: str) -> str:
     """Extract sentiments from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Identify the main emotions or feelings expressed in this journal entry.
-        Select up to 5 sentiments that best match the emotional tone of the entry.""",
+        Identify the main emotions or feelings expressed in
+        this journal entry. Select up to 5 sentiments that best
+        match the emotional tone of the entry.""",
         config={
             "response_mime_type": "application/json",
             "response_schema": SentimentList,
         },
     )
-    return ", ".join([sentiment.value for sentiment in response.parsed.sentiments])
+    return ", ".join(
+        [sentiment.value for sentiment in response.parsed.sentiments])
+
 
 def extract_goals(content: str, goals: str) -> str:
     """Extract goals from the journal entry content."""
