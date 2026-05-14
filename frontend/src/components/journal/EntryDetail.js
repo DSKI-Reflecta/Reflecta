@@ -1,7 +1,6 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 // Import necessary icons, same as EntryCard
-import { X, Edit, Trash2, Smile, Frown, Moon, Sun, Zap, Feather, User, Users, Meh } from 'lucide-react';
+import { X, Edit, Trash2, Smile, Frown, Moon, Sun, Zap, Feather, User, Users, Meh, FileText, File } from 'lucide-react';
 
 // Helper function to render state icons (copied from EntryCard for self-containment)
 const renderStateIcon = (type, value) => {
@@ -34,10 +33,19 @@ const renderStateIcon = (type, value) => {
 
 
 const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
+  // State to toggle between formatted content and original content
+  const [showOriginalContent, setShowOriginalContent] = useState(false);
+
   // If no entry is provided, don't render anything
   if (!entry) {
     return null;
   }
+
+  // Determine which content to display
+  const displayContent = showOriginalContent ? entry.content : (entry.formatted_content || entry.content);
+  
+  // Check if both content types are available for toggle
+  const hasFormattedContent = entry.formatted_content && entry.formatted_content !== entry.content;
 
   return (
     // Overlay for the background (optional, depends on how you integrate it)
@@ -100,11 +108,32 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
              </div>
          ) : null}
 
+        {/* Content Toggle Option - Only show if both content types exist */}
+        {hasFormattedContent && (
+          <div className="mt-4 flex items-center text-sm text-gray-600 space-x-2 flex-shrink-0">
+            <button 
+              className={`flex items-center px-3 py-1 rounded-md ${!showOriginalContent ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}
+              onClick={() => setShowOriginalContent(false)}
+            >
+              <FileText className="h-4 w-4 mr-1" />
+              Formatted
+            </button>
+            <button 
+              className={`flex items-center px-3 py-1 rounded-md ${showOriginalContent ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}
+              onClick={() => setShowOriginalContent(true)}
+            >
+              <File className="h-4 w-4 mr-1" />
+              Original
+            </button>
+          </div>
+        )}
 
         {/* Main Content - Scrollable Area */}
         {/* Added flex-grow and overflow-y-auto here */}
         <div className="mt-4 text-gray-700 leading-relaxed overflow-y-auto flex-grow pr-2"> {/* Added pr-2 for scrollbar padding */}
-          <p className="whitespace-pre-wrap">{entry.content}</p> {/* Use whitespace-pre-wrap to respect line breaks */}
+          <div className="whitespace-pre-wrap">
+            {displayContent}
+          </div>
         </div>
 
         {/* Action Buttons (Edit/Delete) */}
