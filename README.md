@@ -18,13 +18,13 @@ Set, organize, and evolve your direction.
 
 🗓️ **3. Calendar**
 Visualize your journey.
-* 🗓️ View your journal entries, plans, and goal due dates in a comprehensive calendar with month, week, and daily views.
+* 🗓️ View your journal entries and goal due dates in a comprehensive calendar with month, week, and daily views.
 
 📈 **4. Analytics**
 Gain personal insights from your data.
-* 🎯 Track goal alignment and monitor trends in your mood, sleep, stress, and sociality.
+* 🎯 Track your trends, journaling streak and well being statistics over time.
 * 🔁 Discover correlation insights, such as how sleep quality impacts stress levels.
-* ✅ Get a summary of your activities over time.
+* ✅ Get a summary of your activities.
 
 🤖 **5. AI Chatbot (Reflecta Assistant)**
 Your personal, context-aware companion.

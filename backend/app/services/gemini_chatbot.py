@@ -7,6 +7,11 @@ import os
 
 from dotenv import load_dotenv
 from google import genai
+from sqlalchemy.orm import Session
+
+from app.db.crud.goal import get_goals
+from app.db.crud.journal import get_journal_entries
+from app.db.database import get_db
 from app.models.chat_agent import ChatResponse
 
 
@@ -35,19 +40,41 @@ Respond only in text. Never include emojis or excessive enthusiasm unless the us
 """
 
 
-def get_chatbot_response(user_message: str) -> str:
+def get_contextual_chatbot_response(user_message: str, db: Session) -> str:
     """
-    Retrieves a response from the Gemini chatbot based on the user's message.
+    Gets a chatbot response, including context from the user's goals and recent journal entries.
 
     Args:
-        user_message (str): The message from the user to the chatbot.
+        user_message (str): The user's message.
+        db (Session): The database session.
 
     Returns:
-        str: The chatbot's generated text response.
+        str: The chatbot's response.
     """
+    goals = get_goals(db, limit=10)
+    journal_entries = get_journal_entries(db, limit=10)
+
+    context = "User's Goals:\n"
+    if goals:
+        for goal in goals:
+            context += f"- {goal.title} (Priority: {goal.priority}, Target Date: {goal.target_date}, Description: {goal.description})\n"
+    else:
+        context += "No goals found.\n"
+
+    context += "\nRecent Journal Entries:\n"
+    if journal_entries:
+        for entry in journal_entries:
+            context += f"- Date: {entry.date}, Title: {entry.title}, Content: {entry.content}\n"
+    else:
+        context += "No journal entries found.\n"
+
+    system_prompt = SYSTEM_PROMPT
+    if context:
+        system_prompt += f"\n\nHere is some additional context about the user:\n{context}"
+
     chat_message = genai_client.models.generate_content(
         model=model,
-        config={"system_instruction": SYSTEM_PROMPT,
+        config={"system_instruction": system_prompt,
                 "response_mime_type": "application/json",
                 "response_schema": ChatResponse},
         contents=user_message,
