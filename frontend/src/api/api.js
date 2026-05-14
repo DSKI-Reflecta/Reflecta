@@ -1,5 +1,24 @@
 const API_BASE_URL = "http://localhost:8000";
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  const headers = { "Content-Type": "application/json" };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+};
+
+const authFetch = async (url, options = {}) => {
+  const headers = { ...getAuthHeaders(), ...options.headers };
+  const response = await fetch(url, { ...options, headers });
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
+  return response;
+};
+
 const handleResponse = async (response) => {
   if (!response.ok) {
     const contentType = response.headers.get("content-type");
@@ -20,8 +39,8 @@ const handleResponse = async (response) => {
 
 export const fetchCalendarData = async () => {
   const [entriesResponse, goalsResponse] = await Promise.all([
-    fetch(`${API_BASE_URL}/journal/entries/`),
-    fetch(`${API_BASE_URL}/goals/`),
+    authFetch(`${API_BASE_URL}/journal/entries/`),
+    authFetch(`${API_BASE_URL}/goals/`),
   ]);
 
   const entriesData = await handleResponse(entriesResponse);
@@ -51,7 +70,7 @@ const notifyCalendarUpdate = () => {
 };
 
 export const fetchJournalEntries = async () => {
-  const response = await fetch(`${API_BASE_URL}/journal/entries/`);
+  const response = await authFetch(`${API_BASE_URL}/journal/entries/`);
   const data = await handleResponse(response);
   const sortedEntries = data.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
@@ -60,11 +79,8 @@ export const fetchJournalEntries = async () => {
 };
 
 export const createJournalEntry = async (entryData) => {
-  const response = await fetch(`${API_BASE_URL}/journal/entries/`, {
+  const response = await authFetch(`${API_BASE_URL}/journal/entries/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(entryData),
   });
   const result = await handleResponse(response);
@@ -73,11 +89,8 @@ export const createJournalEntry = async (entryData) => {
 };
 
 export const updateJournalEntry = async (entryId, entryData) => {
-  const response = await fetch(`${API_BASE_URL}/journal/entries/${entryId}`, {
+  const response = await authFetch(`${API_BASE_URL}/journal/entries/${entryId}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(entryData),
   });
   const result = await handleResponse(response);
@@ -86,7 +99,7 @@ export const updateJournalEntry = async (entryId, entryData) => {
 };
 
 export const deleteJournalEntry = async (entryId) => {
-  const response = await fetch(`${API_BASE_URL}/journal/entries/${entryId}`, {
+  const response = await authFetch(`${API_BASE_URL}/journal/entries/${entryId}`, {
     method: "DELETE",
   });
   if (!response.ok) {
@@ -108,55 +121,49 @@ export const deleteJournalEntry = async (entryId) => {
 };
 
 export const fetchGoals = async () => {
-  const response = await fetch(`${API_BASE_URL}/goals/`);
+  const response = await authFetch(`${API_BASE_URL}/goals/`);
   return handleResponse(response);
 };
 
 export const getAnalyticsSummary = async (period) => {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/analytics/summary/?period=${period}`
   );
   return handleResponse(response);
 };
 
 export const getAnalyticsTrends = async (period) => {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/analytics/trends/?period=${period}`
   );
   return handleResponse(response);
 };
 
 export const getAnalyticsCorrelations = async (period) => {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/analytics/correlations/?period=${period}`
   );
   return handleResponse(response);
 };
 
 export const getAnalyticsStats = async (period) => {
-  const response = await fetch(
+  const response = await authFetch(
     `${API_BASE_URL}/analytics/stats/?period=${period}`
   );
   return handleResponse(response);
 };
 
 export const enhanceGoalDescription = async (title, description) => {
-  const response = await fetch(`${API_BASE_URL}/goals/enhance-description`, {
+  const response = await authFetch(`${API_BASE_URL}/goals/enhance-description`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ title, description }),
   });
   return handleResponse(response);
 };
 
 export const createGoal = async (goalData) => {
-  const response = await fetch(`${API_BASE_URL}/goals/`, {
+  const response = await authFetch(`${API_BASE_URL}/goals/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(goalData),
   });
   const result = await handleResponse(response);
@@ -165,11 +172,8 @@ export const createGoal = async (goalData) => {
 };
 
 export const updateGoal = async (goalId, goalData) => {
-  const response = await fetch(`${API_BASE_URL}/goals/${goalId}`, {
+  const response = await authFetch(`${API_BASE_URL}/goals/${goalId}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(goalData),
   });
   const result = await handleResponse(response);
@@ -178,7 +182,7 @@ export const updateGoal = async (goalId, goalData) => {
 };
 
 export const deleteGoal = async (goalId) => {
-  const response = await fetch(`${API_BASE_URL}/goals/${goalId}`, {
+  const response = await authFetch(`${API_BASE_URL}/goals/${goalId}`, {
     method: "DELETE",
   });
   if (!response.ok) {
@@ -200,11 +204,8 @@ export const deleteGoal = async (goalId) => {
 };
 
 export const sendChatMessage = async (message) => {
-  const response = await fetch(`${API_BASE_URL}/ai/chat/`, {
+  const response = await authFetch(`${API_BASE_URL}/ai/chat/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ message: message }),
   });
   const data = await handleResponse(response);
@@ -212,11 +213,8 @@ export const sendChatMessage = async (message) => {
 };
 
 export const getJournalQuestion = async (content) => {
-  const response = await fetch(`${API_BASE_URL}/ai/journal-question/`, {
+  const response = await authFetch(`${API_BASE_URL}/ai/journal-question/`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ content: content }),
   });
   const data = await handleResponse(response);
@@ -224,11 +222,8 @@ export const getJournalQuestion = async (content) => {
 };
 
 export const recommendGoals = async () => {
-  const response = await fetch(`${API_BASE_URL}/goals/recommend`, {
+  const response = await authFetch(`${API_BASE_URL}/goals/recommend`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
   return handleResponse(response);
 };
