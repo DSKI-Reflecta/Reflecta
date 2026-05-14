@@ -14,6 +14,36 @@ from app.models.analytics import TsTrends, Averages
 from app.services.gemini_agent import generate_correlation_insights
 
 
+def calculate_moving_average(data: List[float], window: int) -> List[float]:
+    """
+    Calculate centered moving average for a data series.
+    
+    Args:
+        data (List[float]): Input data series
+        window (int): Size of the moving window
+        
+    Returns:
+        List[float]: Moving averages with same length as input data
+    """
+    if len(data) < window:
+        return data  # Return original data if not enough points
+    
+    result = []
+    half_window = window // 2
+    
+    for i in range(len(data)):
+        # Calculate window bounds, ensuring we stay within data bounds
+        start = max(0, i - half_window)
+        end = min(len(data), i + half_window + 1)
+        
+        # Calculate average of current window
+        window_data = data[start:end]
+        avg = sum(window_data) / len(window_data)
+        result.append(avg)
+    
+    return result
+
+
 class AnalyticsService:
     """Service class for journal entry analytics calculations."""
 
@@ -30,30 +60,11 @@ class AnalyticsService:
         # Auto window size: 3-21 days based on period
         window = min(21, max(3, past_days // 7))
         
-        def moving_avg(data):
-            if len(data) < window:
-                return data  # Return original data if not enough points
-            
-            result = []
-            half_window = window // 2
-            
-            for i in range(len(data)):
-                # Calculate window bounds, ensuring we stay within data bounds
-                start = max(0, i - half_window)
-                end = min(len(data), i + half_window + 1)
-                
-                # Calculate average of current window
-                window_data = data[start:end]
-                avg = sum(window_data) / len(window_data)
-                result.append(avg)
-            
-            return result
-        
         # Calculate moving averages
-        sentiment_ma = moving_avg([e.sentiment_level for e in entries])
-        sleep_ma = moving_avg([e.sleep_quality for e in entries])
-        stress_ma = moving_avg([e.stress_level for e in entries])
-        social_ma = moving_avg([e.social_engagement for e in entries])
+        sentiment_ma = calculate_moving_average([e.sentiment_level for e in entries], window)
+        sleep_ma = calculate_moving_average([e.sleep_quality for e in entries], window)
+        stress_ma = calculate_moving_average([e.stress_level for e in entries], window)
+        social_ma = calculate_moving_average([e.social_engagement for e in entries], window)
         
         return TsTrends(
             dates=[e.date.strftime("%Y-%m-%d") for e in entries],
@@ -144,9 +155,6 @@ class AnalyticsService:
 
         window = min(21, max(3, past_days // 7))
 
-        def moving_avg(data):
-            return np.convolve(data, np.ones(window)/window, mode='same')
-
         correlations = {}
 
         correlations["sleep_sentiment"] = {
@@ -154,8 +162,8 @@ class AnalyticsService:
             "data": [{"date": dates[i], "x": sleep[i], "y": sentiment[i]} for i in range(len(dates))],
             "x_label": "Sleep Quality",
             "y_label": "Sentiment Level",
-            "x_avg": moving_avg(sleep).tolist(),
-            "y_avg": moving_avg(sentiment).tolist()
+            "x_avg": calculate_moving_average(sleep, window),
+            "y_avg": calculate_moving_average(sentiment, window)
         }
 
         correlations["sleep_stress"] = {
@@ -163,8 +171,8 @@ class AnalyticsService:
             "data": [{"date": dates[i], "x": sleep[i], "y": stress[i]} for i in range(len(dates))],
             "x_label": "Sleep Quality",
             "y_label": "Stress Level",
-            "x_avg": moving_avg(sleep).tolist(),
-            "y_avg": moving_avg(stress).tolist()
+            "x_avg": calculate_moving_average(sleep, window),
+            "y_avg": calculate_moving_average(stress, window)
         }
 
         correlations["sleep_social"] = {
@@ -172,8 +180,8 @@ class AnalyticsService:
             "data": [{"date": dates[i], "x": sleep[i], "y": social[i]} for i in range(len(dates))],
             "x_label": "Sleep Quality",
             "y_label": "Social Engagement",
-            "x_avg": moving_avg(sleep).tolist(),
-            "y_avg": moving_avg(social).tolist()
+            "x_avg": calculate_moving_average(sleep, window),
+            "y_avg": calculate_moving_average(social, window)
         }
 
         correlations["sentiment_stress"] = {
@@ -181,8 +189,8 @@ class AnalyticsService:
             "data": [{"date": dates[i], "x": sentiment[i], "y": stress[i]} for i in range(len(dates))],
             "x_label": "Sentiment Level",
             "y_label": "Stress Level",
-            "x_avg": moving_avg(sentiment).tolist(),
-            "y_avg": moving_avg(stress).tolist()
+            "x_avg": calculate_moving_average(sentiment, window),
+            "y_avg": calculate_moving_average(stress, window)
         }
 
         correlations["sentiment_social"] = {
@@ -190,8 +198,8 @@ class AnalyticsService:
             "data": [{"date": dates[i], "x": sentiment[i], "y": social[i]} for i in range(len(dates))],
             "x_label": "Sentiment Level",
             "y_label": "Social Engagement",
-            "x_avg": moving_avg(sentiment).tolist(),
-            "y_avg": moving_avg(social).tolist()
+            "x_avg": calculate_moving_average(sentiment, window),
+            "y_avg": calculate_moving_average(social, window)
         }
 
         correlations["stress_social"] = {
@@ -199,8 +207,8 @@ class AnalyticsService:
             "data": [{"date": dates[i], "x": stress[i], "y": social[i]} for i in range(len(dates))],
             "x_label": "Stress Level",
             "y_label": "Social Engagement",
-            "x_avg": moving_avg(stress).tolist(),
-            "y_avg": moving_avg(social).tolist()
+            "x_avg": calculate_moving_average(stress, window),
+            "y_avg": calculate_moving_average(social, window)
         }
 
         valid_correlations = {
