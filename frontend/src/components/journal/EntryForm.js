@@ -19,7 +19,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
     stress: 3,    // Default average stress (1-5)
     socialEngagement: 3, // Default moderate social engagement (e.g., 1-5 scale)
     // We will NOT generate ID here, backend will provide it on creation
-    // id: editEntry?.id || Date.now()
+    // id: editEntry?.id
   });
 
    // Populate form if editing an existing entry
@@ -27,9 +27,14 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
     if (editEntry) {
       setEntry({
          ...editEntry,
-         // Ensure date is inYYYY-MM-DD format for input type="date"
+         // Ensure date is in YYYY-MM-DD format for input type="date"
          // Backend date might be ISO string, so split it
-         date: editEntry.date ? editEntry.date.split('T')[0] : ''
+         date: editEntry.date ? editEntry.date.split('T')[0] : '',
+         // Explicitly set slider values from editEntry (using backend field names)
+         sentiment: editEntry.sentiment_level !== undefined && editEntry.sentiment_level !== null ? editEntry.sentiment_level : 3,
+         sleep: editEntry.sleep_quality !== undefined && editEntry.sleep_quality !== null ? editEntry.sleep_quality : 3,
+         stress: editEntry.stress_level !== undefined && editEntry.stress_level !== null ? editEntry.stress_level : 3,
+         socialEngagement: editEntry.social_engagement !== undefined && editEntry.social_engagement !== null ? editEntry.social_engagement : 3,
       });
     } else {
         // Reset form for new entry
@@ -81,6 +86,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
                   min={min}
                   max={max}
                   step={step}
+                  // Use the corresponding state value for the slider
                   value={entry[name]}
                   onChange={handleChange}
                   className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg" // Tailwind range styling, flex-1 to fill space
