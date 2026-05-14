@@ -10,52 +10,62 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           viewBox="0 0 200 60"
           className="h-10 md:h-12 w-auto"
         >
-          <text
-            x="60"
-            y="38"
-            font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-            font-weight="600"
-            font-size="24"
-            fill="#333333"
-          >
-            Reflecta
-          </text>
+          <defs>
+            <linearGradient
+              id="purpleGradient"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="100%"
+            >
+              <stop offset="0%" stopColor="#9B30FF" />
+              <stop offset="100%" stopColor="#6A0DAD" />
+            </linearGradient>
+          </defs>
 
           <g>
             <rect
               x="10"
-              y="15"
+              y="10"
               width="40"
-              height="30"
-              rx="2"
-              ry="2"
-              fill="#4169E1"
+              height="40"
+              rx="10"
+              ry="10"
+              fill="url(#purpleGradient)"
             />
-
             <line
               x1="30"
-              y1="15"
+              y1="10"
               x2="30"
-              y2="45"
+              y2="50"
               stroke="#FFFFFF"
-              stroke-width="1"
+              strokeWidth="1.5"
             />
-
             <path
-              d="M20 25 Q 25 20, 30 25 Q 35 30, 40 25"
+              d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25"
               stroke="#FFFFFF"
-              stroke-width="2"
+              strokeWidth="2"
               fill="none"
             />
-
             <path
-              d="M20 35 Q 25 40, 30 35 Q 35 30, 40 35"
+              d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35"
               stroke="#FFFFFF"
-              stroke-width="2"
+              strokeWidth="2"
               fill="none"
-              opacity="0.6"
+              opacity="0.7"
             />
           </g>
+
+          <text
+            x="60"
+            y="38"
+            fontFamily="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            fontWeight="600"
+            fontSize="24"
+            fill="#333333"
+          >
+            Reflecta
+          </text>
         </svg>
       </div>
 
