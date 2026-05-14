@@ -7,6 +7,7 @@ const Header = ({ activeTab }) => {
         {activeTab === "journal" && "My Journal"}
         {activeTab === "goals" && "My Goals"}
         {activeTab === "calendar" && "Journal Calendar"}
+        {activeTab === "analytics" && "Analytics Overview"}
       </h2>
     </header>
   );

@@ -112,6 +112,34 @@ export const fetchGoals = async () => {
   return handleResponse(response);
 };
 
+export const getAnalyticsSummary = async (period) => {
+  const response = await fetch(
+    `${API_BASE_URL}/analytics/summary/?period=${period}`
+  );
+  return handleResponse(response);
+};
+
+export const getAnalyticsTrends = async (period) => {
+  const response = await fetch(
+    `${API_BASE_URL}/analytics/trends/?period=${period}`
+  );
+  return handleResponse(response);
+};
+
+export const getAnalyticsCorrelations = async (period) => {
+  const response = await fetch(
+    `${API_BASE_URL}/analytics/correlations/?period=${period}`
+  );
+  return handleResponse(response);
+};
+
+export const getAnalyticsStats = async (period) => {
+  const response = await fetch(
+    `${API_BASE_URL}/analytics/averages/?period=${period}`
+  );
+  return handleResponse(response);
+};
+
 export const enhanceGoalDescription = async (title, description) => {
   const response = await fetch(`${API_BASE_URL}/goals/enhance-description`, {
     method: "POST",
