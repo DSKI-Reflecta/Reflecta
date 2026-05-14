@@ -43,11 +43,33 @@ def get_averages(db: Session = Depends(get_db), past_days: int = 30):
 
 
 @router.get("/correlations/")
-def get_correlations(db: Session = Depends(get_db)):
+def get_correlations(db: Session = Depends(get_db), past_days: int = 30):
     """Get correlations of state tracking fields."""
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=30)
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
     get_journal_entries(db, from_date=cutoff_date)
 
     # Calculate correlations
+
+    return None
+
+
+@router.get("/weekly-patterns/")
+def get_weekly_patterns(db: Session = Depends(get_db), past_days: int = 30):
+    """Show average values per weekday."""
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
+    get_journal_entries(db, from_date=cutoff_date)
+
+    # Calculate weekly patterns
+
+    return None
+
+
+@router.get("/summary/")
+def generate_summary(db: Session = Depends(get_db), past_days: int = 7):
+    """Generate a summary of journal entries."""
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
+    get_journal_entries(db, from_date=cutoff_date)
+
+    # Generate summary
 
     return None
