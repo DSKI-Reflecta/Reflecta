@@ -4,6 +4,7 @@ Backend:
 - Add example env to github: Chris
 
 Frontend:
+- Enable markdown for Formatted entry
 - Editing on detailed view throws an error, deleting as well: Chris
 - More filter and sorting opportunities for journal entries. Make start and end date smaller: Chris
 - Social Engagement without unnecessary text: Chris

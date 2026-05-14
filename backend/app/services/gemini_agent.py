@@ -81,6 +81,7 @@ def format_journal_content(content: str) -> str:
         contents=f"""This is a journal entry. \n\n{content}.
         Format the journal entry by adding clear section headers for
         different times of day (e.g., Morning, Afternoon, Evening).
+        Make the section header bold.
         Include a few relevant emojis to enhance readability,
         but keep it subtle. Maintain the original personal writing style
         and tone, while correcting any unclear phrasing or language mistakes.
