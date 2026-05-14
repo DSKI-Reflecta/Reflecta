@@ -31,7 +31,7 @@ File: `frontend/public/manifest.json`
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "theme_color": "#7c3aed",
   "icons": [
     {
       "src": "icons/icon-192x192.png",
@@ -49,7 +49,7 @@ File: `frontend/public/manifest.json`
 }
 ```
 
-The `theme_color` uses blue-600 (`#2563eb`) which matches the app's primary active/accent color from `tailwind.config.js`.
+The `theme_color` uses purple-600 (`#7c3aed`) which matches the app's brand color - used in the logo gradient, primary buttons, and AI chat elements throughout the app.
 
 ### 2. Service Worker
 
