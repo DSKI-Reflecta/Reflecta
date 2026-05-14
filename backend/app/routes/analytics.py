@@ -2,15 +2,15 @@
 API routes for retrieving and analyzing journal entry analytics.
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
+from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from typing import Optional
 
 from app.db.database import get_db
-from app.db.crud.journal import get_journal_entries
 from app.models.analytics import TsTrends, Averages
+from app.services.analytics import AnalyticsService
 from app.services.gemini_agent import summarize_journal_entries
 
 
@@ -41,16 +41,8 @@ def get_trends(
         TsTrends: An object containing lists of dates
         and corresponding metric values.
     """
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-    entries = get_journal_entries(db, from_date=cutoff_date)
-
-    return TsTrends(
-        dates=[e.date.strftime("%Y-%m-%d") for e in entries],
-        sentiment=[e.sentiment_level for e in entries],
-        sleep=[e.sleep_quality for e in entries],
-        stress=[e.stress_level for e in entries],
-        social=[e.social_engagement for e in entries],
-    )
+    analytics_service = AnalyticsService(db)
+    return analytics_service.calculate_trends(past_days)
 
 
 def _calculate_stats(entries):
@@ -131,34 +123,9 @@ def get_averages(
     Calculates and retrieves average values for sentiment, sleep, stress, and
     social engagement from journal entries over specified number of past days.
     """
-    # Current period
-    current_to_date = datetime.now(timezone.utc)
-    current_from_date = current_to_date - timedelta(days=past_days)
-    current_entries = get_journal_entries(
-        db, from_date=current_from_date, to_date=current_to_date)
-
-    # Previous period
-    previous_to_date = current_from_date
-    previous_from_date = previous_to_date - timedelta(days=past_days)
-    previous_entries = get_journal_entries(
-        db, from_date=previous_from_date, to_date=previous_to_date)
-
-    # Calculate stats for both periods
-    current_stats = _calculate_stats(current_entries)
-    previous_stats = _calculate_stats(previous_entries)
-
-    # Calculate trends
-    trends = {
-        "total_entries_trend": _calculate_trend(current_stats["total_entries"], previous_stats["total_entries"]),
-        "longest_streak_trend": _calculate_trend(current_stats["longest_streak"], previous_stats["longest_streak"]),
-        "average_words_trend": _calculate_trend(current_stats["average_words"], previous_stats["average_words"]),
-        "average_mood_trend": _calculate_trend(current_stats["average_mood"], previous_stats["average_mood"]),
-        "average_sleep_quality_trend": _calculate_trend(current_stats["average_sleep_quality"], previous_stats["average_sleep_quality"]),
-        "average_stress_level_trend": _calculate_trend(current_stats["average_stress_level"], previous_stats["average_stress_level"]),
-        "average_social_engagement_trend": _calculate_trend(current_stats["average_social_engagement"], previous_stats["average_social_engagement"]),
-    }
-
-    return Averages(**current_stats, **trends)
+    print("Fetching averages data...")
+    analytics_service = AnalyticsService(db)
+    return analytics_service.calculate_averages(past_days)
 
 
 @router.get("/correlations/")
@@ -170,41 +137,17 @@ def get_correlations(
         description="Num of past days to consider for correlation analysis.")
 ):
     """
-    Placeholder endpoint to calculate and retrieve
-    correlations between state tracking fields.
+    Calculates and retrieves correlations between state tracking fields.
 
     Args:
         db (Session): The database session dependency.
         past_days (int): The number of past days to consider for the analysis.
 
     Returns:
-        None: Currently returns None.
+        dict: Dictionary containing correlation coefficients between metrics.
     """
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-    entries = get_journal_entries(db, from_date=cutoff_date)
-
-    import numpy as np
-
-    sleep = [e.sleep_quality for e in entries]
-    sentiment = [e.sentiment_level for e in entries]
-    stress = [e.stress_level for e in entries]
-    social = [e.social_engagement for e in entries]
-
-    sleep_sentiment_correlation = np.corrcoef(sleep, sentiment)[0, 1]
-    sleep_stress_correlation = np.corrcoef(sleep, stress)[0, 1]
-    sleep_social_correlation = np.corrcoef(sleep, social)[0, 1]
-    sentiment_stress_correlation = np.corrcoef(sentiment, stress)[0, 1]
-    sentiment_social_correlation = np.corrcoef(sentiment, social)[0, 1]
-    stress_social_correlation = np.corrcoef(stress, social)[0, 1]
-
-    return {
-        "sleep_sentiment_correlation": sleep_sentiment_correlation,
-        "sleep_stress_correlation": sleep_stress_correlation,
-        "sleep_social_correlation": sleep_social_correlation,
-        "sentiment_stress_correlation": sentiment_stress_correlation,
-        "sentiment_social_correlation": sentiment_social_correlation,
-        "stress_social_correlation": stress_social_correlation
-    },
+    analytics_service = AnalyticsService(db)
+    return analytics_service.calculate_correlations(past_days)
 
 
 @router.get("/weekly-patterns/")
@@ -216,48 +159,17 @@ def get_weekly_patterns(
         description="Num of past days to consider for weekly analysis.")
 ):
     """
-    Placeholder endpoint to show average values per weekday.
+    Shows average values per weekday for each metric.
 
     Args:
         db (Session): The database session dependency.
         past_days (int): The number of past days to consider for the analysis.
 
     Returns:
-        None: Currently returns None.
+        dict: Dictionary containing average values per weekday for each metric.
     """
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-    entries = get_journal_entries(db, from_date=cutoff_date)
-
-    from collections import defaultdict
-    import numpy as np
-
-    # defaultdict für automatische Listeninitialisierung
-    weekday_data = {
-        "sleep_quality": defaultdict(list),
-        "sentiment_level": defaultdict(list),
-        "stress_level": defaultdict(list),
-        "social_engagement": defaultdict(list),
-    }
-
-    for entry in entries:
-        weekday = entry.date.weekday()  # 0 = Mo, 6 = So
-        weekday_data["sleep_quality"][weekday].append(entry.sleep_quality)
-        weekday_data["sentiment_level"][weekday].append(entry.sentiment_level)
-        weekday_data["stress_level"][weekday].append(entry.stress_level)
-        weekday_data["social_engagement"][weekday].append(
-            entry.social_engagement)
-
-    # Durchschnitt pro Wochentag berechnen
-    averages = {}
-    for field, days in weekday_data.items():
-        averages[field] = {}
-        for weekday in range(7):
-            values = days.get(weekday, [])
-            averages[field][weekday] = (
-                round(float(np.mean(values)), 2) if values else None
-            )
-
-    return averages
+    analytics_service = AnalyticsService(db)
+    return analytics_service.calculate_weekly_patterns(past_days)
 
 
 @router.get("/summary/")
@@ -277,22 +189,11 @@ def generate_summary(
     Returns:
         dict: A dictionary containing the summary.
     """
-    if from_date is None:
-        from_date = datetime.now(timezone.utc) - timedelta(days=7)
-    if to_date is None:
-        to_date = datetime.now(timezone.utc)
+    analytics_service = AnalyticsService(db)
+    entry_details = analytics_service.prepare_summary_data(from_date, to_date)
 
-    entries = get_journal_entries(db, from_date=from_date, to_date=to_date)
-    if not entries:
+    if not entry_details:
         return {"summary": "No journal entries found for the specified period."}
 
-    entry_details = []
-    for entry in entries:
-        goal_titles = [goal.title for goal in entry.goals]
-        entry_details.append(
-            f"Sentiments: {entry.sentiments}, Activities: {entry.activities}, Goals: {', '.join(goal_titles)}"
-        )
-
     summary = summarize_journal_entries("\n".join(entry_details))
-
     return {"summary": summary}
