@@ -271,13 +271,13 @@ const JournalPage = () => {
         <h1 className="text-2xl font-bold text-gray-900">Journal Entries</h1>
         <button
           onClick={openAddEntryModal}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="btn-primary"
         >
           New Entry
         </button>
       </div>
 
-      <div className="mb-6 p-4 bg-white rounded-lg shadow ring-1 ring-blue-500 ring-opacity-50 flex flex-wrap gap-4">
+      <div className="mb-6 card p-5 flex flex-wrap gap-4">
         <div className="w-full md:w-64">
           <label
             htmlFor="searchTerm"
@@ -293,7 +293,7 @@ const JournalPage = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by title..."
-              className="pl-10 pr-4 py-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+              className="input-field pl-10"
             />
           </div>
         </div>
@@ -310,7 +310,7 @@ const JournalPage = () => {
               id="sentimentFilter"
               value={sentimentFilter}
               onChange={(e) => setSentimentFilter(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 pr-8"
+              className="input-field pr-8"
             >
               {sentimentOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -333,7 +333,7 @@ const JournalPage = () => {
               id="sleepFilter"
               value={sleepFilter}
               onChange={(e) => setSleepFilter(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 pr-8"
+              className="input-field pr-8"
             >
               {sleepOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -356,7 +356,7 @@ const JournalPage = () => {
               id="stressFilter"
               value={stressFilter}
               onChange={(e) => setStressFilter(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 pr-8"
+              className="input-field pr-8"
             >
               {stressOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -379,7 +379,7 @@ const JournalPage = () => {
               id="socialEngagementFilter"
               value={socialEngagementFilter}
               onChange={(e) => setSocialEngagementFilter(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2 pr-8"
+              className="input-field pr-8"
             >
               {socialEngagementOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -403,7 +403,7 @@ const JournalPage = () => {
               id="startDate"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2"
+              className="input-field"
             />
           </div>
         </div>
@@ -421,7 +421,7 @@ const JournalPage = () => {
               id="endDate"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2"
+              className="input-field"
             />
           </div>
         </div>
@@ -446,12 +446,12 @@ const JournalPage = () => {
       )}
 
       {showEntryFormModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-4xl xl:max-w-5xl p-6 max-h-[95vh] flex flex-col">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
+          <div className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-4xl xl:max-w-5xl p-6 max-h-[95vh] flex flex-col">
             <div className="absolute top-4 right-4">
               <button
                 type="button"
-                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                 onClick={closeFormModal}
               >
                 <span className="sr-only">Close</span>

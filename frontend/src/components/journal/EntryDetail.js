@@ -78,12 +78,12 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
     : [];
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-      <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl p-6 max-h-[95vh] flex flex-col">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
+      <div className="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl p-6 max-h-[95vh] flex flex-col">
         <div className="absolute top-4 right-4">
           <button
             type="button"
-            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
             onClick={onClose}
           >
             <span className="sr-only">Close</span>
@@ -170,14 +170,14 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
           {activities.length > 0 && (
             <div className="">
               <div className="flex items-center mb-1 text-gray-700">
-                <Activity className="h-4 w-4 text-blue-500 mr-2" />
+                <Activity className="h-4 w-4 text-purple-500 mr-2" />
                 <span className="font-medium text-sm">Activities</span>
               </div>
               <div className="flex flex-wrap gap-1">
                 {activities.map((activity, index) => (
                   <span
                     key={index}
-                    className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs"
+                    className="badge-purple"
                   >
                     {activity}
                   </span>
@@ -209,9 +209,9 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
         {hasFormattedContent && (
           <div className="mt-8 pt-4 border-t border-gray-200 flex items-center text-sm text-gray-600 space-x-2 flex-shrink-0">
             <button
-              className={`flex items-center px-3 py-2 rounded-md ${
+              className={`flex items-center px-3 py-2 rounded-xl ${
                 !showOriginalContent
-                  ? "bg-blue-100 text-blue-800"
+                  ? "bg-purple-50 text-purple-700"
                   : "bg-gray-100"
               }`}
               onClick={() => setShowOriginalContent(false)}
@@ -220,9 +220,9 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
               Formatted
             </button>
             <button
-              className={`flex items-center px-3 py-2 rounded-md ${
+              className={`flex items-center px-3 py-2 rounded-xl ${
                 showOriginalContent
-                  ? "bg-blue-100 text-blue-800"
+                  ? "bg-purple-50 text-purple-700"
                   : "bg-gray-100"
               }`}
               onClick={() => setShowOriginalContent(true)}
@@ -241,7 +241,7 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
 
         <div className="mt-4 flex justify-end space-x-3 pt-4 border-t border-gray-200 flex-shrink-0">
           <button
-            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="btn-secondary inline-flex items-center"
             onClick={() => onEdit(entry)}
           >
             <Edit
@@ -251,7 +251,7 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
             Edit
           </button>
           <button
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            className="btn-danger inline-flex items-center"
             onClick={() => onDelete(entry.id)}
           >
             <Trash2 className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />

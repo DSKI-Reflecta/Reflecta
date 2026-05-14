@@ -161,7 +161,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
             name="date"
             value={entry.date}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 input-field"
             required
           />
         </div>
@@ -180,7 +180,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
             value={entry.title}
             onChange={handleChange}
             placeholder="What's on your mind today?"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 input-field"
             required
           />
         </div>
@@ -199,7 +199,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
             value={entry.content}
             onChange={handleChange}
             placeholder="Write your thoughts here..."
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="mt-1 input-field"
             required
           ></textarea>
           {aiJournalingActive && (
@@ -285,7 +285,7 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
         </button>
         <button
           type="submit"
-          className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+          className="btn-primary"
         >
           {editEntry ? "Update Entry" : "Save Entry"}
         </button>

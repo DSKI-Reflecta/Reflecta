@@ -47,7 +47,7 @@ const EntryCard = ({ entry, onEdit, onDelete, onSelect }) => {
 
   return (
     <div
-      className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow cursor-pointer flex flex-col"
+      className="card p-6 cursor-pointer flex flex-col"
       onClick={() => onSelect(entry)}
     >
       <div className="flex justify-between items-start mb-3">
