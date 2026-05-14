@@ -37,7 +37,6 @@ const CalendarPage = () => {
 
   return (
     <div className="calendar-page-container p-4">
-      <h1 className="text-2xl font-bold mb-6 text-center">Journal Calendar</h1>
 
       {/* Display loading, error, or calendar */}
       {isLoading && (
