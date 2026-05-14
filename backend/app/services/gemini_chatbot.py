@@ -40,19 +40,20 @@ Respond only in text. Never include emojis or excessive enthusiasm unless the us
 """
 
 
-def get_contextual_chatbot_response(user_message: str, db: Session) -> str:
+def get_contextual_chatbot_response(user_message: str, db: Session, user_id: int) -> str:
     """
     Gets a chatbot response, including context from the user's goals and recent journal entries.
 
     Args:
         user_message (str): The user's message.
         db (Session): The database session.
+        user_id (int): The ID of the authenticated user.
 
     Returns:
         str: The chatbot's response.
     """
-    goals = get_goals(db, limit=10)
-    journal_entries = get_journal_entries(db, limit=10)
+    goals = get_goals(db, user_id, limit=10)
+    journal_entries = get_journal_entries(db, user_id, limit=10)
 
     context = "User's Goals:\n"
     if goals:

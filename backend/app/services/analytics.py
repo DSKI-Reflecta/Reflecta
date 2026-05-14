@@ -47,13 +47,14 @@ def calculate_moving_average(data: List[float], window: int) -> List[float]:
 class AnalyticsService:
     """Service class for journal entry analytics calculations."""
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session, user_id: int):
         self.db = db
+        self.user_id = user_id
 
     def calculate_trends(self, past_days: int) -> TsTrends:
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
         entries = sorted(get_journal_entries(
-            self.db, from_date=cutoff_date), key=lambda x: x.date)
+            self.db, self.user_id, from_date=cutoff_date), key=lambda x: x.date)
         if not entries:
             return TsTrends(dates=[], sentiment=[], sleep=[], stress=[], social=[])
         
@@ -85,7 +86,7 @@ class AnalyticsService:
             Averages: Object containing average values for each metric.
         """
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-        entries = get_journal_entries(self.db, from_date=cutoff_date)
+        entries = get_journal_entries(self.db, self.user_id, from_date=cutoff_date)
 
         # Calculate averages, handling cases where lists are empty to avoid zero division
         num_entries = len(entries)
@@ -128,7 +129,7 @@ class AnalyticsService:
         """
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
         entries = sorted(get_journal_entries(
-            self.db, from_date=cutoff_date), key=lambda x: x.date)
+            self.db, self.user_id, from_date=cutoff_date), key=lambda x: x.date)
 
         aligned_data = []
         for entry in entries:
@@ -260,7 +261,7 @@ class AnalyticsService:
             to_date = datetime.now(timezone.utc)
 
         entries = get_journal_entries(
-            self.db, from_date=from_date, to_date=to_date)
+            self.db, self.user_id, from_date=from_date, to_date=to_date)
 
         if not entries:
             return []
@@ -283,7 +284,7 @@ class AnalyticsService:
         """
         # Hole alle Einträge der letzten z.B. 365 Tage
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=365)
-        entries = get_journal_entries(self.db, from_date=cutoff_date)
+        entries = get_journal_entries(self.db, self.user_id, from_date=cutoff_date)
         
         if not entries:
             return 0

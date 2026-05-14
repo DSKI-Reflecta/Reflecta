@@ -15,25 +15,14 @@ from app.models.entry_goal import GoalCreate, GoalUpdate, GoalPriority
 
 def get_goals(
     db: Session,
+    user_id: int,
     skip: int = 0,
     limit: int = 100,
     max_entries_per_goal: int = 5
 ) -> List[GoalModel]:
-    """
-    Retrieves a list of goals with pagination, ordered by priority,
-    and filters to keep only the most recent journal entries for each goal.
-
-    Args:
-        db (Session): The database session.
-        skip (int): The number of goals to skip (for pagination).
-        limit (int): The maximum number of goals to return (for pagination).
-        max_entries_per_goal (int): The maximum number of recent journal entries to include per goal.
-
-    Returns:
-        List[GoalModel]: A list of goal SQLAlchemy models with filtered journal entries.
-    """
     goals_with_entries = (
         db.query(GoalModel)
+        .filter(GoalModel.user_id == user_id)
         .options(joinedload(GoalModel.journal_entries))
         .order_by(
             case(
@@ -55,44 +44,24 @@ def get_goals(
 def get_goal(
         db: Session,
         goal_id: int,
+        user_id: int,
         max_entries_per_goal: int = 5
 ) -> Optional[GoalModel]:
-    """
-    Retrieves a specific goal by ID with its associated journal entries.
-
-    Args:
-        db (Session): The database session.
-        goal_id (int): The ID of the goal to retrieve.
-        max_entries_per_goal (int): The maximum number of recent journal entries to include for the goal.
-
-    Returns:
-        Optional[GoalModel]: The goal SQLAlchemy model if found, otherwise None.
-    """
     goal = (
         db.query(GoalModel)
+        .filter(GoalModel.id == goal_id, GoalModel.user_id == user_id)
         .options(joinedload(GoalModel.journal_entries))
-        .filter(GoalModel.id == goal_id)
         .one_or_none()
     )
     if goal:
-        # get_recent_entries expects a list of goals, so wrap it
         filtered_goal_list = get_recent_entries([goal], max_entries_per_goal)
         return filtered_goal_list[0]
     return None
 
 
-def create_goal(db: Session, goal: GoalCreate) -> GoalModel:
-    """
-    Creates a new goal.
-
-    Args:
-        db (Session): The database session.
-        goal (GoalCreate): The Pydantic model containing the new goal data.
-
-    Returns:
-        GoalModel: The newly created goal SQLAlchemy model.
-    """
+def create_goal(db: Session, goal: GoalCreate, user_id: int) -> GoalModel:
     db_goal = GoalModel(
+        user_id=user_id,
         title=goal.title,
         type=goal.type,
         target_date=goal.target_date,
@@ -110,20 +79,10 @@ def create_goal(db: Session, goal: GoalCreate) -> GoalModel:
 def update_goal(
     db: Session,
     goal_id: int,
-    goal_update: GoalUpdate
+    goal_update: GoalUpdate,
+    user_id: int,
 ) -> Optional[GoalModel]:
-    """
-    Updates an existing goal.
-
-    Args:
-        db (Session): The database session.
-        goal_id (int): The ID of the goal to update.
-        goal_update (GoalUpdate): The Pydantic model containing the update data.
-
-    Returns:
-        Optional[GoalModel]: The updated goal SQLAlchemy model if found, otherwise None.
-    """
-    db_goal = get_goal(db, goal_id)
+    db_goal = get_goal(db, goal_id, user_id)
     if db_goal:
         update_data: dict = goal_update.model_dump(exclude_unset=True)
 
@@ -140,18 +99,8 @@ def update_goal(
     return db_goal
 
 
-def delete_goal(db: Session, goal_id: int) -> bool:
-    """
-    Deletes a goal by its ID.
-
-    Args:
-        db (Session): The database session.
-        goal_id (int): The ID of the goal to delete.
-
-    Returns:
-        bool: True if the goal was deleted, False otherwise.
-    """
-    db_goal = get_goal(db, goal_id)
+def delete_goal(db: Session, goal_id: int, user_id: int) -> bool:
+    db_goal = get_goal(db, goal_id, user_id)
     if db_goal:
         db.delete(db_goal)
         db.commit()

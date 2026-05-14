@@ -33,19 +33,20 @@ def get_recent_entries(
     return goals
 
 
-def get_goal_info(db: Session) -> List[dict]:
+def get_goal_info(db: Session, user_id: int) -> List[dict]:
     """
     Retrieves basic information (id, title, description) for all goals from the database.
 
     Args:
         db (Session): The database session.
+        user_id (int): The ID of the user whose goals to retrieve.
 
     Returns:
         List[dict]: A list of dictionaries, each containing 'id', 'title', and 'description' of a goal.
     """
     goal_info = [
         {"id": goal.id, "title": goal.title, "description": goal.description}
-        for goal in db.query(GoalModel).all()
+        for goal in db.query(GoalModel).filter(GoalModel.user_id == user_id).all()
     ]
     return goal_info
 
