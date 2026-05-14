@@ -1,6 +1,5 @@
 Backend:
-- Update goals per entry or entries per goal upon PUT: Tristan
-- Add example env to github: Chris
+- 
 
 Frontend:
 - Enable markdown for Formatted entry: Chris

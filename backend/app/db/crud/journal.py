@@ -3,8 +3,9 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from ...models.entry_goal import JournalEntryCreate, JournalEntryUpdate
-from ..database import JournalEntryModel, GoalModel
+from ..database import JournalEntryModel
 from ...services.gemini_agent import analyze_entry
+from .utils import get_goal_info, get_goals
 
 
 def get_journal_entries(
@@ -32,18 +33,13 @@ def create_journal_entry(db: Session,
                          ) -> JournalEntryModel:
     """Create a new journal entry with AI-formatted content"""
     # Get all goal information from the database
-    goal_info = [
-        {"id": goal.id, "title": goal.title, "description": goal.description}
-        for goal in db.query(GoalModel).all()
-    ]
+    goal_info = get_goal_info(db)
     # Analyze the entry content using the AI service
     formatted_content, activities, sentiments, goal_ids = analyze_entry(
         entry.content, goal_info
     )
     # Get the goals with the specified IDs
-    goals = db.query(GoalModel).filter(
-        GoalModel.id.in_(goal_ids)
-    ).all() if goal_ids else []
+    goals = get_goals(db, goal_ids)
 
     db_entry = JournalEntryModel(
         title=entry.title,
@@ -104,11 +100,20 @@ def update_journal_entry(
 
         # Update the content and re-analyze if content is provided
         if entry_update.content:
-            formatted, activities, sentiments = analyze_entry(
-                entry_update.content)
+            # Get all goal information from the database
+            goal_info = get_goal_info(db)
+            # Analyze the entry content using the AI service
+            formatted, activities, sentiments, goal_ids = analyze_entry(
+                entry_update.content, goal_info
+            )
+            # Get the goals with the specified IDs
+            goals = get_goals(db, goal_ids)
+
             db_entry.formatted_content = formatted
             db_entry.activities = activities
             db_entry.sentiments = sentiments
+            db_entry.goals.clear()  # Clear existing goals
+            db_entry.goals.extend(goals)  # Add new goals
 
         # Update the updated_at timestamp
         db_entry.updated_at = datetime.now(timezone.utc)

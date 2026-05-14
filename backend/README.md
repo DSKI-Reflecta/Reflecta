@@ -6,12 +6,15 @@ This is the backend component of the Advanced Programming Project. It is built w
 
 ```
 backend/
+├── .venv/
 ├── app/
 │   ├── db/
+│   │   ├── crud/
 │   ├── models/
 │   ├── routes/
 │   ├── services/
 │   └── main.py
+├── .env  ← required
 └── requirements.txt
 ```
 
@@ -42,10 +45,17 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
+4. **Create a `.env` file:**
+Create a `.env` file in the `backend` directory with the following content:
+```
+GEMINI_API_KEY=your_api_key
+```
+Replace your_api_key with your actual Gemini API key. Get your API key here:
+[Gemini API Key](https://ai.google.dev/gemini-api/docs/api-key).
+
 ## Run the API locally
 
-Use the following command to start the FastAPI server with live reload:
-
+Use the following command to start the FastAPI server with live reload (for development purposes):
 ```bash
 uvicorn app.main:app --reload
 ```
