@@ -1,19 +1,25 @@
+import { fetchAuthSession } from "aws-amplify/auth";
+
 const API_BASE_URL = "http://localhost:8000";
 
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
+const getAuthHeaders = async () => {
   const headers = { "Content-Type": "application/json" };
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
+  try {
+    const session = await fetchAuthSession();
+    const token = session.tokens?.idToken?.toString();
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+  } catch {
+    // Not authenticated
   }
   return headers;
 };
 
 const authFetch = async (url, options = {}) => {
-  const headers = { ...getAuthHeaders(), ...options.headers };
+  const headers = { ...(await getAuthHeaders()), ...options.headers };
   const response = await fetch(url, { ...options, headers });
   if (response.status === 401) {
-    localStorage.removeItem("token");
     window.location.reload();
   }
   return response;
@@ -225,5 +231,10 @@ export const recommendGoals = async () => {
   const response = await authFetch(`${API_BASE_URL}/goals/recommend`, {
     method: "POST",
   });
+  return handleResponse(response);
+};
+
+export const getAdminStats = async () => {
+  const response = await authFetch(`${API_BASE_URL}/admin/stats`);
   return handleResponse(response);
 };

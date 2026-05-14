@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 
 from app.db.crud.journal import get_journal_entries
 from app.models.analytics import TsTrends, Averages
-from app.services.gemini_agent import generate_correlation_insights
 
 
 def calculate_moving_average(data: List[float], window: int) -> List[float]:
@@ -53,19 +52,20 @@ class AnalyticsService:
 
     def calculate_trends(self, past_days: int) -> TsTrends:
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-        entries = sorted(get_journal_entries(
+        all_entries = sorted(get_journal_entries(
             self.db, self.user_id, from_date=cutoff_date), key=lambda x: x.date)
+        entries = [e for e in all_entries if e.sentiment_level is not None]
         if not entries:
             return TsTrends(dates=[], sentiment=[], sleep=[], stress=[], social=[])
-        
+
         # Auto window size: 3-21 days based on period
         window = min(21, max(3, past_days // 7))
-        
+
         # Calculate moving averages
         sentiment_ma = calculate_moving_average([e.sentiment_level for e in entries], window)
-        sleep_ma = calculate_moving_average([e.sleep_quality for e in entries], window)
-        stress_ma = calculate_moving_average([e.stress_level for e in entries], window)
-        social_ma = calculate_moving_average([e.social_engagement for e in entries], window)
+        sleep_ma = calculate_moving_average([e.sleep_quality or 3 for e in entries], window)
+        stress_ma = calculate_moving_average([e.stress_level or 3 for e in entries], window)
+        social_ma = calculate_moving_average([e.social_engagement or 3 for e in entries], window)
         
         return TsTrends(
             dates=[e.date.strftime("%Y-%m-%d") for e in entries],
@@ -94,14 +94,15 @@ class AnalyticsService:
         if num_entries == 0:
             return Averages(sentiment=0.0, sleep=0.0, stress=0.0, social=0.0, total_entries=0, current_streak=0, average_words_per_entry=0.0)
 
-        sentiment_avg = sum(
-            e.sentiment_level for e in entries if e.sentiment_level is not None) / num_entries
-        sleep_avg = sum(
-            e.sleep_quality for e in entries if e.sleep_quality is not None) / num_entries
-        stress_avg = sum(
-            e.stress_level for e in entries if e.stress_level is not None) / num_entries
-        social_avg = sum(
-            e.social_engagement for e in entries if e.social_engagement is not None) / num_entries
+        sentiment_vals = [e.sentiment_level for e in entries if e.sentiment_level is not None]
+        sleep_vals = [e.sleep_quality for e in entries if e.sleep_quality is not None]
+        stress_vals = [e.stress_level for e in entries if e.stress_level is not None]
+        social_vals = [e.social_engagement for e in entries if e.social_engagement is not None]
+
+        sentiment_avg = sum(sentiment_vals) / len(sentiment_vals) if sentiment_vals else 0.0
+        sleep_avg = sum(sleep_vals) / len(sleep_vals) if sleep_vals else 0.0
+        stress_avg = sum(stress_vals) / len(stress_vals) if stress_vals else 0.0
+        social_avg = sum(social_vals) / len(social_vals) if social_vals else 0.0
         total_entries = len(entries)
         current_streak = self._calculate_current_streak()
         average_words_per_entry = (sum(len(e.content.split(
@@ -117,16 +118,7 @@ class AnalyticsService:
             average_words_per_entry=average_words_per_entry,
         )
 
-    def calculate_correlations(self, past_days: int) -> Dict[str, Any]:
-        """
-        Calculate correlations between different metrics and return the 2 strongest correlations.
-
-        Args:
-            past_days (int): Number of past days to consider for correlation analysis.
-
-        Returns:
-            Dict[str, Any]: Dictionary containing the 2 strongest correlations with their data points.
-        """
+    def calculate_correlations_data(self, past_days: int) -> Optional[Dict[str, Any]]:
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
         entries = sorted(get_journal_entries(
             self.db, self.user_id, from_date=cutoff_date), key=lambda x: x.date)
@@ -146,7 +138,7 @@ class AnalyticsService:
                 })
 
         if len(aligned_data) < 2:
-            return {"message": "Not enough data points for correlation analysis"}
+            return None
 
         sleep = [d['sleep'] for d in aligned_data]
         sentiment = [d['sentiment'] for d in aligned_data]
@@ -225,20 +217,16 @@ class AnalyticsService:
 
         top_correlations = dict(sorted_correlations[:2])
 
-        for key, value in top_correlations.items():
-            chart_data = json.dumps({
-                "x_label": value["x_label"],
-                "y_label": value["y_label"],
-                "correlation": value["correlation"],
-                "data": value["data"]
-            })
-            insights = generate_correlation_insights(chart_data)
-            top_correlations[key]["insights"] = insights
-
         return {
             "strongest_correlations": top_correlations,
             "total_data_points": len(aligned_data)
         }
+
+    def calculate_correlations(self, past_days: int) -> Dict[str, Any]:
+        result = self.calculate_correlations_data(past_days)
+        if not result:
+            return {"message": "Not enough data points for correlation analysis"}
+        return result
 
     def prepare_summary_data(
         self,

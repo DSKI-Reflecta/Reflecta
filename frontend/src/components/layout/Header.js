@@ -6,6 +6,7 @@ const Header = ({ activeTab }) => {
     goals: "My Goals",
     calendar: "Calendar",
     analytics: "Analytics",
+    admin: "Admin",
   };
 
   return (

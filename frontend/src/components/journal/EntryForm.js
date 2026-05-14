@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { getJournalQuestion } from "../../api/api"; // Import the API utility
 
-const EntryForm = ({ onClose, onSave, editEntry = null }) => {
+const EntryForm = ({ onClose, onSave, editEntry = null, isSaving = false }) => {
   const [entry, setEntry] = useState({
     title: "",
     content: "",
@@ -146,43 +146,45 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
-      <div className="flex-grow overflow-hidden pr-2 space-y-2">
-        <div>
-          <label
-            htmlFor="date"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Date
-          </label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={entry.date}
-            onChange={handleChange}
-            className="mt-1 input-field"
-            required
-          />
-        </div>
+    <form onSubmit={handleSubmit} className="flex flex-col flex-grow pt-4">
+      <div className="flex-grow overflow-hidden pr-2 space-y-4">
+        <div className="flex gap-3">
+          <div className="flex-1">
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={entry.title}
+              onChange={handleChange}
+              placeholder="What's on your mind today?"
+              className="mt-1 input-field"
+              required
+            />
+          </div>
 
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={entry.title}
-            onChange={handleChange}
-            placeholder="What's on your mind today?"
-            className="mt-1 input-field"
-            required
-          />
+          <div className="w-40 flex-shrink-0">
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date
+            </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={entry.date}
+              onChange={handleChange}
+              className="mt-1 input-field"
+              required
+            />
+          </div>
         </div>
 
         <div>
@@ -192,16 +194,32 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
           >
             Journal Entry
           </label>
-          <textarea
-            id="content"
-            name="content"
-            rows="6"
-            value={entry.content}
-            onChange={handleChange}
-            placeholder="Write your thoughts here..."
-            className="mt-1 input-field"
-            required
-          ></textarea>
+          <div className="relative mt-1">
+            <textarea
+              id="content"
+              name="content"
+              rows="6"
+              value={entry.content}
+              onChange={handleChange}
+              placeholder="Write your thoughts here..."
+              className="input-field pb-10"
+              required
+            ></textarea>
+            <button
+              type="button"
+              onClick={handleToggleAiJournaling}
+              className={`absolute bottom-3 right-3 px-3 py-1.5 text-xs font-medium rounded-md flex items-center space-x-1.5 transition-colors ${
+                aiJournalingActive
+                  ? "bg-purple-600 text-white hover:bg-purple-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300"
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>
+                {aiJournalingActive ? "AI ON" : "AI"}
+              </span>
+            </button>
+          </div>
           {aiJournalingActive && (
             <div className="mt-2 text-sm text-gray-600">
               {loadingAiQuestion ? (
@@ -213,25 +231,6 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
               )}
             </div>
           )}
-        </div>
-
-        <div className="flex justify-start mb-4">
-          <button
-            type="button"
-            onClick={handleToggleAiJournaling}
-            className={`px-4 py-2 text-sm font-medium rounded-md flex items-center space-x-2 ${
-              aiJournalingActive
-                ? "bg-purple-600 text-white hover:bg-purple-700"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            <Sparkles className="h-4 w-4" />
-            <span>
-              {aiJournalingActive
-                ? "AI Journaling ON"
-                : "Activate AI Journaling"}
-            </span>
-          </button>
         </div>
 
         <div className="pt-2 border-t border-gray-200">
@@ -286,8 +285,9 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
         <button
           type="submit"
           className="btn-primary"
+          disabled={isSaving}
         >
-          {editEntry ? "Update Entry" : "Save Entry"}
+          {isSaving ? "Saving..." : editEntry ? "Update Entry" : "Save Entry"}
         </button>
       </div>
     </form>

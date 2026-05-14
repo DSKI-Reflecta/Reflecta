@@ -12,6 +12,7 @@ from sqlalchemy import (
     Text,
     DateTime,
     Date,
+    Boolean,
     Table,
     ForeignKey,
 )
@@ -38,8 +39,9 @@ journal_goal_association = Table(
 class UserModel(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
+    cognito_sub = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
+    is_admin = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     journal_entries = relationship("JournalEntryModel", back_populates="user")
@@ -99,6 +101,29 @@ class GoalModel(Base):
         secondary=journal_goal_association,
         back_populates="goals"
     )
+
+
+class AnalyticsCacheModel(Base):
+    __tablename__ = "analytics_cache"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    period = Column(String, nullable=False)
+    cache_type = Column(String, nullable=False)  # "summary" or "correlation_insights"
+    content = Column(Text, nullable=False)
+    generated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+class AIUsageLog(Base):
+    __tablename__ = "ai_usage_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    feature = Column(String, nullable=False)
+    model = Column(String, nullable=False)
+    input_tokens = Column(Integer, nullable=True)
+    output_tokens = Column(Integer, nullable=True)
+    success = Column(Boolean, nullable=False, default=True)
+    error_message = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 def create_tables():

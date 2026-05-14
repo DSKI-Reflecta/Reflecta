@@ -172,9 +172,11 @@ const JournalPage = () => {
 
   const createEntryMutation = useMutation({
     mutationFn: createJournalEntry,
+    onMutate: () => {
+      closeFormModal();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journalEntries"] });
-      closeFormModal();
     },
     onError: (err) => {
       console.error("Error creating entry:", err);
@@ -185,9 +187,11 @@ const JournalPage = () => {
   const updateEntryMutation = useMutation({
     mutationFn: ({ entryId, entryData }) =>
       updateJournalEntry(entryId, entryData),
+    onMutate: () => {
+      closeFormModal();
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["journalEntries"] });
-      closeFormModal();
     },
     onError: (err) => {
       console.error("Error updating entry:", err);
@@ -395,6 +399,7 @@ const JournalPage = () => {
               onClose={closeFormModal}
               onSave={handleSaveEntry}
               editEntry={editingEntry}
+              isSaving={createEntryMutation.isPending || updateEntryMutation.isPending}
             />
           </div>
         </div>

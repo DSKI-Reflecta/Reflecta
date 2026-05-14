@@ -88,6 +88,13 @@ class RecommendedGoalList(BaseModel):
     )
 
 
+class EntryAnalysis(BaseModel):
+    formatted_content: str = Field(description="The formatted journal entry text")
+    activities: List[str] = Field(description="Key activities from the entry")
+    sentiments: List[str] = Field(description="Emotions/feelings expressed")
+    goal_ids: List[int] = Field(description="IDs of goals with clear positive progress")
+
+
 class InsightList(BaseModel):
     """
     Pydantic model for a list of insights.

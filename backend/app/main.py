@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.database import create_tables
-from app.routes import auth, journal, goal, chatbot, analytics
+from app.routes import auth, journal, goal, chatbot, analytics, admin
 
 
 @asynccontextmanager
@@ -49,6 +49,7 @@ app.include_router(journal.router)
 app.include_router(goal.router)
 app.include_router(chatbot.router)
 app.include_router(analytics.router)
+app.include_router(admin.router)
 
 
 @app.get("/")

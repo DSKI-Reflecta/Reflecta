@@ -97,17 +97,20 @@ def recommend_new_goals(
     if not entries:
         return []
     entry_content = "\n\n".join([entry.content for entry in entries])
-    recommendations = recommend_goals(entry_content)
+    recommendations = recommend_goals(entry_content, db, current_user.id)
     return recommendations
 
 
 @router.post("/enhance-description", response_model=str)
 def enhance_description_endpoint(
     request: EnhanceDescriptionRequest,
+    db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):
     enhanced_description = enhance_goal_description(
         title=request.title,
-        description=request.description
+        description=request.description,
+        db=db,
+        user_id=current_user.id,
     )
     return enhanced_description

@@ -2,6 +2,7 @@
 CRUD operations for journal entries.
 """
 
+import logging
 from datetime import datetime, timezone
 from typing import List, Optional
 
@@ -11,6 +12,8 @@ from app.db.database import JournalEntryModel
 from app.db.crud.utils import get_goal_info, get_goals
 from app.models.entry_goal import JournalEntryCreate, JournalEntryUpdate
 from app.services.gemini_agent import analyze_entry
+
+logger = logging.getLogger(__name__)
 
 
 def get_journal_entries(
@@ -48,12 +51,6 @@ def get_journal_entry(
 def create_journal_entry(
     db: Session, entry: JournalEntryCreate, user_id: int
 ) -> JournalEntryModel:
-    goal_info = get_goal_info(db, user_id)
-    formatted_content, activities, sentiments, goal_ids = analyze_entry(
-        entry.content, goal_info
-    )
-    goals = get_goals(db, goal_ids)
-
     db_entry = JournalEntryModel(
         user_id=user_id,
         title=entry.title,
@@ -79,16 +76,43 @@ def create_journal_entry(
             if entry.social_engagement is not None
             else None
         ),
-        formatted_content=formatted_content,
-        activities=activities,
-        sentiments=sentiments,
-        goals=goals,
+        formatted_content=entry.content,
+        activities="",
+        sentiments="",
+        goals=[],
     )
 
     db.add(db_entry)
     db.commit()
     db.refresh(db_entry)
     return db_entry
+
+
+def enrich_journal_entry(entry_id: int, user_id: int) -> None:
+    from app.db.database import SessionLocal
+    db = SessionLocal()
+    try:
+        db_entry = get_journal_entry(db, entry_id, user_id)
+        if not db_entry:
+            return
+
+        goal_info = get_goal_info(db, user_id)
+        formatted_content, activities, sentiments, goal_ids = analyze_entry(
+            db_entry.content, goal_info, db, user_id
+        )
+        goals = get_goals(db, goal_ids)
+
+        db_entry.formatted_content = formatted_content
+        db_entry.activities = activities
+        db_entry.sentiments = sentiments
+        db_entry.goals = goals
+        db_entry.updated_at = datetime.now(timezone.utc)
+
+        db.commit()
+    except Exception as e:
+        logger.error(f"Background AI enrichment failed for entry {entry_id}: {e}")
+    finally:
+        db.close()
 
 
 def update_journal_entry(
@@ -100,6 +124,7 @@ def update_journal_entry(
     db_entry = get_journal_entry(db, entry_id, user_id)
     if db_entry:
         update_data: dict = entry_update.model_dump(exclude_unset=True)
+        content_changed = False
 
         for key, value in update_data.items():
             if key in ['sentiment_level', 'sleep_quality', 'stress_level',
@@ -107,25 +132,13 @@ def update_journal_entry(
                 setattr(db_entry, key, value.value)
             else:
                 setattr(db_entry, key, value)
-
-        if entry_update.content:
-            goal_info = get_goal_info(db, user_id)
-            formatted, activities, sentiments, goal_ids = analyze_entry(
-                entry_update.content, goal_info
-            )
-            goals = get_goals(db, goal_ids)
-
-            db_entry.formatted_content = formatted
-            db_entry.activities = activities
-            db_entry.sentiments = sentiments
-            db_entry.goals.clear()
-            db_entry.goals.extend(goals)
+            if key == 'content':
+                content_changed = True
 
         db_entry.updated_at = datetime.now(timezone.utc)
-
         db.commit()
         db.refresh(db_entry)
-    return db_entry
+    return db_entry, content_changed if db_entry else (None, False)
 
 
 def delete_journal_entry(db: Session, entry_id: int, user_id: int) -> bool:

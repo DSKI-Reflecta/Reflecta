@@ -1,15 +1,16 @@
 import React from "react";
-import { BookOpen, Calendar, CheckSquare, BarChart, LogOut } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare, BarChart, Shield, LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const navItems = [
     { id: "journal", icon: BookOpen, label: "Journal" },
     { id: "goals", icon: CheckSquare, label: "Goals" },
     { id: "calendar", icon: Calendar, label: "Calendar" },
     { id: "analytics", icon: BarChart, label: "Analytics" },
+    ...(user?.is_admin ? [{ id: "admin", icon: Shield, label: "Admin" }] : []),
   ];
 
   return (

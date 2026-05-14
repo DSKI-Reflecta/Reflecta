@@ -38,7 +38,8 @@ async def chat_with_assistant(
 @router.post("/journal-question/", response_model=JournalQuestionResponse)
 async def get_journal_question(
     request: JournalQuestionRequest,
+    db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):
-    question = generate_journal_question(request.content)
+    question = generate_journal_question(request.content, db, current_user.id)
     return JournalQuestionResponse(question=question)

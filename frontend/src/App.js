@@ -6,6 +6,7 @@ import JournalPage from "./components/pages/JournalPage";
 import CalendarPage from "./components/pages/CalendarPage";
 import GoalPage from "./components/pages/GoalPage";
 import AnalyticsDashboard from "./components/analytics/AnalyticsDashboard";
+import AdminDashboard from "./components/pages/AdminDashboard";
 import AIChat from "./components/ai/AIChat";
 import LoginPage from "./components/pages/LoginPage";
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -34,6 +35,7 @@ function AuthenticatedApp() {
             {activeTab === "goals" && <GoalPage />}
             {activeTab === "calendar" && <CalendarPage />}
             {activeTab === "analytics" && <AnalyticsDashboard />}
+            {activeTab === "admin" && <AdminDashboard />}
           </div>
 
           {showAIChat && (

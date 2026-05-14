@@ -1,73 +1,97 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  signIn,
+  signUp,
+  signOut,
+  fetchAuthSession,
+  signInWithRedirect,
+} from "aws-amplify/auth";
+import "../auth/cognito";
 
 const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
+const DEV_MODE = process.env.REACT_APP_DEV_MODE === "true";
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (token) {
-      fetch("http://localhost:8000/auth/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw new Error("Invalid token");
-        })
-        .then((data) => setUser(data))
-        .catch(() => {
-          localStorage.removeItem("token");
-          setToken(null);
-          setUser(null);
-        })
-        .finally(() => setLoading(false));
-    } else {
+  const fetchUser = async () => {
+    try {
+      if (DEV_MODE) {
+        const res = await fetch("http://localhost:8000/auth/me");
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+        }
+      } else {
+        const session = await fetchAuthSession();
+        const idToken = session.tokens?.idToken?.toString();
+
+        if (idToken) {
+          const res = await fetch("http://localhost:8000/auth/me", {
+            headers: { Authorization: `Bearer ${idToken}` },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setUser(data);
+          } else {
+            setUser(null);
+          }
+        }
+      }
+    } catch {
+      setUser(null);
+    } finally {
       setLoading(false);
     }
-  }, [token]);
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   const login = async (email, password) => {
-    const res = await fetch("http://localhost:8000/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.detail || "Login failed");
+    if (DEV_MODE) {
+      await fetchUser();
+      return;
     }
-    const data = await res.json();
-    localStorage.setItem("token", data.access_token);
-    setToken(data.access_token);
+    await signIn({ username: email, password });
+    await fetchUser();
   };
 
   const register = async (email, password) => {
-    const res = await fetch("http://localhost:8000/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.detail || "Registration failed");
+    if (DEV_MODE) {
+      await fetchUser();
+      return;
     }
-    const data = await res.json();
-    localStorage.setItem("token", data.access_token);
-    setToken(data.access_token);
+    await signUp({
+      username: email,
+      password,
+      options: { userAttributes: { email } },
+    });
+    await signIn({ username: email, password });
+    await fetchUser();
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+  const loginWithGitHub = () => {
+    if (DEV_MODE) return;
+    signInWithRedirect({ provider: "GitHub" });
+  };
+
+  const logout = async () => {
+    if (!DEV_MODE) {
+      await signOut();
+    }
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, register, loginWithGitHub, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -4,13 +4,14 @@ API routes for managing journal entries.
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db, UserModel
 from app.auth.dependencies import get_current_user
 from app.db.crud.journal import (
     create_journal_entry,
+    enrich_journal_entry,
     get_journal_entry,
     get_journal_entries,
     update_journal_entry,
@@ -58,10 +59,12 @@ def read_entry(
 @router.post("/entries/", response_model=JournalEntry)
 def create_entry(
     entry: JournalEntryCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):
     db_entry = create_journal_entry(db, entry, current_user.id)
+    background_tasks.add_task(enrich_journal_entry, db_entry.id, current_user.id)
     return JournalEntry.model_validate(db_entry, from_attributes=True)
 
 
@@ -69,12 +72,15 @@ def create_entry(
 def update_entry(
     entry_id: int,
     entry_update: JournalEntryUpdate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     current_user: UserModel = Depends(get_current_user),
 ):
-    db_entry = update_journal_entry(db, entry_id, entry_update, current_user.id)
+    db_entry, content_changed = update_journal_entry(db, entry_id, entry_update, current_user.id)
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
+    if content_changed:
+        background_tasks.add_task(enrich_journal_entry, db_entry.id, current_user.id)
     return JournalEntry.model_validate(db_entry, from_attributes=True)
 
 
