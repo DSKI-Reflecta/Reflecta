@@ -1,18 +1,7 @@
-Backend:
-- 
+To do: 
 
-Frontend:
-- show latest 3 journal entries which reflect that goal: Tristan
 
-- Cursor is not visible after enter
-- Backend already sorts entries (GoalList)
-- Drag and drop possiblity to order goals
-
-General:
-- Add Analytics Section
-- Write AI Chatbot functionality
-
-- Add Plans Section
-- Possibility to include attachments to journals
-- User Management
-- Daily reminder to write journal entry
+- analytics section
+- create presentation 
+- clean code? 
+- update ReadMeFiles

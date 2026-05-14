@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy.orm import Session
-from ...models.entry_goal import Goal
-from ..database import GoalModel
+from app.models.entry_goal import Goal
+from app.db.database import GoalModel
 
 
 def get_recent_entries(

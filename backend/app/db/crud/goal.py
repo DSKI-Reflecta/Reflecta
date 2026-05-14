@@ -1,11 +1,12 @@
-from datetime import datetime, timezone, date as date_type # Import date_type and datetime
+# Import date_type and datetime
+from datetime import datetime, timezone, date as date_type
 from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import case  # for custom ordering
 
-from ...models.entry_goal import GoalCreate, GoalUpdate, GoalPriority
-from ..database import GoalModel
-from .utils import get_recent_entries
+from app.models.entry_goal import GoalCreate, GoalUpdate, GoalPriority
+from app.db.database import GoalModel
+from app.db.crud.utils import get_recent_entries
 
 
 def get_goals(

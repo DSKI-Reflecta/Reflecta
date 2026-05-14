@@ -1,8 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import journal, goal, chatbot, analytics
-from .db.database import create_tables
+from app.routes import journal, goal, chatbot, analytics
+from app.db.database import create_tables
 
 
 @asynccontextmanager

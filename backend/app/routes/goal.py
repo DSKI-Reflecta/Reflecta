@@ -1,17 +1,17 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from ..db.database import get_db
-from ..db.crud.goal import (
+from app.db.database import get_db
+from app.db.crud.goal import (
     create_goal,
     get_goal,
     get_goals,
     update_goal,
     delete_goal
 )
-from ..models.entry_goal import GoalCreate, Goal, GoalUpdate
-from ..services.gemini_agent import recommend_goals, RecommendedGoal, enhance_goal_description
-from ..db.crud.journal import get_journal_entries
+from app.models.entry_goal import GoalCreate, Goal, GoalUpdate
+from app.services.gemini_agent import recommend_goals, RecommendedGoal, enhance_goal_description
+from app.db.crud.journal import get_journal_entries
 from pydantic import BaseModel
 
 

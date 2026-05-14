@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from ..services.gemini_chatbot import get_chatbot_response
-from ..services.gemini_agent import generate_journal_question
+from app.services.gemini_chatbot import get_chatbot_response
+from app.services.gemini_agent import generate_journal_question
 
 router = APIRouter(
     prefix="/ai",

@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List
 
-from ..db.database import get_db
-from ..db.crud.journal import (
+from app.db.database import get_db
+from app.db.crud.journal import (
     create_journal_entry,
     get_journal_entry,
     get_journal_entries,
@@ -11,7 +11,7 @@ from ..db.crud.journal import (
     delete_journal_entry
 )
 # Import updated models
-from ..models.entry_goal import (
+from app.models.entry_goal import (
     JournalEntryCreate,
     JournalEntry,
     JournalEntryUpdate
