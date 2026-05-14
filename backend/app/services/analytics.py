@@ -24,29 +24,43 @@ class AnalyticsService:
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
         entries = sorted(get_journal_entries(
             self.db, from_date=cutoff_date), key=lambda x: x.date)
-
         if not entries:
             return TsTrends(dates=[], sentiment=[], sleep=[], stress=[], social=[])
-
+        
         # Auto window size: 3-21 days based on period
         window = min(21, max(3, past_days // 7))
-
+        
         def moving_avg(data):
-            return np.convolve(data, np.ones(window)/window, mode='same')
-
-        # No need to skip entries with 'same' mode
-        skip = 0
-
+            if len(data) < window:
+                return data  # Return original data if not enough points
+            
+            result = []
+            half_window = window // 2
+            
+            for i in range(len(data)):
+                # Calculate window bounds, ensuring we stay within data bounds
+                start = max(0, i - half_window)
+                end = min(len(data), i + half_window + 1)
+                
+                # Calculate average of current window
+                window_data = data[start:end]
+                avg = sum(window_data) / len(window_data)
+                result.append(avg)
+            
+            return result
+        
+        # Calculate moving averages
+        sentiment_ma = moving_avg([e.sentiment_level for e in entries])
+        sleep_ma = moving_avg([e.sleep_quality for e in entries])
+        stress_ma = moving_avg([e.stress_level for e in entries])
+        social_ma = moving_avg([e.social_engagement for e in entries])
+        
         return TsTrends(
             dates=[e.date.strftime("%Y-%m-%d") for e in entries],
-            sentiment=[round(x) for x in moving_avg(
-                [e.sentiment_level for e in entries])],
-            sleep=[round(x) for x in moving_avg(
-                [e.sleep_quality for e in entries])],
-            stress=[round(x) for x in moving_avg(
-                [e.stress_level for e in entries])],
-            social=[round(x) for x in moving_avg(
-                [e.social_engagement for e in entries])],
+            sentiment=[round(x) for x in sentiment_ma],
+            sleep=[round(x) for x in sleep_ma],
+            stress=[round(x) for x in stress_ma],
+            social=[round(x) for x in social_ma],
         )
 
     def calculate_averages(self, past_days: int) -> Averages:
