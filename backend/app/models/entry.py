@@ -63,7 +63,8 @@ class JournalEntryBase(BaseModel):
 
 class JournalEntryCreate(JournalEntryBase):
     """Model for creating a new journal entry,
-    inherits all fields from JournalEntryBase"""
+    inherits all fields from JournalEntryBase.
+    Format content is optional and defaults to False"""
     pass
 
 

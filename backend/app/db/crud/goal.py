@@ -37,7 +37,7 @@ def create_goal(db: Session, goal: GoalCreate) -> GoalModel:
     db_goal = GoalModel(
         title=goal.title,
         type=goal.type,
-        targetDate=goal.targetDate,
+        target_date=goal.target_date,
         category=goal.category,
         # Store the string value of the Enum
         priority=goal.priority.value,
@@ -68,7 +68,7 @@ def update_goal(
             else:
                 setattr(db_goal, key, value)
         # Handle the case where targetDate might be None in the update
-            if key == 'targetDate':
+            if key == 'target_date':
                 setattr(db_goal, key, value)
 
         # Update the updated_at timestamp

@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from ...models.entry import JournalEntryCreate, JournalEntryUpdate
 from ..database import JournalEntryModel
+from ...services.formatter import format_journal_content
 
 
 # --- Journal Entry CRUD  ---
@@ -31,7 +32,10 @@ def get_journal_entry(db: Session,
 def create_journal_entry(db: Session,
                          entry: JournalEntryCreate
                          ) -> JournalEntryModel:
-    """Create a new journal entry"""
+    """Create a new journal entry with AI-formatted content"""
+    # Format the content using the formatter service
+    formatted_content = format_journal_content(entry.content)
+
     db_entry = JournalEntryModel(
         title=entry.title,
         date=entry.date,  # Pass the date object
@@ -56,7 +60,8 @@ def create_journal_entry(db: Session,
             entry.social_engagement.value
             if entry.social_engagement is not None
             else None
-        )
+        ),
+        formatted_content=formatted_content
     )
     db.add(db_entry)
     db.commit()
@@ -69,7 +74,7 @@ def update_journal_entry(
     entry_id: int,
     entry_update: JournalEntryUpdate
 ) -> Optional[JournalEntryModel]:
-    """Update a journal entry"""
+    """Update a journal entry with optional AI formatting"""
     db_entry = get_journal_entry(db, entry_id)
     if db_entry:
         # only include fields that are set in the update
@@ -82,6 +87,11 @@ def update_journal_entry(
                 setattr(db_entry, key, value.value)
             else:
                 setattr(db_entry, key, value)
+
+        # Format the content using the formatter service if provided
+        if entry_update.content:
+            formatted = format_journal_content(entry_update.content)
+            db_entry.formatted_content = formatted
 
         # Update the updated_at timestamp
         db_entry.updated_at = datetime.now(timezone.utc)

@@ -1,18 +1,14 @@
 Backend:
-- def get_journal_entry: return (
-        db.query(JournalEntryModel)
-        .filter(JournalEntryModel.id == entry_id)
-        .first()
-    ) 
-    might also work with db.query(JournalEntryModel).get(entry_id)  # shorthand for primary key lookup
 - result = JournalEntry.from_orm(db_entry) this is deprecated, have a look at is again when it gets important with agent
 
 Frontend:
+- Should instantly show the formatted content of journal entry but button to also show the normal
+- Editing on detailed view throws an error, deleting as well
 - Bigger box to write the Journal in
 - Cursor is not visible after enter
-- Editing on detailed view throws an error, deleting as well
 - Scrolling in Journal Writing is too fast
 
 General:
+- More filters and sorting opportunities for journal entries
 - Add field for planning for the next day into journal
 - Possibility to include attachments to journals
