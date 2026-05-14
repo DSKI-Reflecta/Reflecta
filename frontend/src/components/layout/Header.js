@@ -10,7 +10,7 @@ const Header = ({ activeTab }) => {
 
   return (
     <header className="flex items-center px-8 py-6">
-      <h2 className="text-2xl font-display text-gray-900">
+      <h2 className="text-2xl font-bold text-gray-900">
         {titles[activeTab]}
       </h2>
     </header>

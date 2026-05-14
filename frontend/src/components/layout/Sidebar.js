@@ -69,7 +69,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           <text
             x="60"
             y="38"
-            fontFamily="'DM Serif Display', serif"
+            fontFamily="'Plus Jakarta Sans', sans-serif"
             fontWeight="400"
             fontSize="24"
             fill="#171717"

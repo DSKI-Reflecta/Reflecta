@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import EntryList from "../journal/EntryList";
 import EntryForm from "../journal/EntryForm";
 import EntryDetail from "../journal/EntryDetail";
-import { Search as SearchIcon, X } from "lucide-react";
+import { Search as SearchIcon, X, SlidersHorizontal } from "lucide-react";
 import {
   fetchJournalEntries,
   createJournalEntry,
@@ -62,6 +62,7 @@ const JournalPage = () => {
   const [stressFilter, setStressFilter] = useState("");
   const [socialEngagementFilter, setSocialEngagementFilter] = useState("");
 
+  const [showFilters, setShowFilters] = useState(false);
   const [error, setError] = useState(null);
 
   const queryClient = useQueryClient();
@@ -267,165 +268,92 @@ const JournalPage = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Journal Entries</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="relative flex-1 max-w-sm">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search entries..."
+            className="input-field pl-9 py-2 text-sm"
+          />
+        </div>
         <button
-          onClick={openAddEntryModal}
-          className="btn-primary"
+          onClick={() => setShowFilters(!showFilters)}
+          className={`p-2.5 rounded-xl transition-colors ${
+            showFilters ? "bg-purple-100 text-purple-700" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+          }`}
         >
+          <SlidersHorizontal className="h-4 w-4" />
+        </button>
+        <button onClick={openAddEntryModal} className="btn-primary ml-auto">
           New Entry
         </button>
       </div>
 
-      <div className="mb-6 card p-5 flex flex-wrap gap-4">
-        <div className="w-full md:w-64">
-          <label
-            htmlFor="searchTerm"
-            className="block text-sm font-medium text-gray-700 mb-1"
+      {showFilters && (
+        <div className="mb-6 flex flex-wrap gap-3 items-center">
+          <select
+            value={sentimentFilter}
+            onChange={(e) => setSentimentFilter(e.target.value)}
+            className="text-sm rounded-lg bg-gray-100 border-0 px-3 py-2 text-gray-600 focus:ring-2 focus:ring-purple-500"
           >
-            Search Title:
-          </label>
-          <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-            <input
-              type="text"
-              id="searchTerm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by title..."
-              className="input-field pl-10"
-            />
-          </div>
-        </div>
-
-        <div className="w-full md:w-32">
-          <label
-            htmlFor="sentimentFilter"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            {sentimentOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.value === "" ? "Mood" : option.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={sleepFilter}
+            onChange={(e) => setSleepFilter(e.target.value)}
+            className="text-sm rounded-lg bg-gray-100 border-0 px-3 py-2 text-gray-600 focus:ring-2 focus:ring-purple-500"
           >
-            Sentiment:
-          </label>
-          <div className="relative">
-            <select
-              id="sentimentFilter"
-              value={sentimentFilter}
-              onChange={(e) => setSentimentFilter(e.target.value)}
-              className="input-field pr-8"
-            >
-              {sentimentOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="w-full md:w-32">
-          <label
-            htmlFor="sleepFilter"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            {sleepOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.value === "" ? "Sleep" : option.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={stressFilter}
+            onChange={(e) => setStressFilter(e.target.value)}
+            className="text-sm rounded-lg bg-gray-100 border-0 px-3 py-2 text-gray-600 focus:ring-2 focus:ring-purple-500"
           >
-            Sleep Quality:
-          </label>
-          <div className="relative">
-            <select
-              id="sleepFilter"
-              value={sleepFilter}
-              onChange={(e) => setSleepFilter(e.target.value)}
-              className="input-field pr-8"
-            >
-              {sleepOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="w-full md:w-32">
-          <label
-            htmlFor="stressFilter"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            {stressOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.value === "" ? "Stress" : option.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={socialEngagementFilter}
+            onChange={(e) => setSocialEngagementFilter(e.target.value)}
+            className="text-sm rounded-lg bg-gray-100 border-0 px-3 py-2 text-gray-600 focus:ring-2 focus:ring-purple-500"
           >
-            Stress Level:
-          </label>
-          <div className="relative">
-            <select
-              id="stressFilter"
-              value={stressFilter}
-              onChange={(e) => setStressFilter(e.target.value)}
-              className="input-field pr-8"
-            >
-              {stressOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
+            {socialEngagementOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.value === "" ? "Social" : option.label}
+              </option>
+            ))}
+          </select>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="text-sm rounded-lg bg-gray-100 border-0 px-3 py-2 text-gray-600 focus:ring-2 focus:ring-purple-500"
+            placeholder="From"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="text-sm rounded-lg bg-gray-100 border-0 px-3 py-2 text-gray-600 focus:ring-2 focus:ring-purple-500"
+            placeholder="To"
+          />
         </div>
-
-        <div className="w-full md:w-32">
-          <label
-            htmlFor="socialEngagementFilter"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Social:
-          </label>
-          <div className="relative">
-            <select
-              id="socialEngagementFilter"
-              value={socialEngagementFilter}
-              onChange={(e) => setSocialEngagementFilter(e.target.value)}
-              className="input-field pr-8"
-            >
-              {socialEngagementOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="w-full md:w-32">
-          <label
-            htmlFor="startDate"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Start Date:
-          </label>
-          <div className="relative">
-            <input
-              type="date"
-              id="startDate"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="input-field"
-            />
-          </div>
-        </div>
-
-        <div className="w-full md:w-32">
-          <label
-            htmlFor="endDate"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            End Date:
-          </label>
-          <div className="relative">
-            <input
-              type="date"
-              id="endDate"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="input-field"
-            />
-          </div>
-        </div>
-      </div>
+      )}
 
       {isLoading && (
         <p className="text-center text-gray-500">Loading entries...</p>
