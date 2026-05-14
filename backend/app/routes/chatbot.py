@@ -4,14 +4,17 @@ from app.services.gemini_chatbot import get_chatbot_response
 
 router = APIRouter(
     prefix="/ai",
-    tags=["ai"], # for swagger UI
+    tags=["ai"]  # for swagger UI
 )
+
 
 class ChatRequest(BaseModel):
     message: str
 
+
 class ChatResponse(BaseModel):
     response: str
+
 
 @router.post("/chat/", response_model=ChatResponse)
 async def chat_with_assistant(request: ChatRequest):

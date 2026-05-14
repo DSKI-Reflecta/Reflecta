@@ -27,29 +27,23 @@ Set, organize, and evolve your direction.
 * 🔢 Prioritize via drag-and-drop or numbering
 * 📊 Connect journal entries to goal relevance
 
-📅 3. Plans for Tomorrow
-* Write a brief outline of next-day intentions
-* Review past plans and see if they were completed
-
-🗓️ 4. Calendar
+🗓️ 3. Calendar
 Visualize your journal entries, plans and goal due dates
 * 🗓️ Views: Month / Week / Tomorrow
 
-📈 5. Analytics
+📈 4. Analytics
 Gain personal insights from your data
-* 📊 Track trends: sleep, stress, mood, sociality
-* 😊 Sentiment over time
-* ✅ Activities summary
 * 🎯 Goal alignment tracking
+* 📊 Track trends: sleep, stress, mood, sociality
 * 🔁 Correlation insights (e.g., “Low sleep → high stress next day”)
+* ✅ Activities summary
 
-🤖 6. AI Chatbot (Reflecta Assistant)
+🤖 5. AI Chatbot (Reflecta Assistant)
 Your personal, context-aware companion
 * 💡 Knows your journal, goals, trends, coping tools
 * 📬 Can help with goal setting, mood reflection, plan adjustments
 * 🧠 Smart suggestions and check-ins
 
-🧭 7. “Future Me” Letters
-Reflect forward.
-* 📝 Write to your future self (e.g., +7, +30 days)
-* 📬 Get a notification with your letter and agent comment:“Here’s what past-you hoped for. How do you feel about it now?
+📅 6. Plans for Tomorrow
+* Write a brief outline of next-day intentions
+* Review past plans and see if they were completed

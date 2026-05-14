@@ -1,9 +1,7 @@
-#simple gemini chatbot 
+# simple gemini chatbot
 import os
-from typing import List
 from pydantic import BaseModel, Field
 from google import genai
-from google.genai import types
 from dotenv import load_dotenv
 
 
@@ -14,16 +12,18 @@ api_key = os.getenv("GEMINI_API_KEY")
 genai_client = genai.Client(api_key=api_key)
 model = "gemini-2.0-flash"
 
-#pydantic model for the response
+
+# pydantic model for the response
 class answer(BaseModel):
     text: str = Field(..., description="The response text from the chatbot")
 
-#pydantic model for the request
+
+# pydantic model for the request
 class request(BaseModel):
     message: str = Field(..., description="The user message to the chatbot")
 
 
-#Sysem prompt for the chatbot
+# Sysem prompt for the chatbot
 SYSTEM_PROMPT = """
 You are a supportive, thoughtful, and privacy-respecting AI assistant embedded in a journaling app. Your goal is to help the user reflect, express themselves clearly, and track their personal growth. Your tone is warm, calm, non-judgmental, and emotionally intelligent. You always respect the user’s boundaries and never force interaction.
 
@@ -50,9 +50,8 @@ def get_chatbot_response(user_message: str) -> str:
     chat_message = genai_client.models.generate_content(
         model=model,
         config={"system_instruction": SYSTEM_PROMPT,
-            "response_mime_type":"application/json",
-            "response_schema": answer,},
+                "response_mime_type": "application/json",
+                "response_schema": answer},
         contents=user_message,
         )
     return chat_message.parsed.text.strip()
-

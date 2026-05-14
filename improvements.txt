@@ -1,18 +1,27 @@
 Backend:
-- Update goals per entry or entries per goal upon PUT
-- remove keywords as they are probably not needed
+- Update goals per entry or entries per goal upon PUT: Tristan
+- remove keywords as they are probably not needed: Tristan
+- Add example env to github: Chris
 
 Frontend:
-- Backend already sorts entries (GoalList)
-- Editing on detailed view throws an error, deleting as well
-- More filter and sorting opportunities for journal entries
-- Bigger box to write the Journal in
-- Drag and drop possiblity to order goals
+- Editing on detailed view throws an error, deleting as well: Chris
+- More filter and sorting opportunities for journal entries. Make start and end date smaller: Chris
+- Social Engagement without unnecessary text: Chris
+- Bigger box to write the Journal in and bigger box in general: Chris
+- Fix Calendar alignment: Chris
+- Allow weekly and daily view: Chris
+- Edit goals page to show more goals in boxes + detail page with description: Chris
+- show latest 3 journal entries which reflect that goal: Tristan
+
 - Cursor is not visible after enter
-- Scrolling in Journal Writing is too fast
+- Backend already sorts entries (GoalList)
+- Drag and drop possiblity to order goals
 
 General:
-- Besides the Journal, Goals and Calendar Section, also add Plans, Analytics and "Future-Me" letters
+- Add Analytics Section
 - Write AI Chatbot functionality
+
+- Add Plans Section
 - Possibility to include attachments to journals
+- User Management
 - Daily reminder to write journal entry
