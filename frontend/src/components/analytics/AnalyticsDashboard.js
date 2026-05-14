@@ -46,18 +46,6 @@ const StatCard = ({
       <div className={`p-3 rounded-lg bg-${color}-50`}>
         <Icon className={`w-6 h-6 text-${color}-600`} />
       </div>
-      {isRating && (
-        <div className="flex items-center space-x-1">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <div
-              key={star}
-              className={`w-3 h-3 rounded-full ${
-                star <= Math.round(value) ? `bg-${color}-400` : "bg-gray-200"
-              }`}
-            />
-          ))}
-        </div>
-      )}
     </div>
     <div className="mt-4">
       <h3 className="text-2xl font-bold text-gray-900">
