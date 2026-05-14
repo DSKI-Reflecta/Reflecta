@@ -129,7 +129,7 @@ const GoalsPage = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Goals & Priorities</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Goals & Priorities</h1>
         <button
           onClick={openAddGoalModal}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
