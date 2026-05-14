@@ -2,10 +2,10 @@
 API routes for retrieving and analyzing journal entry analytics.
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -20,45 +20,50 @@ router = APIRouter(
 )
 
 
+def _parse_period_to_days(period: str) -> int:
+    """Converts a period string (e.g., '7days') to an integer of days."""
+    if period.endswith("days"):
+        return int(period.replace("days", ""))
+    elif period.endswith("months"):
+        return int(period.replace("months", "")) * 30
+    elif period.endswith("years"):
+        return int(period.replace("years", "")) * 365
+    try:
+        return int(period)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid period format.")
+
+
 @router.get("/trends/", response_model=TsTrends)
 def get_trends(
     db: Session = Depends(get_db),
-    past_days: int = Query(
-        30,
-        ge=1,
-        description="Number of past days to include in the trend analysis.")
+    period: str = Query(
+        "30days",
+        description="Period to analyze (e.g., '7days', '30days', '90days')."
+    )
 ) -> TsTrends:
     """
     Retrieves time series data for sentiment, sleep, stress, and social
-    engagement from journal entries over a specified number of past days.
-
-    Args:
-        db (Session): The database session dependency.
-        past_days (int): The number of past days to consider
-        for the trend analysis.
-
-    Returns:
-        TsTrends: An object containing lists of dates
-        and corresponding metric values.
+    engagement from journal entries over a specified period.
     """
+    past_days = _parse_period_to_days(period)
     analytics_service = AnalyticsService(db)
     return analytics_service.calculate_trends(past_days)
 
 
-@router.get("/averages/", response_model=Averages)
-def get_averages(
+@router.get("/stats/", response_model=Averages)
+def get_stats(
     db: Session = Depends(get_db),
-    past_days: int = Query(
-        30,
-        ge=1,
-        description="Number of past days to include in the average calculation."
+    period: str = Query(
+        "30days",
+        description="Period for calculating stats (e.g., '7days', '30days')."
     )
 ) -> Averages:
     """
-    Calculates and retrieves average values for sentiment, sleep, stress, and
-    social engagement from journal entries over specified number of past days.
+    Calculates and retrieves average values for key metrics over a
+    specified period.
     """
-    print("Fetching averages data...")
+    past_days = _parse_period_to_days(period)
     analytics_service = AnalyticsService(db)
     return analytics_service.calculate_averages(past_days)
 
@@ -66,21 +71,15 @@ def get_averages(
 @router.get("/correlations/")
 def get_correlations(
     db: Session = Depends(get_db),
-    past_days: int = Query(
-        30,
-        ge=1,
-        description="Num of past days to consider for correlation analysis.")
+    period: str = Query(
+        "30days",
+        description="Period for correlation analysis (e.g., '30days')."
+    )
 ):
     """
     Calculates and retrieves correlations between state tracking fields.
-
-    Args:
-        db (Session): The database session dependency.
-        past_days (int): The number of past days to consider for the analysis.
-
-    Returns:
-        dict: Dictionary containing correlation coefficients between metrics.
     """
+    past_days = _parse_period_to_days(period)
     analytics_service = AnalyticsService(db)
     return analytics_service.calculate_correlations(past_days)
 
@@ -88,20 +87,18 @@ def get_correlations(
 @router.get("/summary/")
 def generate_summary(
     db: Session = Depends(get_db),
-    from_date: Optional[datetime] = None,
-    to_date: Optional[datetime] = None,
+    period: str = Query(
+        "30days",
+        description="Period for the summary (e.g., '7days', '30days')."
+    )
 ):
     """
     Generates a summary of journal entries for a specified period.
-
-    Args:
-        db (Session): The database session dependency.
-        from_date (Optional[datetime]): The start date of the period.
-        to_date (Optional[datetime]): The end date of the period.
-
-    Returns:
-        dict: A dictionary containing the summary.
     """
+    past_days = _parse_period_to_days(period)
+    to_date = datetime.now()
+    from_date = to_date - timedelta(days=past_days)
+
     analytics_service = AnalyticsService(db)
     entry_details = analytics_service.prepare_summary_data(from_date, to_date)
 

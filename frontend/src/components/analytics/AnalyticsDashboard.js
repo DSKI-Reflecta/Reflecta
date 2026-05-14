@@ -93,6 +93,16 @@ const AnalyticsDashboard = () => {
   const [trends, setTrends] = useState([]);
   const [correlations, setCorrelations] = useState(null);
   const [summary, setSummary] = useState(null);
+  const [visibleTrends, setVisibleTrends] = useState({
+    sentiment: true,
+    sleep: false,
+    stress: false,
+    social: false,
+  });
+
+  const handleTrendToggle = (trend) => {
+    setVisibleTrends((prev) => ({ ...prev, [trend]: !prev[trend] }));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -254,56 +264,100 @@ const AnalyticsDashboard = () => {
                   <XAxis dataKey="date" stroke="#64748b" />
                   <YAxis domain={[1, 5]} stroke="#64748b" />
                   <Tooltip content={<CustomTooltip />} />
-                  <Line
-                    type="monotone"
-                    dataKey="sleep"
-                    stroke="#6366f1"
-                    strokeWidth={2}
-                    name="Sleep Quality"
-                    dot={{ fill: "#6366f1", strokeWidth: 2, r: 3 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="stress"
-                    stroke="#ef4444"
-                    strokeWidth={2}
-                    name="Stress Level"
-                    dot={{ fill: "#ef4444", strokeWidth: 2, r: 3 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="sentiment"
-                    stroke="#eab308"
-                    strokeWidth={2}
-                    name="Mood"
-                    dot={{ fill: "#eab308", strokeWidth: 2, r: 3 }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="social"
-                    stroke="#ec4899"
-                    strokeWidth={2}
-                    name="Social Engagement"
-                    dot={{ fill: "#ec4899", strokeWidth: 2, r: 3 }}
-                  />
+                  {visibleTrends.sleep && (
+                    <Line
+                      type="monotone"
+                      dataKey="sleep"
+                      stroke="#6366f1"
+                      strokeWidth={2}
+                      name="Sleep Quality"
+                      dot={false}
+                    />
+                  )}
+                  {visibleTrends.stress && (
+                    <Line
+                      type="monotone"
+                      dataKey="stress"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                      name="Stress Level"
+                      dot={false}
+                    />
+                  )}
+                  {visibleTrends.sentiment && (
+                    <Line
+                      type="monotone"
+                      dataKey="sentiment"
+                      stroke="#eab308"
+                      strokeWidth={2}
+                      name="Mood"
+                      dot={false}
+                    />
+                  )}
+                  {visibleTrends.social && (
+                    <Line
+                      type="monotone"
+                      dataKey="social"
+                      stroke="#ec4899"
+                      strokeWidth={2}
+                      name="Social Engagement"
+                      dot={false}
+                    />
+                  )}
                 </LineChart>
               </ResponsiveContainer>
               <div className="mt-4 flex flex-wrap gap-4">
-                <div className="flex items-center text-sm">
-                  <div className="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
-                  <span className="text-gray-600">Sleep Quality</span>
+                <div
+                  className={`flex items-center cursor-pointer ${
+                    visibleTrends.sleep ? "text-gray-600" : "text-gray-400"
+                  }`}
+                  onClick={() => handleTrendToggle("sleep")}
+                >
+                  <div
+                    className={`w-3 h-3 rounded-full mr-2 ${
+                      visibleTrends.sleep ? "bg-indigo-500" : "bg-gray-400"
+                    }`}
+                  ></div>
+                  <span>Sleep Quality</span>
                 </div>
-                <div className="flex items-center text-sm">
-                  <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                  <span className="text-gray-600">Stress Level</span>
+                <div
+                  className={`flex items-center cursor-pointer ${
+                    visibleTrends.stress ? "text-gray-600" : "text-gray-400"
+                  }`}
+                  onClick={() => handleTrendToggle("stress")}
+                >
+                  <div
+                    className={`w-3 h-3 rounded-full mr-2 ${
+                      visibleTrends.stress ? "bg-red-500" : "bg-gray-400"
+                    }`}
+                  ></div>
+                  <span>Stress Level</span>
                 </div>
-                <div className="flex items-center text-sm">
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-                  <span className="text-gray-600">Mood</span>
+                <div
+                  className={`flex items-center cursor-pointer ${
+                    visibleTrends.sentiment ? "text-gray-600" : "text-gray-400"
+                  }`}
+                  onClick={() => handleTrendToggle("sentiment")}
+                >
+                  <div
+                    className={`w-3 h-3 rounded-full mr-2 ${
+                      visibleTrends.sentiment ? "bg-yellow-500" : "bg-gray-400"
+                    }`}
+                  ></div>
+                  <span>Mood</span>
                 </div>
-                <div className="flex items-center text-sm">
-                  <div className="w-3 h-3 bg-pink-500 rounded-full mr-2"></div>
-                  <span className="text-gray-600">Social Engagement</span>
+                <div
+                  className={`flex items-center cursor-pointer ${
+                    visibleTrends.social ? "text-gray-600" : "text-gray-400"
+                  }`}
+                  onClick={() => handleTrendToggle("social")}
+                >
+                  <div
+                    className={`w-3 h-3 rounded-full mr-2 ${
+                      visibleTrends.social ? "bg-pink-500" : "bg-gray-400"
+                    }`}
+                  ></div>
+                  <span>Social Engagement</span>
                 </div>
               </div>
             </div>

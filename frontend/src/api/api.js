@@ -135,7 +135,7 @@ export const getAnalyticsCorrelations = async (period) => {
 
 export const getAnalyticsStats = async (period) => {
   const response = await fetch(
-    `${API_BASE_URL}/analytics/averages/?period=${period}`
+    `${API_BASE_URL}/analytics/stats/?period=${period}`
   );
   return handleResponse(response);
 };
