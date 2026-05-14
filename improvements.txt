@@ -2,7 +2,6 @@ Backend:
 - result = JournalEntry.from_orm(db_entry) this is deprecated, have a look at is again when it gets important with agent
 
 Frontend:
-- Should instantly show the formatted content of journal entry but button to also show the normal
 - Editing on detailed view throws an error, deleting as well
 - Bigger box to write the Journal in
 - Cursor is not visible after enter

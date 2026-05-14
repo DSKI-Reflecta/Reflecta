@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from ...models.entry import JournalEntryCreate, JournalEntryUpdate
 from ..database import JournalEntryModel
-from ...services.formatter import format_journal_content
+from ...services.gemini_agent import format_journal_content
 
 
 # --- Journal Entry CRUD  ---
