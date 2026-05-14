@@ -23,10 +23,6 @@ const CalendarPage = () => {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Journal Calendar</h1>
-        <p className="text-gray-600">View your journal entries and goals by date</p>
-      </div>
 
       {/* Display loading, error, or calendar */}
       {isLoading && <p className="text-center text-gray-500 italic">Loading calendar data...</p>} {/* Use isLoading from useQuery */}

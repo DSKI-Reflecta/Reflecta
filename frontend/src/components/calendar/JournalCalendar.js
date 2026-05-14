@@ -125,9 +125,14 @@ const JournalCalendar = ({ journalEntries, goals }) => {
     });
   };
 
+  // Function to limit the number of items shown per day
+  const getLimitedItems = (items, limit = 2) => {
+    if (items.length <= limit) return items;
+    return items.slice(0, limit);
+  };
 
   return (
-    <div className="bg-white rounded-lg shadow p-4"> {/* Added padding */}
+    <div className="bg-white rounded-lg shadow p-4"> 
       {/* Month Navigation Header */}
       <div className="flex justify-between items-center mb-4">
         <button onClick={goToPreviousMonth} className="p-2 rounded-full hover:bg-gray-200">
@@ -139,39 +144,46 @@ const JournalCalendar = ({ journalEntries, goals }) => {
         </button>
       </div>
 
-      <div className="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-md overflow-hidden"> {/* Added border and rounded corners */}
+      <div className="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-md overflow-hidden"> 
         {weekdays.map(day => (
-          <div key={day} className="bg-gray-100 text-center py-2 font-medium text-gray-700 text-sm">{day}</div> /* Adjusted background and text size */
+          <div key={day} className="bg-gray-100 text-center py-2 font-medium text-gray-700 text-sm">{day}</div>
         ))}
 
         {days.map((dayInfo, index) => (
           <div
             key={index}
-            className={`bg-white border border-gray-100 h-32 p-1 flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100
+            className={`bg-white border border-gray-100 h-32 p-1 flex flex-col overflow-hidden
                        ${dayInfo.isCurrentMonth ? '' : 'text-gray-400 bg-gray-50'}
                        ${dayInfo.isToday ? 'border-blue-500 border-2' : ''}
-                       hover:bg-gray-100 transition-colors duration-100`} // Added hover effect
+                       hover:bg-gray-100 transition-colors duration-100`}
           >
-            <div className="flex justify-between items-center mb-1"> {/* Added margin-bottom */}
-              <span className={`font-medium ${dayInfo.isToday ? 'text-blue-600' : 'text-gray-900'}`}>{dayInfo.day}</span> {/* Highlight today's number */}
+            <div className="flex justify-between items-center mb-1"> 
+              <span className={`font-medium ${dayInfo.isToday ? 'text-blue-600' : 'text-gray-900'}`}>{dayInfo.day}</span>
             </div>
 
-            {/* Display mini-cards for entries and goals */}
-            <div className="flex flex-col space-y-1 flex-grow"> {/* flex-grow to push content down */}
-                {/* Journal Entries */}
-                {dayInfo.entries.map(entry => (
+            {/* Display limited number of entries and goals */}
+            <div className="flex flex-col space-y-1 flex-grow"> 
+                {/* Journal Entries - limited display */}
+                {getLimitedItems(dayInfo.entries).map(entry => (
                     <div key={`entry-${entry.id}`} className="bg-blue-100 text-blue-800 text-xs p-1 rounded truncate" title={entry.title}>
                         Entry: {entry.title}
                     </div>
                 ))}
-                {/* Goals */}
-                 {dayInfo.goals.map(goal => (
+                
+                {/* Goals - limited display */}
+                {getLimitedItems(dayInfo.goals).map(goal => (
                     <div key={`goal-${goal.id}`} className="bg-green-100 text-green-800 text-xs p-1 rounded truncate" title={goal.title}>
                         Goal: {goal.title}
                     </div>
                 ))}
+                
+                {/* Show count of additional items if there are more than the limit */}
+                {(dayInfo.entries.length + dayInfo.goals.length > 4) && (
+                    <div className="text-xs text-gray-500 font-medium">
+                        +{dayInfo.entries.length + dayInfo.goals.length - 4} more
+                    </div>
+                )}
             </div>
-
           </div>
         ))}
       </div>
