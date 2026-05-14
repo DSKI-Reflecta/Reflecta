@@ -107,34 +107,6 @@ const JournalPage = () => {
       );
     }
 
-    // Filter by date range
-    if (startDate || endDate) {
-      updatedFilteredEntries = updatedFilteredEntries.filter(entry => {
-        const entryDate = new Date(entry.date);
-        let isWithinRange = true;
-
-        if (startDate) {
-          const start = new Date(startDate);
-          // Set time to start of day for accurate comparison
-          start.setHours(0, 0, 0, 0);
-          if (entryDate < start) {
-            isWithinRange = false;
-          }
-        }
-
-        if (endDate) {
-          const end = new Date(endDate);
-           // Set time to end of day for accurate comparison
-          end.setHours(23, 59, 59, 999);
-          if (entryDate > end) {
-            isWithinRange = false;
-          }
-        }
-
-        return isWithinRange;
-      });
-    }
-
     // Filter by sentiment
     if (sentimentFilter) {
       updatedFilteredEntries = updatedFilteredEntries.filter(entry =>
@@ -165,6 +137,34 @@ const JournalPage = () => {
         entry.social_engagement !== null && entry.social_engagement !== undefined &&
         String(entry.social_engagement) === socialEngagementFilter
       );
+    }
+
+    // Filter by date range
+    if (startDate || endDate) {
+      updatedFilteredEntries = updatedFilteredEntries.filter(entry => {
+        const entryDate = new Date(entry.date);
+        let isWithinRange = true;
+
+        if (startDate) {
+          const start = new Date(startDate);
+          // Set time to start of day for accurate comparison
+          start.setHours(0, 0, 0, 0);
+          if (entryDate < start) {
+            isWithinRange = false;
+          }
+        }
+
+        if (endDate) {
+          const end = new Date(endDate);
+           // Set time to end of day for accurate comparison
+          end.setHours(23, 59, 59, 999);
+          if (entryDate > end) {
+            isWithinRange = false;
+          }
+        }
+
+        return isWithinRange;
+      });
     }
 
 
@@ -330,36 +330,6 @@ const JournalPage = () => {
     </div>
   </div>
 
-  {/* Start Date - Standard width */}
-  <div className="w-full md:w-32">
-    <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Start Date:</label>
-    <div className="relative">
-      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-      <input
-        type="date"
-        id="startDate"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-        className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2"
-      />
-    </div>
-  </div>
-
-  {/* End Date - Standard width */}
-  <div className="w-full md:w-32">
-    <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">End Date:</label>
-    <div className="relative">
-      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-      <input
-        type="date"
-        id="endDate"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2"
-      />
-    </div>
-  </div>
-
   {/* Sentiment Filter - Standard width */}
   <div className="w-full md:w-32">
     <label htmlFor="sentimentFilter" className="block text-sm font-medium text-gray-700 mb-1">Sentiment:</label>
@@ -376,7 +346,7 @@ const JournalPage = () => {
       </select>
     </div>
   </div>
-
+      
   {/* Sleep Quality Filter - Standard width */}
   <div className="w-full md:w-32">
     <label htmlFor="sleepFilter" className="block text-sm font-medium text-gray-700 mb-1">Sleep Quality:</label>
@@ -427,8 +397,37 @@ const JournalPage = () => {
       </select>
     </div>
   </div>
-</div>
 
+  {/* Start Date - Standard width */}
+  <div className="w-full md:w-32">
+    <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Start Date:</label>
+    <div className="relative">
+      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+      <input
+        type="date"
+        id="startDate"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2"
+      />
+    </div>
+  </div>
+
+  {/* End Date - Standard width */}
+  <div className="w-full md:w-32">
+    <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">End Date:</label>
+    <div className="relative">
+      <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+      <input
+        type="date"
+        id="endDate"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+        className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2"
+      />
+    </div>
+  </div>
+</div>
 
       {/* Loading and Error Messages */}
       {isLoading && <p className="text-center text-gray-500">Loading entries...</p>}

@@ -1,6 +1,5 @@
 Backend:
-- Update goals per entry or entries per goal upon PUT: Tristan
-- remove keywords as they are probably not needed: Tristan
+- 
 
 Frontend:
 - Bigger box to write the Journal in and bigger box in general: Chris
