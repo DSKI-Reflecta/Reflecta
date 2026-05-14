@@ -25,3 +25,4 @@ class Averages(BaseModel):
     sleep: float
     stress: float
     social: float
+
