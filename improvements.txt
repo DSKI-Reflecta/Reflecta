@@ -1,0 +1,9 @@
+Backend:
+- Include lifespan instead of onevent("start") as it is deprecated
+- def get_journal_entry: return (
+        db.query(JournalEntryModel)
+        .filter(JournalEntryModel.id == entry_id)
+        .first()
+    ) 
+    might also work with db.query(JournalEntryModel).get(entry_id)  # shorthand for primary key lookup
+- split crud.py into goal_crud and entry_crud
