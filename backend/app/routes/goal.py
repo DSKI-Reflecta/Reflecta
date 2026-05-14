@@ -9,7 +9,7 @@ from ..db.crud.goal import (
     update_goal,
     delete_goal
 )
-from ..models.goal import GoalCreate, Goal, GoalUpdate
+from ..models.entry_goal import GoalCreate, Goal, GoalUpdate
 
 router = APIRouter(
     prefix="/goals",  # Prefix for goal endpoints

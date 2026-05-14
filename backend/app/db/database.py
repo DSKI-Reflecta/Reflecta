@@ -5,10 +5,12 @@ from sqlalchemy import (
     String,
     Text,
     DateTime,
-    Date
+    Date,
+    Table,
+    ForeignKey,
 )
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 import os
 from datetime import datetime, timezone
 
@@ -23,6 +25,15 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+# Association table for many-to-many relationship between
+# JournalEntryModel and GoalModel
+journal_goal_association = Table(
+    "journal_goal_association",
+    Base.metadata,
+    Column("journal_id", Integer, ForeignKey("journal_entries.id")),
+    Column("goal_id", Integer, ForeignKey("goals.id"))
+)
 
 
 class JournalEntryModel(Base):
@@ -52,6 +63,13 @@ class JournalEntryModel(Base):
     sentiments = Column(String, nullable=True)
     keywords = Column(Text, nullable=True)  # Stored as JSON string
 
+    # Many-to-many relationship with goals
+    goals = relationship(
+        "GoalModel",  # target model
+        secondary=journal_goal_association,  # association table
+        back_populates="journal_entries"  # "two-way" mirror
+    )
+
 
 class GoalModel(Base):
     """Model for goals."""
@@ -71,6 +89,13 @@ class GoalModel(Base):
     # Timestamps
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, nullable=True)
+
+    # Many-to-many relationship with journal entries
+    journal_entries = relationship(
+        "JournalEntryModel",  # target model
+        secondary=journal_goal_association,  # association table
+        back_populates="goals"  # "two-way" mirror
+    )
 
 
 # Create the database tables
