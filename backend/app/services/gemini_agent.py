@@ -56,11 +56,28 @@ def extract_sentiments(content: str) -> str:
     return response.text.strip()
 
 
-def analyze_entry(content: str) -> tuple:
+def extract_goals(content: str, goals: str) -> str:
+    """Extract goals from the journal entry content."""
+    response = genai_client.models.generate_content(
+        model=model,
+        contents=f"""This is a journal entry. \n{content}\n.
+        Here is the list of goals (each with an ID and description):
+        \n{goals}\n
+        Based on the entry, list the relevant goal IDs as a
+        comma-separated list of numbers.
+        Do not include any list formatting, quotes, or explanations.
+        Example output: 1, 3, 5"""
+    )
+    # Convert the response text to a list of integers
+    return [int(x.strip()) for x in response.text.split(",")]
+
+
+def analyze_entry(content: str, goals: str) -> tuple:
     """Analyze the journal entry content using concurrent tasks.
     This means that the tasks will run in parallel."""
     with concurrent.futures.ThreadPoolExecutor() as executor:
         f1 = executor.submit(format_journal_content, content)
         f2 = executor.submit(extract_activities, content)
         f3 = executor.submit(extract_sentiments, content)
-        return f1.result(), f2.result(), f3.result()
+        f4 = executor.submit(extract_goals, content, goals)
+        return f1.result(), f2.result(), f3.result(), f4.result()

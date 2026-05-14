@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import date as date_type  # Import date type with an alias
-from enum import Enum  # Import Enum
+from enum import Enum
 
 
 class GoalPriority(str, Enum):

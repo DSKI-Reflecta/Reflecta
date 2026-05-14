@@ -1,8 +1,11 @@
+from __future__ import annotations  # help with forward references
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field
 from enum import IntEnum  # for mapping enums to integers
 from datetime import date as date_type
+from .goal import Goal
+
 
 """
 IntEnum members behave like integers, e.g.:
@@ -65,7 +68,7 @@ class JournalEntryCreate(JournalEntryBase):
     """Model for creating a new journal entry,
     inherits all fields from JournalEntryBase.
     Format content is optional and defaults to False"""
-    pass
+    goals: Optional[List[int]] = None
 
 
 class JournalEntryUpdate(BaseModel):
@@ -94,7 +97,10 @@ class JournalEntry(JournalEntryBase):
     formatted_content: Optional[str] = None
     activities: Optional[str] = None
     sentiments: Optional[str] = None
-    keywords: Optional[list[str]] = None
+    keywords: Optional[List[str]] = None
+
+    # Many-to-many relationship with goals
+    goals: Optional[List[Goal]] = None
 
     # model can be directly created from SQLAlchemy object
     class Config:

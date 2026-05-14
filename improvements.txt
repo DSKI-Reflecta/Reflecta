@@ -1,4 +1,5 @@
 Backend:
+- Update goals per entry or entries per goal upon PUT
 - remove keywords as they are probably not needed
 
 Frontend:
