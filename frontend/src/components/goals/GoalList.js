@@ -1,8 +1,8 @@
 import React from 'react';
 import GoalCard from './GoalCard';
 
-// Added goals, onEditGoal, onDeleteGoal props
-const GoalList = ({ goals, onEditGoal, onDeleteGoal }) => {
+// Added goals, onEditGoal, onDeleteGoal, and onGoalClick props
+const GoalList = ({ goals, onEditGoal, onDeleteGoal, onGoalClick }) => {
 
   // Define the order for priority levels for sorting
   const priorityOrder = {
@@ -19,13 +19,15 @@ const GoalList = ({ goals, onEditGoal, onDeleteGoal }) => {
   });
 
   return (
-    <div className="grid gap-6">
+    // Removed the misplaced JSX comment
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {sortedGoals.map(goal => (
         <GoalCard
           key={goal.id}
           goal={goal}
-          onEdit={() => onEditGoal(goal)} // Pass the goal object to edit handler
-          onDelete={() => onDeleteGoal(goal.id)} // Pass the goal id to delete handler
+          onEdit={onEditGoal} // Pass the edit handler
+          onDelete={onDeleteGoal} // Pass the delete handler
+          onClick={onGoalClick} // Pass the new click handler for detail view
         />
       ))}
        {/* Message if no goals */}

@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict # Import ConfigDict
 from datetime import date as date_type  # Import date type with an alias
 from enum import Enum, IntEnum
 
@@ -56,14 +56,19 @@ class GoalBase(BaseModel):
     title: str = Field(..., description="The title of the goal")
     type: str = Field(...,
                       description="The type of the goal")
+    # Added alias='targetDate' to map frontend camelCase to backend snake_case
     target_date: Optional[date_type] = Field(
         None,
-        description="Target date for the goal (optional for recurring goals)"
+        description="Target date for the goal (optional for recurring goals)",
+        alias='targetDate'
     )
     category: str = Field(..., description="The category of the goal")
     priority: GoalPriority = Field(..., description="The priority of the goal")
     description: Optional[str] = Field(None,
                                        description="A brief goal description")
+
+    # Configure Pydantic to allow population by field name or alias
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class GoalCreate(GoalBase):
@@ -77,8 +82,12 @@ class GoalUpdate(BaseModel):
     # Allow optional updates for all fields
     title: Optional[str] = None
     type: Optional[str] = None
-    # Allow optional update for targetDate
-    target_date: Optional[date_type] = None
+    # Added alias='targetDate' for the update model as well
+    target_date: Optional[date_type] = Field(
+        None,
+        description="Target date for the goal (optional for recurring goals)",
+        alias='targetDate'
+    )
     category: Optional[str] = None
     priority: Optional[GoalPriority] = None
     description: Optional[str] = None
@@ -86,6 +95,9 @@ class GoalUpdate(BaseModel):
         None,
         description="The current progress percentage (0-100)"
     )
+
+    # Configure Pydantic to allow population by field name or alias
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class JournalEntryBase(BaseModel):
@@ -137,8 +149,7 @@ class JournalEntryBasic(JournalEntryBase):
     sentiments: Optional[str] = None
 
     # model can be directly created from SQLAlchemy object
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Goal(GoalBase):
@@ -154,10 +165,7 @@ class Goal(GoalBase):
     journal_entries: Optional[List[JournalEntryBasic]] = None
 
     # model can be directly created from SQLAlchemy object
-    class Config:
-        from_attributes = True
-        # Allow converting Enum value to its string value
-        use_enum_values = True
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True) # Use model_config
 
 
 class JournalEntry(JournalEntryBasic):

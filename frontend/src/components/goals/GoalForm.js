@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // Import icons for priority levels
 import { ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
-
-
 // Added onSave prop to handle saving/updating the goal
 const GoalForm = ({ onClose, onSave, editGoal = null }) => {
   const [goal, setGoal] = useState({

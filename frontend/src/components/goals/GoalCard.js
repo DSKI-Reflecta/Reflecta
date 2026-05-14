@@ -3,7 +3,8 @@ import React from 'react';
 import { Edit, Trash2, Tag, Calendar, ArrowDownCircle, MinusCircle, ArrowUpCircle } from 'lucide-react';
 
 // This is the GoalCard component
-const GoalCard = ({ goal, onEdit, onDelete }) => {
+// Added onClick prop to make the card clickable
+const GoalCard = ({ goal, onEdit, onDelete, onClick }) => {
 
     // Helper to render priority icon and text
     const renderPriority = (priority) => {
@@ -41,9 +42,12 @@ const GoalCard = ({ goal, onEdit, onDelete }) => {
 
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow flex flex-col">
+    // Added aspect-square and cursor-pointer classes, reduced padding
+    // Added onClick handler to make the card clickable
+    <div className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow flex flex-col aspect-square cursor-pointer" onClick={() => onClick(goal)}>
       <div className="flex justify-between items-start mb-3">
-        <div className="flex-1 pr-4"> {/* Added flex-1 and padding */}
+        {/* Removed flex-1 and padding */}
+        <div>
           {/* Display Category and Priority */}
           <div className="flex items-center text-sm text-gray-500 mb-1 space-x-4"> {/* Added space-x-4 */}
              {goal.category && (
@@ -56,29 +60,31 @@ const GoalCard = ({ goal, onEdit, onDelete }) => {
           </div>
           <h3 className="text-lg font-semibold text-gray-900">{goal.title}</h3>
           {/* Display Target Date */}
-          <p className="text-sm text-gray-600 mt-1 flex items-center">
-            <Calendar className="h-4 w-4 mr-1 text-gray-500" /> Target Date: {goal.targetDate || 'Not set'}
-          </p>
+          {goal.targetDate && ( // Only show target date if it exists
+            <p className="text-sm text-gray-600 mt-1 flex items-center">
+              <Calendar className="h-4 w-4 mr-1 text-gray-500" /> Target Date: {new Date(goal.targetDate).toLocaleDateString()}
+            </p>
+           )}
            {/* Display Goal Type */}
            <p className="text-sm text-gray-600 mt-1">
              Type: {goal.type || 'Not specified'}
            </p>
-           {/* Display Description if available */}
-           {goal.description && (
-             <p className="text-sm text-gray-700 mt-2 italic">{goal.description}</p>
-           )}
+           {/* Removed Description display */}
+
         </div>
-        <div className="flex space-x-2"> {/* Buttons for Edit and Delete */}
+        {/* Buttons for Edit and Delete - These should ideally be outside the clickable card area or handled differently */}
+        {/* For now, keeping them but note they are within the clickable area */}
+        <div className="flex space-x-2">
             <button
                 className="p-1 text-gray-400 hover:text-gray-600"
-                onClick={() => onEdit(goal)} // Call onEdit with the goal object
+                onClick={(e) => { e.stopPropagation(); onEdit(goal); }} // Stop propagation to prevent card click
                 aria-label="Edit Goal"
             >
                 <Edit className="h-5 w-5" />
             </button>
             <button
                 className="p-1 text-red-400 hover:text-red-600"
-                onClick={() => onDelete(goal.id)} // Call onDelete with the goal id
+                onClick={(e) => { e.stopPropagation(); onDelete(goal.id); }} // Stop propagation to prevent card click
                 aria-label="Delete Goal"
             >
                 <Trash2 className="h-5 w-5" />
@@ -88,7 +94,7 @@ const GoalCard = ({ goal, onEdit, onDelete }) => {
 
       {/* Progress Bar */}
       {goal.progress !== undefined && (
-          <div className="mt-4">
+          <div className="mt-auto"> {/* Use mt-auto to push progress to the bottom */}
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-green-500 h-2 rounded-full"
