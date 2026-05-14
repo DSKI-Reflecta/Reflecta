@@ -57,56 +57,130 @@ class AnalyticsService:
         num_entries = len(entries)
         
         if num_entries == 0:
-            return Averages(sentiment=0.0, sleep=0.0, stress=0.0, social=0.0)
+            return Averages(sentiment=0.0, sleep=0.0, stress=0.0, social=0.0, total_entries=0, current_streak=0, average_words_per_entry=0.0)
         
         sentiment_avg = sum(e.sentiment_level for e in entries if e.sentiment_level is not None) / num_entries
         sleep_avg = sum(e.sleep_quality for e in entries if e.sleep_quality is not None) / num_entries
         stress_avg = sum(e.stress_level for e in entries if e.stress_level is not None) / num_entries
         social_avg = sum(e.social_engagement for e in entries if e.social_engagement is not None) / num_entries
+        total_entries = len(entries)
+        current_streak = self._calculate_current_streak()
+        average_words_per_entry = (sum(len(e.content.split()) for e in entries if e.content)) / (num_entries if num_entries > 0 else 0.0)
+
 
         return Averages(
             sentiment=sentiment_avg,
             sleep=sleep_avg,
             stress=stress_avg,
             social=social_avg,
+            total_entries=total_entries,
+            current_streak=current_streak,
+            average_words_per_entry=average_words_per_entry,
         )
     
-    def calculate_correlations(self, past_days: int) -> Dict[str, float]:
+    def calculate_correlations(self, past_days: int) -> Dict[str, Any]:
         """
-        Calculate correlations between different metrics.
+        Calculate correlations between different metrics and return the 2 strongest correlations.
         
         Args:
             past_days (int): Number of past days to consider for correlation analysis.
             
         Returns:
-            Dict[str, float]: Dictionary containing correlation coefficients.
+            Dict[str, Any]: Dictionary containing the 2 strongest correlations with their data points.
         """
         cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
         entries = get_journal_entries(self.db, from_date=cutoff_date)
 
-        # Extract metric arrays
-        sleep = [e.sleep_quality for e in entries if e.sleep_quality is not None]
-        sentiment = [e.sentiment_level for e in entries if e.sentiment_level is not None]
-        stress = [e.stress_level for e in entries if e.stress_level is not None]
-        social = [e.social_engagement for e in entries if e.social_engagement is not None]
+        # Create aligned data (same entries for all metrics)
+        aligned_data = []
+        for entry in entries:
+            if (entry.sleep_quality is not None and 
+                entry.sentiment_level is not None and 
+                entry.stress_level is not None and 
+                entry.social_engagement is not None):
+                aligned_data.append({
+                    'date': entry.date.strftime("%Y-%m-%d"),
+                    'sleep': entry.sleep_quality,
+                    'sentiment': entry.sentiment_level,
+                    'stress': entry.stress_level,
+                    'social': entry.social_engagement
+                })
 
-        # Calculate correlations
+        if len(aligned_data) < 2:
+            return {"message": "Not enough data points for correlation analysis"}
+
+        # Extract aligned arrays
+        sleep = [d['sleep'] for d in aligned_data]
+        sentiment = [d['sentiment'] for d in aligned_data]
+        stress = [d['stress'] for d in aligned_data]
+        social = [d['social'] for d in aligned_data]
+        dates = [d['date'] for d in aligned_data]
+
+        # Calculate all correlations
         correlations = {}
         
-        if len(sleep) > 1 and len(sentiment) > 1:
-            correlations["sleep_sentiment_correlation"] = np.corrcoef(sleep, sentiment)[0, 1]
-        if len(sleep) > 1 and len(stress) > 1:
-            correlations["sleep_stress_correlation"] = np.corrcoef(sleep, stress)[0, 1]
-        if len(sleep) > 1 and len(social) > 1:
-            correlations["sleep_social_correlation"] = np.corrcoef(sleep, social)[0, 1]
-        if len(sentiment) > 1 and len(stress) > 1:
-            correlations["sentiment_stress_correlation"] = np.corrcoef(sentiment, stress)[0, 1]
-        if len(sentiment) > 1 and len(social) > 1:
-            correlations["sentiment_social_correlation"] = np.corrcoef(sentiment, social)[0, 1]
-        if len(stress) > 1 and len(social) > 1:
-            correlations["stress_social_correlation"] = np.corrcoef(stress, social)[0, 1]
+        correlations["sleep_sentiment"] = {
+            "correlation": np.corrcoef(sleep, sentiment)[0, 1],
+            "data": [{"date": dates[i], "x": sleep[i], "y": sentiment[i]} for i in range(len(dates))],
+            "x_label": "Sleep Quality",
+            "y_label": "Sentiment Level"
+        }
+        
+        correlations["sleep_stress"] = {
+            "correlation": np.corrcoef(sleep, stress)[0, 1],
+            "data": [{"date": dates[i], "x": sleep[i], "y": stress[i]} for i in range(len(dates))],
+            "x_label": "Sleep Quality",
+            "y_label": "Stress Level"
+        }
+        
+        correlations["sleep_social"] = {
+            "correlation": np.corrcoef(sleep, social)[0, 1],
+            "data": [{"date": dates[i], "x": sleep[i], "y": social[i]} for i in range(len(dates))],
+            "x_label": "Sleep Quality",
+            "y_label": "Social Engagement"
+        }
+        
+        correlations["sentiment_stress"] = {
+            "correlation": np.corrcoef(sentiment, stress)[0, 1],
+            "data": [{"date": dates[i], "x": sentiment[i], "y": stress[i]} for i in range(len(dates))],
+            "x_label": "Sentiment Level",
+            "y_label": "Stress Level"
+        }
+        
+        correlations["sentiment_social"] = {
+            "correlation": np.corrcoef(sentiment, social)[0, 1],
+            "data": [{"date": dates[i], "x": sentiment[i], "y": social[i]} for i in range(len(dates))],
+            "x_label": "Sentiment Level",
+            "y_label": "Social Engagement"
+        }
+        
+        correlations["stress_social"] = {
+            "correlation": np.corrcoef(stress, social)[0, 1],
+            "data": [{"date": dates[i], "x": stress[i], "y": social[i]} for i in range(len(dates))],
+            "x_label": "Stress Level",
+            "y_label": "Social Engagement"
+        }
 
-        return correlations
+        # Filter out NaN correlations and sort by absolute value
+        valid_correlations = {
+            k: v for k, v in correlations.items() 
+            if not np.isnan(v["correlation"])
+        }
+        
+        # Sort by absolute correlation value (strongest first)
+        sorted_correlations = sorted(
+            valid_correlations.items(), 
+            key=lambda x: abs(x[1]["correlation"]), 
+            reverse=True
+        )
+
+        # Return top 2 strongest correlations
+        top_correlations = dict(sorted_correlations[:2])
+        
+        return {
+            "strongest_correlations": top_correlations,
+            "total_data_points": len(aligned_data)
+        }
     
     def calculate_weekly_patterns(self, past_days: int) -> Dict[str, Dict[int, Optional[float]]]:
         """
@@ -186,3 +260,30 @@ class AnalyticsService:
             )
 
         return entry_details
+    
+    def _calculate_current_streak(self) -> int:
+        """
+        Calculate the current streak of consecutive days with journal entries.
+        
+        Returns:
+            int: Number of consecutive days with entries (starting from today).
+        """
+        current_date = datetime.now(timezone.utc).date()
+        streak = 0
+        
+        # Check each day backwards from today
+        while True:
+            # Get entries for this specific date
+            entries = get_journal_entries(
+                self.db, 
+                from_date=datetime.combine(current_date, datetime.min.time(), timezone.utc),
+                to_date=datetime.combine(current_date, datetime.max.time(), timezone.utc)
+            )
+            
+            if entries:
+                streak += 1
+                current_date -= timedelta(days=1)
+            else:
+                break
+                
+        return streak

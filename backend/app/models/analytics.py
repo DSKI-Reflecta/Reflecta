@@ -25,4 +25,7 @@ class Averages(BaseModel):
     sleep: float
     stress: float
     social: float
+    total_entries: int
+    current_streak: int
+    average_words_per_entry: float
 
