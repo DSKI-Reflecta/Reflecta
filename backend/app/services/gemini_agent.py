@@ -46,7 +46,7 @@ def extract_sentiments(content: str) -> list:
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Extract up to 5 key emotions or feelings expressed in the text.
+        Extract up to 6 key emotions or feelings expressed in the text.
         Use precise and descriptive words (e.g., excited, calm,
         frustrated, hopeful) that clearly reflect the tone or mood.
         Return them in a single line, separated by commas only.

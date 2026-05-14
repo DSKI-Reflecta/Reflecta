@@ -2,13 +2,16 @@ Backend:
 - 
 
 Frontend:
-- Include sentiments and activities in Frontend
 - Editing on detailed view throws an error, deleting as well
+- More filter and sorting opportunities for journal entries
 - Bigger box to write the Journal in
+- Drag and drop possiblity to order goals
 - Cursor is not visible after enter
 - Scrolling in Journal Writing is too fast
 
 General:
-- More filters and sorting opportunities for journal entries
-- Add field for planning for the next day into journal
+- Besides the Journal, Goals and Calendar Section, also add Plans, Analytics and "Future-Me" letters
+- Connect journal entries to goals by relevance
+- Write AI Chatbot functionality
 - Possibility to include attachments to journals
+- Daily reminder to write journal entry
