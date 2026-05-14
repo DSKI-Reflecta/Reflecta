@@ -157,6 +157,45 @@ Example output: 1, 3, 5
         return []
 
 
+def generate_journal_question(current_content: str) -> str:
+    """Generate a follow-up question for the journal entry."""
+    prompt = f"""You are an AI journaling assistant. Your role is to help the user deepen and expand their journal entry by asking thoughtful, open-ended questions.
+
+The user has written the following entry:
+"{current_content}"
+
+Your task:
+- Ask ONE clear, open-ended question that either (a) encourages the user to explore *another* aspect of their thoughts or day, or (b) helps them go deeper into emotions or experiences they haven't fully explored yet.
+- If the user already focused on one topic in detail (e.g., stress about university), avoid staying on that same topic and instead gently guide them toward another area of reflection (e.g., social life, hobbies, physical well-being, mindset shifts).
+- If their entry feels very short or surface-level, your question may prompt them to expand on what they’ve already shared — but still avoid yes/no questions.
+- Avoid questions that feel clinical or force introspection; your tone should feel natural, supportive, and curious.
+- No additional explanations, just output the question itself.
+
+Examples:
+- User content: ""
+  Question: "How did your day start today?"
+
+- User content: "Today was pretty busy. I had a lot of meetings."
+  Question: "How did you feel once your meetings were over?"
+
+- User content: "I felt really happy after finishing my project."
+  Question: "What other moments recently have made you feel this kind of happiness?"
+
+- User content: "I’m really stressed with math at university right now."
+  Question: "Outside of academics, what has been helping you unwind lately?"
+
+Question:"""
+    response = genai_client.models.generate_content(
+        model=model,
+        contents=prompt,
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": FormattedText,
+        },
+    )
+    return response.parsed.text.strip()
+
+
 def analyze_entry(content: str, goals: str) -> tuple:
     """Analyze the journal entry content using concurrent tasks.
     This means that the tasks will run in parallel."""

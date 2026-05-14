@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Calendar, CheckSquare, User } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare } from "lucide-react";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   return (
@@ -96,13 +96,6 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           <span className="hidden md:inline">Calendar</span>
         </button>
       </nav>
-
-      <div className="p-4 border-t border-gray-200">
-        <button className="flex items-center justify-center md:justify-start w-full p-2 rounded-full bg-gray-100 hover:bg-gray-200">
-          <User className="h-5 w-5 md:mr-2" />
-          <span className="hidden md:inline">Profile</span>
-        </button>
-      </div>
     </div>
   );
 };

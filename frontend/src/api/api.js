@@ -171,3 +171,15 @@ export const sendChatMessage = async (message) => {
   const data = await handleResponse(response);
   return data.response;
 };
+
+export const getJournalQuestion = async (content) => {
+  const response = await fetch(`${API_BASE_URL}/ai/journal-question/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ content: content }),
+  });
+  const data = await handleResponse(response);
+  return data.question;
+};

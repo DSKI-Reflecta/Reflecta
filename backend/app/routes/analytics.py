@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta, timezone
 
 from ..db.database import get_db
-from app.db.crud.journal import get_journal_entries
-from app.models.analytics import TsTrends, Averages
+from ..db.crud.journal import get_journal_entries
+from ..models.analytics import TsTrends, Averages
 
 router = APIRouter(
     prefix="/analytics",

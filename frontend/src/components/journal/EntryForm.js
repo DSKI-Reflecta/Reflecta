@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Smile,
   Frown,
@@ -8,7 +8,9 @@ import {
   Feather,
   User,
   Users,
+  Sparkles,
 } from "lucide-react";
+import { getJournalQuestion } from "../../api/api"; // Import the API utility
 
 const EntryForm = ({ onClose, onSave, editEntry = null }) => {
   const [entry, setEntry] = useState({
@@ -20,6 +22,10 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
     stress: 3,
     socialEngagement: 3,
   });
+  const [aiJournalingActive, setAiJournalingActive] = useState(false);
+  const [aiQuestion, setAiQuestion] = useState("");
+  const [loadingAiQuestion, setLoadingAiQuestion] = useState(false);
+  const debounceTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (editEntry) {
@@ -60,12 +66,47 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
     }
   }, [editEntry]);
 
+  const fetchAiQuestion = useCallback(async (currentContent) => {
+    setLoadingAiQuestion(true);
+    try {
+      const question = await getJournalQuestion(currentContent);
+      setAiQuestion(question);
+    } catch (error) {
+      console.error("Error fetching AI question:", error);
+      setAiQuestion("Could not load AI question. Please try again.");
+    } finally {
+      setLoadingAiQuestion(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (aiJournalingActive) {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+      debounceTimeoutRef.current = setTimeout(() => {
+        fetchAiQuestion(entry.content);
+      }, 1000); // Debounce for 1 second
+    } else {
+      setAiQuestion(""); // Clear question when AI journaling is inactive
+    }
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, [aiJournalingActive, entry.content, fetchAiQuestion]);
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
     const newValue = type === "range" ? parseInt(value, 10) : value;
 
     setEntry((prev) => ({ ...prev, [name]: newValue }));
+  };
+
+  const handleToggleAiJournaling = () => {
+    setAiJournalingActive((prev) => !prev);
   };
 
   const handleSubmit = (e) => {
@@ -163,6 +204,34 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           required
         ></textarea>
+        {aiJournalingActive && (
+          <div className="mt-2 text-sm text-gray-600">
+            {loadingAiQuestion ? (
+              <span>Loading AI question...</span>
+            ) : (
+              <p className="italic">
+                {aiQuestion || "Start typing to get AI questions."}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-start mb-4">
+        <button
+          type="button"
+          onClick={handleToggleAiJournaling}
+          className={`px-4 py-2 text-sm font-medium rounded-md flex items-center space-x-2 ${
+            aiJournalingActive
+              ? "bg-purple-600 text-white hover:bg-purple-700"
+              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+          }`}
+        >
+          <Sparkles className="h-4 w-4" />
+          <span>
+            {aiJournalingActive ? "AI Journaling ON" : "Activate AI Journaling"}
+          </span>
+        </button>
       </div>
 
       <div className="space-y-4 pt-4 border-t border-gray-200">
