@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import journal, goal, chatbot  # Import routers
+from .routes import journal, goal, chatbot, analytics
 from .db.database import create_tables
 
 
@@ -34,6 +34,7 @@ app.add_middleware(
 # Register routers
 app.include_router(journal.router)
 app.include_router(goal.router)
+app.include_router(analytics.router)
 app.include_router(chatbot.router)
 
 

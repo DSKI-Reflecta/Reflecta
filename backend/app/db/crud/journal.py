@@ -11,11 +11,18 @@ from .utils import get_goal_info, get_goals
 def get_journal_entries(
     db: Session,
     skip: int = 0,
-    limit: int = 100
+    limit: int = 100,
+    from_date: Optional[datetime] = None,
 ) -> List[JournalEntryModel]:
-    """Get all journal entries with pagination.
-    Order by date (descending) and created_at (descending)."""
-    return db.query(JournalEntryModel).order_by(
+    """Get all journal entries with optional filter
+    and pagination."""
+    query = db.query(JournalEntryModel)
+
+    # Filter by date if provided
+    if from_date:
+        query = query.filter(JournalEntryModel.date >= from_date)
+
+    return query.order_by(
         JournalEntryModel.date.desc(),
         JournalEntryModel.created_at.desc()
     ).offset(skip).limit(limit).all()

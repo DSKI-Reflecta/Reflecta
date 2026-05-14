@@ -35,7 +35,7 @@ def get_goal_info(
 
 def get_goals(
         db: Session,
-        goal_ids: List[int] = None 
+        goal_ids: List[int] = None
 ) -> List[GoalModel]:
     """Get goals by their IDs"""
     return db.query(GoalModel).filter(
