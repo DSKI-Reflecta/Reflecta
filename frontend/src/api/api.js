@@ -208,7 +208,7 @@ export const sendChatMessage = async (message) => {
     body: JSON.stringify({ message: message }),
   });
   const data = await handleResponse(response);
-  return data.response;
+  return data.text;
 };
 
 export const getJournalQuestion = async (content) => {
