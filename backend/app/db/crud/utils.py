@@ -2,7 +2,7 @@
 Utility functions for database operations related to goals and journal entries.
 """
 
-from typing import List, Optional
+from typing import List
 
 from sqlalchemy.orm import Session
 

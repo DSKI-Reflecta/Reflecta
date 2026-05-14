@@ -2,7 +2,7 @@
 CRUD operations for goals.
 """
 
-from datetime import datetime, timezone, date as date_type
+from datetime import datetime, timezone
 from typing import List, Optional
 
 from sqlalchemy import case

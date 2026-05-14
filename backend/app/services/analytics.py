@@ -105,7 +105,6 @@ class AnalyticsService:
         entries = sorted(get_journal_entries(
             self.db, from_date=cutoff_date), key=lambda x: x.date)
 
-        # Create aligned data (same entries for all metrics)
         aligned_data = []
         for entry in entries:
             if (entry.sleep_quality is not None and
@@ -123,20 +122,17 @@ class AnalyticsService:
         if len(aligned_data) < 2:
             return {"message": "Not enough data points for correlation analysis"}
 
-        # Extract aligned arrays
         sleep = [d['sleep'] for d in aligned_data]
         sentiment = [d['sentiment'] for d in aligned_data]
         stress = [d['stress'] for d in aligned_data]
         social = [d['social'] for d in aligned_data]
         dates = [d['date'] for d in aligned_data]
 
-        # Auto window size: 3-21 days based on period
         window = min(21, max(3, past_days // 7))
 
         def moving_avg(data):
             return np.convolve(data, np.ones(window)/window, mode='same')
 
-        # Calculate all correlations
         correlations = {}
 
         correlations["sleep_sentiment"] = {
@@ -193,23 +189,19 @@ class AnalyticsService:
             "y_avg": moving_avg(social).tolist()
         }
 
-        # Filter out NaN correlations and sort by absolute value
         valid_correlations = {
             k: v for k, v in correlations.items()
             if not np.isnan(v["correlation"])
         }
 
-        # Sort by absolute correlation value (strongest first)
         sorted_correlations = sorted(
             valid_correlations.items(),
             key=lambda x: abs(x[1]["correlation"]),
             reverse=True
         )
 
-        # Return top 2 strongest correlations
         top_correlations = dict(sorted_correlations[:2])
 
-        # Generate insights for the top 2 correlations
         for key, value in top_correlations.items():
             chart_data = json.dumps({
                 "x_label": value["x_label"],
