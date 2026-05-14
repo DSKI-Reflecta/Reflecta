@@ -8,13 +8,6 @@ from app.services.gemini_agent import analyze_entry
 from app.db.crud.utils import get_goal_info, get_goals
 
 
-def get_journal_entries_by_user(db: Session, user_id: int) -> List[JournalEntryModel]:
-    """Get all journal entries for a user."""
-    # In a real app, you'd filter by user_id.
-    # For now, we'll return all entries.
-    return db.query(JournalEntryModel).all()
-
-
 def get_journal_entries(
     db: Session,
     skip: int = 0,

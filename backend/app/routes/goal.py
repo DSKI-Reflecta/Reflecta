@@ -11,7 +11,7 @@ from ..db.crud.goal import (
 )
 from ..models.entry_goal import GoalCreate, Goal, GoalUpdate
 from ..services.gemini_agent import recommend_goals, RecommendedGoal, enhance_goal_description
-from ..db.crud.journal import get_journal_entries_by_user
+from ..db.crud.journal import get_journal_entries
 from pydantic import BaseModel
 
 
@@ -87,8 +87,7 @@ def delete_existing_goal(
 @router.post("/recommend", response_model=List[RecommendedGoal])
 def recommend_new_goals(db: Session = Depends(get_db)) -> List[RecommendedGoal]:
     """Recommend new goals based on journal entries"""
-    # Assuming a single user for now, with user_id=1
-    entries = get_journal_entries_by_user(db, user_id=1)
+    entries = get_journal_entries(db)
     if not entries:
         return []
 
