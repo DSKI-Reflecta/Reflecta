@@ -281,22 +281,31 @@ class AnalyticsService:
         Returns:
             int: Number of consecutive days with entries (starting from today).
         """
+        # Hole alle Einträge der letzten z.B. 365 Tage
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=365)
+        entries = get_journal_entries(self.db, from_date=cutoff_date)
+        
+        if not entries:
+            return 0
+        
+        # Sortiere Einträge nach Datum (neueste zuerst)
+        entries = sorted(entries, key=lambda x: x.date, reverse=True)
+        
+        # Extrahiere nur die Datumsteile (ohne Zeit) als Set für schnelle Lookups
+        entry_dates = set()
+        for entry in entries:
+            # Konvertiere das Datum zu einem date() Objekt
+            if isinstance(entry.date, datetime):
+                entry_dates.add(entry.date.date())
+            else:
+                entry_dates.add(entry.date)
+        
+        # Berechne Streak ab heute
         current_date = datetime.now(timezone.utc).date()
         streak = 0
-
-        while True:
-            entries = get_journal_entries(
-                self.db,
-                from_date=datetime.combine(
-                    current_date, datetime.min.time(), timezone.utc),
-                to_date=datetime.combine(
-                    current_date, datetime.max.time(), timezone.utc)
-            )
-
-            if entries:
-                streak += 1
-                current_date -= timedelta(days=1)
-            else:
-                break
-
+        
+        while current_date in entry_dates:
+            streak += 1
+            current_date -= timedelta(days=1)
+        
         return streak
