@@ -8,3 +8,10 @@ class TsTrends(BaseModel):
     sleep: List[Optional[int]]
     stress: List[Optional[int]]
     social: List[Optional[int]]
+
+
+class Averages(BaseModel):
+    sentiment: float
+    sleep: float
+    stress: float
+    social: float
