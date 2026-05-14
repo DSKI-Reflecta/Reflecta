@@ -418,7 +418,7 @@ def summarize_journal_entries(entries: str) -> str:
 
 Your job is to analyze the user's recent journal entries and return an in-depth summary that captures the emotional patterns, recurring thoughts, key themes, and significant moments in their reflections.
 
-Here are the journal entries:
+Here are the journal entries, with sentiments, activities and goals:
 {entries}
 
 Write a multi-paragraph summary that:
@@ -433,7 +433,7 @@ Format:
 - Return ONLY a JSON object with this structure:
   {{ "summary": "<your detailed summary text here>" }}
 
-Do NOT include any introductory explanations or additional metadata.
+Do NOT include any introductory explanations or additional metadata. 
 """,
         config={
             "response_mime_type": "application/json",

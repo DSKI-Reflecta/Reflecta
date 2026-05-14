@@ -223,7 +223,13 @@ def generate_summary(
     if not entries:
         return {"summary": "No journal entries found for the specified period."}
 
-    entry_content = "\n".join([entry.content for entry in entries])
-    summary = summarize_journal_entries(entry_content)
+    entry_details = []
+    for entry in entries:
+        goal_titles = [goal.title for goal in entry.goals]
+        entry_details.append(
+            f"Sentiments: {entry.sentiments}, Activities: {entry.activities}, Goals: {', '.join(goal_titles)}"
+        )
+
+    summary = summarize_journal_entries("\n".join(entry_details))
 
     return {"summary": summary}
