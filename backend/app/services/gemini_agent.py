@@ -140,7 +140,10 @@ def extract_goals(content: str, goals: str) -> str:
         Example output: 1, 3, 5"""
     )
     # Convert the response text to a list of integers
-    return [int(x.strip()) for x in response.text.split(",")]
+    try:
+        return [int(x.strip()) for x in response.text.split(",")]
+    except ValueError:
+        return []
 
 
 def analyze_entry(content: str, goals: str) -> tuple:
