@@ -1,131 +1,104 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
+from typing import List, Optional
 import json
-import datetime
-from datetime import datetime as dt
-from werkzeug.exceptions import BadRequest
-import sys
-import os
 
-# Add parent directory to path for imports
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from ..db.database import get_db
+from ..db.crud import (
+    create_journal_entry,
+    get_journal_entry,
+    get_journal_entries,
+    update_journal_entry,
+    delete_journal_entry
+)
+from ..models.entry import JournalEntryCreate, JournalEntry, JournalEntryUpdate
 
-# Import DB functions
-from db.database import init_db
-from db.crud import (
-    create_entry,
-    get_entry,
-    get_all_entries,
-    update_entry,
-    delete_entry,
+router = APIRouter(
+    prefix="/journal",
+    tags=["journal"],
+    responses={404: {"description": "Not found"}},
 )
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+
+@router.post("/entries/", response_model=JournalEntry)
+def create_entry(entry: JournalEntryCreate, db: Session = Depends(get_db)):
+    """Create a new journal entry"""
+    db_entry = create_journal_entry(db, entry)
+
+    # Convert the activities and keywords from JSON strings to lists
+    result = JournalEntry.from_orm(db_entry)
+    if db_entry.activities:
+        result.activities = json.loads(db_entry.activities)
+    if db_entry.keywords:
+        result.keywords = json.loads(db_entry.keywords)
+
+    return result
 
 
-# Custom JSON encoder that handles datetime objects
-class CustomJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime.datetime):
-            return obj.isoformat()
-        return super().default(obj)
+@router.get("/entries/", response_model=List[JournalEntry])
+def read_entries(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=100),
+    db: Session = Depends(get_db)
+):
+    """Get all journal entries with pagination"""
+    entries = get_journal_entries(db, skip=skip, limit=limit)
+
+    # Convert the activities and keywords from JSON strings to lists for each entry
+    results = []
+    for entry in entries:
+        result = JournalEntry.from_orm(entry)
+        if entry.activities:
+            result.activities = json.loads(entry.activities)
+        if entry.keywords:
+            result.keywords = json.loads(entry.keywords)
+        results.append(result)
+
+    return results
 
 
-app.json_encoder = CustomJSONEncoder
+@router.get("/entries/{entry_id}", response_model=JournalEntry)
+def read_entry(entry_id: int, db: Session = Depends(get_db)):
+    """Get a specific journal entry by ID"""
+    db_entry = get_journal_entry(db, entry_id)
+    if db_entry is None:
+        raise HTTPException(status_code=404, detail="Journal entry not found")
+
+    # Convert the activities and keywords from JSON strings to lists
+    result = JournalEntry.from_orm(db_entry)
+    if db_entry.activities:
+        result.activities = json.loads(db_entry.activities)
+    if db_entry.keywords:
+        result.keywords = json.loads(db_entry.keywords)
+
+    return result
 
 
-@app.route("/api/entries", methods=["GET"])
-def get_entries():
-    """Get all journal entries."""
-    entries = get_all_entries()
-    return jsonify(entries)
+@router.put("/entries/{entry_id}", response_model=JournalEntry)
+def update_entry(
+    entry_id: int, 
+    entry_update: JournalEntryUpdate, 
+    db: Session = Depends(get_db)
+):
+    """Update a journal entry"""
+    db_entry = update_journal_entry(db, entry_id, entry_update)
+    if db_entry is None:
+        raise HTTPException(status_code=404, detail="Journal entry not found")
+
+    # Convert the activities and keywords from JSON strings to lists
+    result = JournalEntry.from_orm(db_entry)
+    if db_entry.activities:
+        result.activities = json.loads(db_entry.activities)
+    if db_entry.keywords:
+        result.keywords = json.loads(db_entry.keywords)
+
+    return result
 
 
-@app.route("/api/entries/<int:entry_id>", methods=["GET"])
-def get_single_entry(entry_id):
-    """Get a specific journal entry by ID."""
-    entry = get_entry(entry_id)
-    if entry:
-        return jsonify(entry)
-    return jsonify({"error": "Entry not found"}), 404
-
-
-@app.route("/api/entries", methods=["POST"])
-def add_entry():
-    """Create a new journal entry."""
-    data = request.json
-
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
-
-    # Validate required fields
-    if "title" not in data or "content" not in data:
-        return jsonify({"error": "Title and content are required"}), 400
-
-    try:
-        entry_id = create_entry(
-            title=data["title"], content=data["content"], mood=data.get("mood")
-        )
-
-        # Return the created entry
-        new_entry = get_entry(entry_id)
-        return jsonify(new_entry), 201
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route("/api/entries/<int:entry_id>", methods=["PUT"])
-def update_single_entry(entry_id):
-    """Update an existing journal entry."""
-    data = request.json
-
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
-
-    try:
-        success = update_entry(
-            entry_id=entry_id,
-            title=data.get("title"),
-            content=data.get("content"),
-            mood=data.get("mood"),
-        )
-
-        if success:
-            updated_entry = get_entry(entry_id)
-            return jsonify(updated_entry)
-
-        return jsonify({"error": "Entry not found"}), 404
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route("/api/entries/<int:entry_id>", methods=["DELETE"])
-def delete_single_entry(entry_id):
-    """Delete a journal entry."""
-    success = delete_entry(entry_id)
-
-    if success:
-        return jsonify({"message": "Entry deleted successfully"}), 200
-
-    return jsonify({"error": "Entry not found"}), 404
-
-
-@app.errorhandler(BadRequest)
-def handle_bad_request(e):
-    """Handle bad request errors."""
-    return jsonify({"error": str(e)}), 400
-
-
-@app.errorhandler(Exception)
-def handle_general_exception(e):
-    """Handle general exceptions."""
-    return jsonify({"error": str(e)}), 500
-
-
-if __name__ == "__main__":
-    # Initialize the database before starting the app
-    init_db()
-    app.run(debug=True, port=5000)
+@router.delete("/entries/{entry_id}", response_model=bool)
+def delete_entry(entry_id: int, db: Session = Depends(get_db)):
+    """Delete a journal entry"""
+    success = delete_journal_entry(db, entry_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Journal entry not found")
+    return success
