@@ -25,11 +25,7 @@ def get_journal_entries(
 def get_journal_entry(db: Session,
                       entry_id: int) -> Optional[JournalEntryModel]:
     """Get a specific journal entry by ID"""
-    return (
-        db.query(JournalEntryModel)
-        .filter(JournalEntryModel.id == entry_id)
-        .first()
-    )
+    return db.get(JournalEntryModel, entry_id)
 
 
 def create_journal_entry(db: Session,

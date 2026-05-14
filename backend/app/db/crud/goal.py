@@ -29,7 +29,7 @@ def get_goals(
 
 def get_goal(db: Session, goal_id: int) -> Optional[GoalModel]:
     """Get a specific goal by ID"""
-    return db.query(GoalModel).filter(GoalModel.id == goal_id).first()
+    return db.get(GoalModel, goal_id)
 
 
 def create_goal(db: Session, goal: GoalCreate) -> GoalModel:
