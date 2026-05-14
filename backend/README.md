@@ -56,4 +56,3 @@ uvicorn app.main:app --reload
 ## License
 
 This project is for educational purposes.
-```
