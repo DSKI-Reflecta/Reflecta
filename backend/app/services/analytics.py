@@ -5,12 +5,14 @@ Analytics service for calculating journal entry metrics and patterns.
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 from collections import defaultdict
+import json
 
 import numpy as np
 from sqlalchemy.orm import Session
 
 from app.db.crud.journal import get_journal_entries
 from app.models.analytics import TsTrends, Averages
+from app.services.gemini_agent import generate_correlation_insights
 
 
 class AnalyticsService:
@@ -207,6 +209,17 @@ class AnalyticsService:
 
         # Return top 2 strongest correlations
         top_correlations = dict(sorted_correlations[:2])
+
+        # Generate insights for the top 2 correlations
+        for key, value in top_correlations.items():
+            chart_data = json.dumps({
+                "x_label": value["x_label"],
+                "y_label": value["y_label"],
+                "correlation": value["correlation"],
+                "data": value["data"]
+            })
+            insights = generate_correlation_insights(chart_data)
+            top_correlations[key]["insights"] = insights
 
         return {
             "strongest_correlations": top_correlations,

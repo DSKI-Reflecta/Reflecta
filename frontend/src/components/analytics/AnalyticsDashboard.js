@@ -368,57 +368,86 @@ const AnalyticsDashboard = () => {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">
               Correlations
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {Object.entries(correlations.strongest_correlations).map(
                 ([key, value]) => (
                   <div
                     key={key}
-                    className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                    className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex"
                   >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      {value.x_label} vs {value.y_label}
-                    </h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                      <ComposedChart data={value.data}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis dataKey="date" stroke="#64748b" />
-                        <YAxis
-                          yAxisId="left"
-                          stroke="#8884d8"
-                          allowDecimals={false}
-                        />
-                        <YAxis
-                          yAxisId="right"
-                          orientation="right"
-                          stroke="#ff7300"
-                          allowDecimals={false}
-                        />
-                        <Legend />
-                        <Bar
-                          yAxisId="left"
-                          dataKey="x_avg"
-                          barSize={20}
-                          fill="#413ea0"
-                          name={value.x_label}
-                          label={false}
-                        />
-                        <Line
-                          yAxisId="right"
-                          type="monotone"
-                          dataKey="y_avg"
-                          stroke="#ff7300"
-                          name={value.y_label}
-                          label={false}
-                          dot={false}
-                        />
-                      </ComposedChart>
-                    </ResponsiveContainer>
-                    <p className="text-sm text-gray-600 mt-2">
-                      Correlation:{" "}
-                      <span className="font-medium text-green-600">
-                        {value.correlation.toFixed(2)}
-                      </span>
-                    </p>
+                    <div className="w-2/3">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                        {value.x_label} vs {value.y_label}
+                      </h3>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <ComposedChart data={value.data}>
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="#f1f5f9"
+                          />
+                          <XAxis dataKey="date" stroke="#64748b" />
+                          <YAxis
+                            yAxisId="left"
+                            stroke="#8884d8"
+                            allowDecimals={false}
+                          />
+                          <YAxis
+                            yAxisId="right"
+                            orientation="right"
+                            stroke="#ff7300"
+                            allowDecimals={false}
+                          />
+                          <Legend />
+                          <Bar
+                            yAxisId="left"
+                            dataKey="x_avg"
+                            barSize={20}
+                            fill="#413ea0"
+                            name={value.x_label}
+                            label={false}
+                          />
+                          <Line
+                            yAxisId="right"
+                            type="monotone"
+                            dataKey="y_avg"
+                            stroke="#ff7300"
+                            name={value.y_label}
+                            label={false}
+                            dot={false}
+                          />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                      <p className="text-sm text-gray-600 mt-2">
+                        Correlation:{" "}
+                        <span className="font-medium text-green-600">
+                          {value.correlation.toFixed(2)}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="w-1/3 pl-6">
+                      <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                        Insights
+                      </h4>
+                      {value.insights &&
+                        value.insights.map((insight, index) => {
+                          const colors = [
+                            "bg-blue-50 text-blue-800",
+                            "bg-green-50 text-green-800",
+                            "bg-yellow-50 text-yellow-800",
+                          ];
+
+                          return (
+                            <div
+                              key={index}
+                              className={`p-4 rounded-lg mb-4 ${
+                                colors[index % colors.length]
+                              }`}
+                            >
+                              <p className="text-sm">{insight}</p>
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                 )
               )}

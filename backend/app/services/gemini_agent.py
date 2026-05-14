@@ -104,6 +104,15 @@ class RecommendedGoalList(BaseModel):
     )
 
 
+class InsightList(BaseModel):
+    """
+    Pydantic model for a list of insights.
+    """
+    insights: List[str] = Field(
+        description="List of insights generated for the chart"
+    )
+
+
 def recommend_goals(entries: str) -> List[RecommendedGoal]:
     """
     Recommends 3-5 specific and actionable goals based on journal entries.
@@ -462,3 +471,34 @@ def analyze_entry(content: str, goals: str) -> tuple:
         f3 = executor.submit(extract_sentiments, content, 5)
         f4 = executor.submit(extract_goals, content, goals)
         return f1.result(), f2.result(), f3.result(), f4.result()
+
+
+def generate_correlation_insights(chart_data: str) -> List[str]:
+    """
+    Generates three insights for a given correlation chart.
+
+    Args:
+        chart_data (str): A string representation of the correlation chart data.
+
+    Returns:
+        List[str]: A list of three insight strings.
+    """
+    response = genai_client.models.generate_content(
+        model=model,
+        contents=f"""You are an AI assistant that generates insights for correlation charts.
+Here is the data for a correlation chart:
+{chart_data}
+
+Your task is to generate exactly three insights based on this data. The insights should follow this structure:
+1. A statement about the correlation (e.g., "You have a high correlation between X and Y").
+2. A suggestion for improvement (e.g., "Try... to make... better").
+3. A concrete recommendation (e.g., "I suggest...").
+
+Return the insights as a JSON list of strings within a JSON object with the key "insights".
+""",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": InsightList,
+        },
+    )
+    return response.parsed.insights
