@@ -1,10 +1,8 @@
-from __future__ import annotations  # help with forward references
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel, Field
-from enum import IntEnum  # for mapping enums to integers
-from datetime import date as date_type
-from .goal import Goal
+from datetime import date as date_type  # Import date type with an alias
+from enum import Enum, IntEnum
 
 
 """
@@ -13,8 +11,6 @@ SentimentLevel.NEGATIVE < SentimentLevel.POSITIVE  # True
 int(SentimentLevel.NEUTRAL)  # 3
 """
 
-
-# --- State Tracking Fields (IntEnums) ---
 
 class SentimentLevel(IntEnum):
     VERY_NEGATIVE = 1
@@ -48,7 +44,49 @@ class SocialEngagement(IntEnum):
     VERY_SOCIAL = 5
 
 
-# --- Journal Entry Models (for different CRUD operations) ---
+class GoalPriority(str, Enum):
+    """Enum for Goal Priority levels."""
+    HIGH = "High"
+    MEDIUM = "Medium"
+    LOW = "Low"
+
+
+class GoalBase(BaseModel):
+    """Base model for Goal attributes."""
+    title: str = Field(..., description="The title of the goal")
+    type: str = Field(...,
+                      description="The type of the goal")
+    target_date: Optional[date_type] = Field(
+        None,
+        description="Target date for the goal (optional for recurring goals)"
+    )
+    category: str = Field(..., description="The category of the goal")
+    priority: GoalPriority = Field(..., description="The priority of the goal")
+    description: Optional[str] = Field(None,
+                                       description="A brief goal description")
+
+
+class GoalCreate(GoalBase):
+    """Model for creating a new Goal.
+    Inherits all fields from GoalBase."""
+    pass
+
+
+class GoalUpdate(BaseModel):
+    """Model for updating an existing Goal."""
+    # Allow optional updates for all fields
+    title: Optional[str] = None
+    type: Optional[str] = None
+    # Allow optional update for targetDate
+    target_date: Optional[date_type] = None
+    category: Optional[str] = None
+    priority: Optional[GoalPriority] = None
+    description: Optional[str] = None
+    progress: Optional[int] = Field(
+        None,
+        description="The current progress percentage (0-100)"
+    )
+
 
 class JournalEntryBase(BaseModel):
     """Base model for journal entries."""
@@ -84,7 +122,7 @@ class JournalEntryUpdate(BaseModel):
     social_engagement: Optional[SocialEngagement] = None
 
 
-class JournalEntry(JournalEntryBase):
+class JournalEntryBasic(JournalEntryBase):
     """Model for a journal entry,
     inherits all fields from JournalEntryBase and
     adds additional fields used in the backend"""
@@ -99,9 +137,33 @@ class JournalEntry(JournalEntryBase):
     sentiments: Optional[str] = None
     keywords: Optional[List[str]] = None
 
-    # Many-to-many relationship with goals
-    goals: Optional[List[Goal]] = None
+    # model can be directly created from SQLAlchemy object
+    class Config:
+        from_attributes = True
+
+
+class Goal(GoalBase):
+    """Model for reading a Goal from the database."""
+    id: int
+    progress: int = Field(
+        0,  # Default progress is 0
+        description="The current progress percentage (0-100)")
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    # relationship with JournalEntry without its goals
+    journal_entries: Optional[List[JournalEntryBasic]] = None
 
     # model can be directly created from SQLAlchemy object
     class Config:
         from_attributes = True
+        # Allow converting Enum value to its string value
+        use_enum_values = True
+
+
+class JournalEntry(JournalEntryBasic):
+    """Model for a journal entry,
+    inherits all fields from JournalEntryBasic and
+    adds additional fields used in the backend"""
+    # Many-to-many relationship with goals
+    goals: Optional[List[Goal]] = None

@@ -11,7 +11,11 @@ from ..db.crud.journal import (
     delete_journal_entry
 )
 # Import updated models
-from ..models.entry import JournalEntryCreate, JournalEntry, JournalEntryUpdate
+from ..models.entry_goal import (
+    JournalEntryCreate,
+    JournalEntry,
+    JournalEntryUpdate
+)
 
 router = APIRouter(
     prefix="/journal",

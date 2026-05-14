@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
-from ...models.entry import JournalEntryCreate, JournalEntryUpdate
+from ...models.entry_goal import JournalEntryCreate, JournalEntryUpdate
 from ..database import JournalEntryModel, GoalModel
 from ...services.gemini_agent import analyze_entry
 
@@ -31,8 +31,8 @@ def create_journal_entry(db: Session,
                          entry: JournalEntryCreate
                          ) -> JournalEntryModel:
     """Create a new journal entry with AI-formatted content"""
-    user_goals = db.query(GoalModel).all()  # fetch all goals
-    goal_titles = [goal.title for goal in user_goals]
+    # Get all goal titles from the database
+    goal_titles = [goal.title for goal in db.query(GoalModel).all()]
     # Analyze the entry content using the AI service
     formatted_content, activities, sentiments, goal_ids = analyze_entry(
         entry.content, goal_titles
