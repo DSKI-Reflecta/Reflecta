@@ -1,5 +1,8 @@
 import os
 import concurrent.futures
+from typing import List
+from enum import Enum
+from pydantic import BaseModel, Field
 from google import genai
 from dotenv import load_dotenv
 
@@ -11,6 +14,57 @@ api_key = os.getenv("GEMINI_API_KEY")
 genai_client = genai.Client(api_key=api_key)
 model = "gemini-2.0-flash"
 
+# Define enums for activities and sentiments
+class Activity(str, Enum):
+    WORKING = "Working"
+    STUDYING = "Studying"
+    READING = "Reading"
+    EXERCISING = "Exercising"
+    SOCIALIZING = "Socializing"
+    COOKING = "Cooking"
+    CLEANING = "Cleaning"
+    SHOPPING = "Shopping"
+    TRAVELING = "Traveling"
+    MEDITATING = "Meditating"
+    WATCHING_TV = "Watching TV"
+    GAMING = "Gaming"
+    SLEEPING = "Sleeping"
+    EATING = "Eating"
+    HOBBIES = "Pursuing hobbies"
+    FAMILY_TIME = "Spending time with family"
+    OTHER = "Other activities"
+
+class Sentiment(str, Enum):
+    HAPPY = "Happy"
+    SAD = "Sad"
+    ANGRY = "Angry"
+    ANXIOUS = "Anxious"
+    EXCITED = "Excited"
+    CONTENT = "Content"
+    TIRED = "Tired"
+    STRESSED = "Stressed"
+    GRATEFUL = "Grateful"
+    FRUSTRATED = "Frustrated"
+    HOPEFUL = "Hopeful"
+    CALM = "Calm"
+    WORRIED = "Worried"
+    PROUD = "Proud"
+    OVERWHELMED = "Overwhelmed"
+    INSPIRED = "Inspired"
+    MOTIVATED = "Motivated"
+    CONFUSED = "Confused"
+    PEACEFUL = "Peaceful"
+    DISAPPOINTED = "Disappointed"
+
+# Simple response classes for structured output
+class FormattedText(BaseModel):
+    text: str
+
+class ActivityList(BaseModel):
+    activities: List[Activity] = Field(description="List of activities extracted from the journal entry")
+
+class SentimentList(BaseModel):
+    sentiments: List[Sentiment] = Field(description="List of sentiments extracted from the journal entry")
 
 def format_journal_content(content: str) -> str:
     """Format the journal entry content."""
@@ -24,37 +78,40 @@ def format_journal_content(content: str) -> str:
         and tone, while correcting any unclear phrasing or language mistakes.
         Return only the formatted journal content itself,
         without any extra explanations or commentary.""",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": FormattedText,
+        },
     )
-    return response.text.strip()
-
+    return response.parsed.text.strip()
 
 def extract_activities(content: str) -> str:
     """Extract activities from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Extract up to 10 activities mentioned in the text.
-        Return them in a single line, separated by commas only.
-        Do not include any list formatting, quotes, or explanations.
-        Example output: activity 1, activity 2, activity 3"""
+        Extract up to 5 key activities mentioned in the text.
+        Select the most relevant activities that match the journal content.""",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": ActivityList,
+        },
     )
-    return response.text.strip()
-
+    return ", ".join([activity.value for activity in response.parsed.activities])
 
 def extract_sentiments(content: str) -> str:
     """Extract sentiments from the journal entry content."""
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Extract up to 6 key emotions or feelings expressed in the text.
-        Use precise and descriptive words (e.g., excited, calm,
-        frustrated, hopeful) that clearly reflect the tone or mood.
-        Return them in a single line, separated by commas only.
-        Do not include any list formatting, quotes, or explanations.
-        Example output: excited, calm, frustrated"""
+        Identify the main emotions or feelings expressed in this journal entry.
+        Select up to 5 sentiments that best match the emotional tone of the entry.""",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": SentimentList,
+        },
     )
-    return response.text.strip()
-
+    return ", ".join([sentiment.value for sentiment in response.parsed.sentiments])
 
 def analyze_entry(content: str) -> tuple:
     """Analyze the journal entry content using concurrent tasks.
