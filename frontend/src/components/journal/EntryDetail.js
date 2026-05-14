@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // Import necessary icons, same as EntryCard
-import { X, Edit, Trash2, Smile, Frown, Moon, Sun, Zap, Feather, User, Users, Meh, FileText, File } from 'lucide-react';
+import { X, Edit, Trash2, Smile, Frown, Moon, Sun, Zap, Feather, User, Users, Meh, FileText, File, Activity, Heart } from 'lucide-react';
 
 // Helper function to render state icons (copied from EntryCard for self-containment)
 const renderStateIcon = (type, value) => {
@@ -46,14 +46,18 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
   
   // Check if both content types are available for toggle
   const hasFormattedContent = entry.formatted_content && entry.formatted_content !== entry.content;
+  
+  // Parse activities and sentiments if they exist
+  const activities = entry.activities ? entry.activities.split(',').map(item => item.trim()).filter(item => item) : [];
+  const sentiments = entry.sentiments ? entry.sentiments.split(',').map(item => item.trim()).filter(item => item) : [];
 
   return (
     // Overlay for the background (optional, depends on how you integrate it)
     // If using a dedicated modal component in the parent, this overlay might be part of that.
     // This structure assumes you are rendering this component conditionally in your main app/page component.
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
-      {/* Modal content area */}
-      <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full md:max-w-xl lg:max-w-2xl p-6 max-h-[80vh] flex flex-col"> {/* Increased max-w to better match image proportions */}
+      {/* Modal content area - increased size */}
+      <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full md:max-w-2xl lg:max-w-4xl p-6 max-h-[95vh] flex flex-col"> {/* Increased max-w and max-h */}
 
         {/* Close button */}
         <div className="absolute top-4 right-4">
@@ -108,18 +112,58 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
              </div>
          ) : null}
 
+        {/* Activities Section - Made smaller */}
+        {activities.length > 0 && (
+          <div className="mt-3 flex-shrink-0"> {/* Reduced top margin from mt-5 to mt-3 */}
+            <div className="flex items-center mb-1 text-gray-700"> {/* Reduced bottom margin from mb-2 to mb-1 */}
+              <Activity className="h-4 w-4 text-blue-500 mr-2" /> {/* Reduced icon size from h-5 w-5 to h-4 w-4 */}
+              <span className="font-medium text-sm">Activities</span> {/* Made text smaller */}
+            </div>
+            <div className="flex flex-wrap gap-1"> {/* Reduced gap from gap-2 to gap-1 */}
+              {activities.map((activity, index) => (
+                <span 
+                  key={index} 
+                  className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs" /* Reduced padding and font size */
+                >
+                  {activity}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Sentiments Section - Made smaller */}
+        {sentiments.length > 0 && (
+          <div className="mt-3 flex-shrink-0"> {/* Reduced top margin from mt-5 to mt-3 */}
+            <div className="flex items-center mb-1 text-gray-700"> {/* Reduced bottom margin from mb-2 to mb-1 */}
+              <Heart className="h-4 w-4 text-rose-500 mr-2" /> {/* Reduced icon size from h-5 w-5 to h-4 w-4 */}
+              <span className="font-medium text-sm">Sentiments</span> {/* Made text smaller */}
+            </div>
+            <div className="flex flex-wrap gap-1"> {/* Reduced gap from gap-2 to gap-1 */}
+              {sentiments.map((sentiment, index) => (
+                <span 
+                  key={index} 
+                  className="px-2 py-0.5 bg-rose-100 text-rose-800 rounded-full text-xs" /* Reduced padding and font size */
+                >
+                  {sentiment}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Content Toggle Option - Only show if both content types exist */}
         {hasFormattedContent && (
-          <div className="mt-4 flex items-center text-sm text-gray-600 space-x-2 flex-shrink-0">
+          <div className="mt-8 pt-4 border-t border-gray-200 flex items-center text-sm text-gray-600 space-x-2 flex-shrink-0">
             <button 
-              className={`flex items-center px-3 py-1 rounded-md ${!showOriginalContent ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}
+              className={`flex items-center px-3 py-2 rounded-md ${!showOriginalContent ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}
               onClick={() => setShowOriginalContent(false)}
             >
               <FileText className="h-4 w-4 mr-1" />
               Formatted
             </button>
             <button 
-              className={`flex items-center px-3 py-1 rounded-md ${showOriginalContent ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}
+              className={`flex items-center px-3 py-2 rounded-md ${showOriginalContent ? 'bg-blue-100 text-blue-800' : 'bg-gray-100'}`}
               onClick={() => setShowOriginalContent(true)}
             >
               <File className="h-4 w-4 mr-1" />
@@ -130,7 +174,7 @@ const EntryDetail = ({ entry, onClose, onEdit, onDelete }) => {
 
         {/* Main Content - Scrollable Area */}
         {/* Added flex-grow and overflow-y-auto here */}
-        <div className="mt-4 text-gray-700 leading-relaxed overflow-y-auto flex-grow pr-2"> {/* Added pr-2 for scrollbar padding */}
+        <div className="mt-4 text-gray-700 leading-relaxed overflow-y-auto flex-grow pr-2 min-h-[100px]"> {/* Added min-height */}
           <div className="whitespace-pre-wrap">
             {displayContent}
           </div>

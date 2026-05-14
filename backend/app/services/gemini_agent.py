@@ -33,7 +33,7 @@ def extract_activities(content: str) -> list:
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Extract the activities mentioned in the text.
+        Extract up to 10 activities mentioned in the text.
         Return them in a single line, separated by commas only.
         Do not include any list formatting, quotes, or explanations.
         Example output: activity 1, activity 2, activity 3"""
@@ -46,10 +46,12 @@ def extract_sentiments(content: str) -> list:
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
-        Extract the sentiments mentioned in the text.
+        Extract up to 5 key emotions or feelings expressed in the text.
+        Use precise and descriptive words (e.g., excited, calm,
+        frustrated, hopeful) that clearly reflect the tone or mood.
         Return them in a single line, separated by commas only.
         Do not include any list formatting, quotes, or explanations.
-        Example output: sentiment 1, sentiment 2, sentiment 3""",
+        Example output: excited, calm, frustrated"""
     )
     return response.text.strip()
 

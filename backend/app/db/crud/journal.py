@@ -90,7 +90,7 @@ def update_journal_entry(
             else:
                 setattr(db_entry, key, value)
 
-        # Format the content using the formatter service if provided
+        # Update the content and re-analyze if content is provided
         if entry_update.content:
             formatted, activities, sentiments = analyze_entry(
                 entry_update.content)
