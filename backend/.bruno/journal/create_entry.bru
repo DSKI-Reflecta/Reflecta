@@ -1,0 +1,23 @@
+meta {
+  name: create_entry
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://127.0.0.1:8000/journal/entries/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Reflections on My Day",
+    "date": "2025-05-16",
+    "content": "Today was productive. I finished a major task and took a long walk in the evening.",
+    "sentiment_level": 4,
+    "sleep_quality": 3,
+    "stress_level": 2,
+    "social_engagement": 3
+  }
+}
