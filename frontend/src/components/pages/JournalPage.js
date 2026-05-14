@@ -36,11 +36,11 @@ const sleepOptions = [
 
 const stressOptions = [
   { value: "", label: "All" },
-  { value: "1", label: "Very High" },
-  { value: "2", label: "High" },
+  { value: "1", label: "Very Low" },
+  { value: "2", label: "Low" },
   { value: "3", label: "Moderate" },
-  { value: "4", label: "Low" },
-  { value: "5", label: "Very Low" },
+  { value: "4", label: "High" },
+  { value: "5", label: "Very High" },
 ];
 
 const socialEngagementOptions = [
