@@ -4,7 +4,7 @@ from typing import List
 import json
 
 from ..db.database import get_db
-from ..db.crud import (
+from ..db.crud.journal import (
     create_journal_entry,
     get_journal_entry,
     get_journal_entries,

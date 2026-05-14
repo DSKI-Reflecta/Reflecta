@@ -23,6 +23,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Create the database file in the same directory
 DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'journal.db')}"
 
+# check_same_thread=False is required for SQLite to allow multiple
+# threads to use the same connection
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -62,7 +64,7 @@ class GoalModel(Base):
 
     title = Column(String, nullable=False)
     type = Column(String, nullable=False)  # 'One-time' or 'Recurring'
-    targetDate = Column(Date, nullable=True)  # Date for one-time goals
+    target_date = Column(Date, nullable=True)  # Date for one-time goals
     category = Column(String, nullable=False)  # Category of the goal
     priority = Column(String, nullable=False, default="Low")
     description = Column(Text, nullable=True)

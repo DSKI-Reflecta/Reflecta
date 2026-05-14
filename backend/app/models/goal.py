@@ -19,7 +19,7 @@ class GoalBase(BaseModel):
     title: str = Field(..., description="The title of the goal")
     type: str = Field(...,
                       description="The type of the goal")
-    targetDate: Optional[date_type] = Field(
+    target_date: Optional[date_type] = Field(
         None,
         description="Target date for the goal (optional for recurring goals)"
     )
@@ -41,7 +41,7 @@ class GoalUpdate(BaseModel):
     title: Optional[str] = None
     type: Optional[str] = None
     # Allow optional update for targetDate
-    targetDate: Optional[date_type] = None
+    target_date: Optional[date_type] = None
     category: Optional[str] = None
     priority: Optional[GoalPriority] = None
     description: Optional[str] = None

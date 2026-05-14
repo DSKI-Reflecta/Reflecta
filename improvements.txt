@@ -6,4 +6,13 @@ Backend:
         .first()
     ) 
     might also work with db.query(JournalEntryModel).get(entry_id)  # shorthand for primary key lookup
-- split crud.py into goal_crud and entry_crud
+
+Frontend:
+- Bigger box to write the Journal in
+- Cursor is not visible after enter
+- Editing on detailed view throws an error, deleting as well
+- Scrolling in Journal Writing is too fast
+
+General:
+- Add field for planning for the next day into journal
+- Possibility to include attachments to journals

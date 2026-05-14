@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from ..db.database import get_db
-from ..db.crud import (
+from ..db.crud.goal import (
     create_goal,
     get_goal,
     get_goals,
