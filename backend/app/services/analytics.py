@@ -128,6 +128,12 @@ class AnalyticsService:
         social = [d['social'] for d in aligned_data]
         dates = [d['date'] for d in aligned_data]
 
+        # Auto window size: 3-21 days based on period
+        window = min(21, max(3, past_days // 7))
+
+        def moving_avg(data):
+            return np.convolve(data, np.ones(window)/window, mode='same')
+
         # Calculate all correlations
         correlations = {}
 
@@ -135,42 +141,54 @@ class AnalyticsService:
             "correlation": np.corrcoef(sleep, sentiment)[0, 1],
             "data": [{"date": dates[i], "x": sleep[i], "y": sentiment[i]} for i in range(len(dates))],
             "x_label": "Sleep Quality",
-            "y_label": "Sentiment Level"
+            "y_label": "Sentiment Level",
+            "x_avg": moving_avg(sleep).tolist(),
+            "y_avg": moving_avg(sentiment).tolist()
         }
 
         correlations["sleep_stress"] = {
             "correlation": np.corrcoef(sleep, stress)[0, 1],
             "data": [{"date": dates[i], "x": sleep[i], "y": stress[i]} for i in range(len(dates))],
             "x_label": "Sleep Quality",
-            "y_label": "Stress Level"
+            "y_label": "Stress Level",
+            "x_avg": moving_avg(sleep).tolist(),
+            "y_avg": moving_avg(stress).tolist()
         }
 
         correlations["sleep_social"] = {
             "correlation": np.corrcoef(sleep, social)[0, 1],
             "data": [{"date": dates[i], "x": sleep[i], "y": social[i]} for i in range(len(dates))],
             "x_label": "Sleep Quality",
-            "y_label": "Social Engagement"
+            "y_label": "Social Engagement",
+            "x_avg": moving_avg(sleep).tolist(),
+            "y_avg": moving_avg(social).tolist()
         }
 
         correlations["sentiment_stress"] = {
             "correlation": np.corrcoef(sentiment, stress)[0, 1],
             "data": [{"date": dates[i], "x": sentiment[i], "y": stress[i]} for i in range(len(dates))],
             "x_label": "Sentiment Level",
-            "y_label": "Stress Level"
+            "y_label": "Stress Level",
+            "x_avg": moving_avg(sentiment).tolist(),
+            "y_avg": moving_avg(stress).tolist()
         }
 
         correlations["sentiment_social"] = {
             "correlation": np.corrcoef(sentiment, social)[0, 1],
             "data": [{"date": dates[i], "x": sentiment[i], "y": social[i]} for i in range(len(dates))],
             "x_label": "Sentiment Level",
-            "y_label": "Social Engagement"
+            "y_label": "Social Engagement",
+            "x_avg": moving_avg(sentiment).tolist(),
+            "y_avg": moving_avg(social).tolist()
         }
 
         correlations["stress_social"] = {
             "correlation": np.corrcoef(stress, social)[0, 1],
             "data": [{"date": dates[i], "x": stress[i], "y": social[i]} for i in range(len(dates))],
             "x_label": "Stress Level",
-            "y_label": "Social Engagement"
+            "y_label": "Social Engagement",
+            "x_avg": moving_avg(stress).tolist(),
+            "y_avg": moving_avg(social).tolist()
         }
 
         # Filter out NaN correlations and sort by absolute value

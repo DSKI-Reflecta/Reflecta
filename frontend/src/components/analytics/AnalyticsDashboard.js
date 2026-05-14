@@ -11,6 +11,8 @@ import {
   Line,
   ScatterChart,
   Scatter,
+  ComposedChart,
+  Legend,
 } from "recharts";
 import {
   BookOpen,
@@ -123,8 +125,21 @@ const AnalyticsDashboard = () => {
           social: trendsData.social[index],
         }));
         setTrends(formattedTrends);
-        console.log("Trends data:", trendsData);
-        setCorrelations(correlationsData);
+        if (correlationsData && correlationsData.strongest_correlations) {
+          const formattedCorrelations = { ...correlationsData };
+          for (const key in formattedCorrelations.strongest_correlations) {
+            const correlation =
+              formattedCorrelations.strongest_correlations[key];
+            correlation.data = correlation.data.map((d, i) => ({
+              ...d,
+              x_avg: correlation.x_avg[i],
+              y_avg: correlation.y_avg[i],
+            }));
+          }
+          setCorrelations(formattedCorrelations);
+        } else {
+          setCorrelations(correlationsData);
+        }
         setSummary(summaryData);
       } catch (error) {
         console.error("Error fetching analytics data:", error);
@@ -381,33 +396,32 @@ const AnalyticsDashboard = () => {
                       {value.x_label} vs {value.y_label}
                     </h3>
                     <ResponsiveContainer width="100%" height={300}>
-                      <ScatterChart data={value.data}>
+                      <ComposedChart data={value.data}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis
-                          dataKey="x"
-                          domain={[1, 5]}
-                          stroke="#64748b"
+                        <XAxis dataKey="date" stroke="#64748b" />
+                        <YAxis yAxisId="left" stroke="#8884d8" />
+                        <YAxis
+                          yAxisId="right"
+                          orientation="right"
+                          stroke="#82ca9d"
+                        />
+                        <Tooltip />
+                        <Legend />
+                        <Bar
+                          yAxisId="left"
+                          dataKey="x_avg"
+                          barSize={20}
+                          fill="#413ea0"
                           name={value.x_label}
                         />
-                        <YAxis
-                          dataKey="y"
-                          domain={[1, 5]}
-                          stroke="#64748b"
+                        <Line
+                          yAxisId="right"
+                          type="monotone"
+                          dataKey="y_avg"
+                          stroke="#ff7300"
                           name={value.y_label}
                         />
-                        <Tooltip
-                          formatter={(val, name) => [
-                            val,
-                            name === "x" ? value.x_label : value.y_label,
-                          ]}
-                          labelFormatter={() => ""}
-                        />
-                        <Scatter
-                          dataKey="y"
-                          fill="#10b981"
-                          name={value.y_label}
-                        />
-                      </ScatterChart>
+                      </ComposedChart>
                     </ResponsiveContainer>
                     <p className="text-sm text-gray-600 mt-2">
                       Correlation:{" "}
