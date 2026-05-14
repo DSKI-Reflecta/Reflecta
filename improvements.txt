@@ -3,7 +3,6 @@ Backend:
 
 Frontend:
 - Bigger box to write the Journal in and bigger box in general: Chris
-- Fix Calendar alignment: Chris
 - Allow weekly and daily view: Chris
 - Edit goals page to show more goals in boxes + detail page with description: Chris
 - show latest 3 journal entries which reflect that goal: Tristan
