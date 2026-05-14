@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Calendar, CheckSquare } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare, BarChart } from "lucide-react";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   return (
@@ -104,6 +104,18 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         >
           <Calendar className="h-5 w-5 mx-auto md:ml-2 md:mr-3" />
           <span className="hidden md:inline">Calendar</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab("analytics")}
+          className={`flex items-center w-full p-3 ${
+            activeTab === "analytics"
+              ? "bg-blue-50 text-blue-600"
+              : "hover:bg-gray-100"
+          }`}
+        >
+          <BarChart className="h-5 w-5 mx-auto md:ml-2 md:mr-3" />
+          <span className="hidden md:inline">Analytics</span>
         </button>
       </nav>
     </div>

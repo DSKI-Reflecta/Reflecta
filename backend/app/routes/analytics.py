@@ -53,49 +53,112 @@ def get_trends(
     )
 
 
+def _calculate_stats(entries):
+    """Helper function to calculate statistics from a list of entries."""
+    num_entries = len(entries)
+    if num_entries == 0:
+        return {
+            "total_entries": 0,
+            "longest_streak": 0,
+            "average_words": 0,
+            "average_mood": 0,
+            "average_sleep_quality": 0,
+            "average_stress_level": 0,
+            "average_social_engagement": 0,
+        }
+
+    # Word count
+    total_words = sum(len(e.content.split()) for e in entries)
+    average_words = total_words / num_entries if num_entries > 0 else 0
+
+    # Averages
+    average_mood = sum(
+        e.sentiment_level for e in entries if e.sentiment_level is not None) / num_entries
+    average_sleep_quality = sum(
+        e.sleep_quality for e in entries if e.sleep_quality is not None) / num_entries
+    average_stress_level = sum(
+        e.stress_level for e in entries if e.stress_level is not None) / num_entries
+    average_social_engagement = sum(
+        e.social_engagement for e in entries if e.social_engagement is not None) / num_entries
+
+    # Longest streak
+    if not entries:
+        longest_streak = 0
+    else:
+        dates = sorted([e.date.date() for e in entries])
+        if not dates:
+            longest_streak = 0
+        else:
+            streaks = []
+            current_streak = 1
+            for i in range(1, len(dates)):
+                if (dates[i] - dates[i-1]).days == 1:
+                    current_streak += 1
+                else:
+                    streaks.append(current_streak)
+                    current_streak = 1
+            streaks.append(current_streak)
+            longest_streak = max(streaks) if streaks else 0
+
+    return {
+        "total_entries": num_entries,
+        "longest_streak": longest_streak,
+        "average_words": average_words,
+        "average_mood": average_mood,
+        "average_sleep_quality": average_sleep_quality,
+        "average_stress_level": average_stress_level,
+        "average_social_engagement": average_social_engagement,
+    }
+
+
+def _calculate_trend(current, previous):
+    """Helper function to calculate the percentage trend."""
+    if previous == 0:
+        return 100.0 if current > 0 else 0.0
+    return ((current - previous) / previous) * 100
+
+
 @router.get("/averages/", response_model=Averages)
 def get_averages(
     db: Session = Depends(get_db),
     past_days: int = Query(
         30,
         ge=1,
-        description="Number of past days to include "
-        "in the average calculation.")
+        description="Number of past days to include in the average calculation."
+    )
 ) -> Averages:
     """
     Calculates and retrieves average values for sentiment, sleep, stress, and
     social engagement from journal entries over specified number of past days.
-
-    Args:
-        db (Session): The database session dependency.
-        past_days (int): The number of past days to consider
-        for the average calculation.
-
-    Returns:
-        Averages: An object containing the average values for each metric.
     """
-    print("Fetching averages data...")
-    cutoff_date = datetime.now(timezone.utc) - timedelta(days=past_days)
-    entries = get_journal_entries(db, from_date=cutoff_date)
+    # Current period
+    current_to_date = datetime.now(timezone.utc)
+    current_from_date = current_to_date - timedelta(days=past_days)
+    current_entries = get_journal_entries(
+        db, from_date=current_from_date, to_date=current_to_date)
 
-    # Calculate averages
-    # handling cases where lists are empty to avoid zero division
-    num_entries = len(entries)
-    sentiment_avg = sum(e.sentiment_level for e in entries if e.sentiment_level is not None) / \
-        num_entries if num_entries > 0 else 0.0
-    sleep_avg = sum(e.sleep_quality for e in entries if e.sleep_quality is not None) / \
-        num_entries if num_entries > 0 else 0.0
-    stress_avg = sum(e.stress_level for e in entries if e.stress_level is not None) / \
-        num_entries if num_entries > 0 else 0.0
-    social_avg = sum(e.social_engagement for e in entries if e.social_engagement is not None) / \
-        num_entries if num_entries > 0 else 0.0
+    # Previous period
+    previous_to_date = current_from_date
+    previous_from_date = previous_to_date - timedelta(days=past_days)
+    previous_entries = get_journal_entries(
+        db, from_date=previous_from_date, to_date=previous_to_date)
 
-    return Averages(
-        sentiment=sentiment_avg,
-        sleep=sleep_avg,
-        stress=stress_avg,
-        social=social_avg,
-    )
+    # Calculate stats for both periods
+    current_stats = _calculate_stats(current_entries)
+    previous_stats = _calculate_stats(previous_entries)
+
+    # Calculate trends
+    trends = {
+        "total_entries_trend": _calculate_trend(current_stats["total_entries"], previous_stats["total_entries"]),
+        "longest_streak_trend": _calculate_trend(current_stats["longest_streak"], previous_stats["longest_streak"]),
+        "average_words_trend": _calculate_trend(current_stats["average_words"], previous_stats["average_words"]),
+        "average_mood_trend": _calculate_trend(current_stats["average_mood"], previous_stats["average_mood"]),
+        "average_sleep_quality_trend": _calculate_trend(current_stats["average_sleep_quality"], previous_stats["average_sleep_quality"]),
+        "average_stress_level_trend": _calculate_trend(current_stats["average_stress_level"], previous_stats["average_stress_level"]),
+        "average_social_engagement_trend": _calculate_trend(current_stats["average_social_engagement"], previous_stats["average_social_engagement"]),
+    }
+
+    return Averages(**current_stats, **trends)
 
 
 @router.get("/correlations/")
