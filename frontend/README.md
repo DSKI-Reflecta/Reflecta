@@ -14,14 +14,16 @@ Follow these instructions to set up and run the frontend project locally.
 
 ### Installation
 
-   ```
-1. Install dependencies:
+1. **Navigate to the frontend directory:**
+
+```bash
+cd frontend
+```
+
+2. **Install dependencies:**
 
    ```bash
    npm install
-   # or
-   yarn install
-
    ```
 
 ### Running the Project
@@ -30,9 +32,6 @@ Follow these instructions to set up and run the frontend project locally.
 
    ```bash
    npm start
-   # or
-   yarn start
-
    ```
 
    This will typically open the application in your default browser at `http://localhost:3000`.
