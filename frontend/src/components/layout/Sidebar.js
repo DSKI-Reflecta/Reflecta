@@ -1,7 +1,10 @@
 import React from "react";
-import { BookOpen, Calendar, CheckSquare, BarChart } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare, BarChart, LogOut } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
+  const { logout } = useAuth();
+
   const navItems = [
     { id: "journal", icon: BookOpen, label: "Journal" },
     { id: "goals", icon: CheckSquare, label: "Goals" },
@@ -92,6 +95,16 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           </button>
         ))}
       </nav>
+
+      <div className="px-2 pb-4">
+        <button
+          onClick={logout}
+          className="flex items-center w-full p-3 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-150"
+        >
+          <LogOut className="h-5 w-5 mx-auto md:mx-0 md:mr-3" />
+          <span className="hidden md:inline text-sm">Log Out</span>
+        </button>
+      </div>
     </div>
   );
 };
