@@ -1,46 +1,138 @@
-import React, { useState, useEffect } from 'react'; // Added useEffect
+import React, { useState, useEffect } from 'react';
+// Import icons for priority levels
+import { ArrowDownCircle, MinusCircle, ArrowUpCircle } from 'lucide-react';
+
 
 // Added onSave prop to handle saving/updating the goal
 const GoalForm = ({ onClose, onSave, editGoal = null }) => {
   const [goal, setGoal] = useState({
     title: '',
     type: 'One-time', // Default type
-    targetDate: '',
-    category: '', // New field
-    priority: 0, // New field, default priority
-    description: '', // New field
-    // Progress and streak are not set on creation, only updated later
-    progress: editGoal?.progress || 0, // Keep progress if editing
-    id: editGoal?.id || Date.now() // Add ID, use existing if editing
+    targetDate: '', // Initialize as empty string
+    category: '',
+    priority: 'Low', // Initialize with default string value
+    description: '',
+    progress: 0, // Default progress to 0
   });
+
+   // Map slider value (0, 1, 2) to priority string ('Low', 'Medium', 'High')
+  const priorityLevels = ['Low', 'Medium', 'High'];
+  const getPriorityString = (sliderValue) => priorityLevels[sliderValue];
+  const getPrioritySliderValue = (priorityString) => priorityLevels.indexOf(priorityString);
+
 
   // Populate form if editing an existing goal
   useEffect(() => {
     if (editGoal) {
-      setGoal(editGoal);
+      setGoal({
+        ...editGoal,
+        // Ensure targetDate is in ISO format or empty string for input type="date"
+        targetDate: editGoal.targetDate ? editGoal.targetDate.split('T')[0] : '',
+        // Ensure priority is set correctly from backend string
+        priority: editGoal.priority || 'Low', // Default to 'Low' if not set
+      });
+    } else {
+       // Reset form for new goal
+       setGoal({
+            title: '',
+            type: 'One-time',
+            targetDate: '', // Reset to empty string
+            category: '',
+            priority: 'Low', // Default priority for new goals
+            description: '',
+            progress: 0,
+       });
     }
   }, [editGoal]);
 
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    // Handle checkbox/radio button if needed, currently only text/select/range
-    setGoal(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, type } = e.target;
+
+    // Handle number input for priority slider and range input for progress
+    if (name === 'priority') {
+        const sliderValue = parseInt(value, 10);
+        setGoal(prev => ({
+            ...prev,
+            priority: getPriorityString(sliderValue) // Store the string value
+        }));
+    } else if (type === 'range') {
+         const newValue = parseInt(value, 10);
+         setGoal(prev => ({
+            ...prev,
+            [name]: newValue
+         }));
+    } else if (name === 'type') {
+         // When goal type changes, update the state and clear target date if recurring
+         setGoal(prev => ({
+             ...prev,
+             type: value,
+             targetDate: value === 'Recurring' ? '' : prev.targetDate // Clear date if recurring
+         }));
+    }
+    else {
+        setGoal(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Basic validation
-    if (!goal.title || !goal.targetDate || !goal.category) {
-        alert("Please fill out Title, Target Date, and Category."); // Replace with a better UI message
+    // Basic validation - targetDate is only required for 'One-time' goals
+    if (!goal.title || !goal.category) {
+        alert("Please fill out Title and Category."); // Replace with a better UI message
         return;
     }
-    onSave(goal); // Call onSave with the goal data
-    onClose();
+    if (goal.type === 'One-time' && !goal.targetDate) {
+         alert("Please fill out the Target Date for One-time goals.");
+         return;
+    }
+
+    // Prepare data to send to backend
+    const goalDataToSave = { ...goal };
+    // If goal is recurring, remove targetDate from the data sent to backend
+    if (goalDataToSave.type === 'Recurring') {
+        delete goalDataToSave.targetDate;
+    }
+
+
+    onSave(goalDataToSave); // Call onSave with the goal data
+    // onClose(); // onClose is called by the parent after saving
   };
+
+   // Helper to render slider with label, icons, and value display
+  const renderPrioritySlider = () => (
+      <div>
+          <label htmlFor="priority" className="block text-sm font-medium text-gray-700">Priority: {goal.priority}</label>
+          <div className="flex items-center space-x-2 mt-1"> {/* Container for icons and slider */}
+              {/* Icon for Low Priority */}
+              <ArrowDownCircle className="h-5 w-5 text-gray-500" />
+              <input
+                  type="range"
+                  id="priority"
+                  name="priority"
+                  min="0"
+                  max="2"
+                  step="1"
+                  // Use the mapped slider value for the input
+                  value={getPrioritySliderValue(goal.priority)}
+                  onChange={handleChange}
+                  className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg" // Tailwind range styling, flex-1 to fill space
+              />
+              {/* Icon for High Priority */}
+              <ArrowUpCircle className="h-5 w-5 text-red-500" />
+          </div>
+          {/* Optional labels for slider values */}
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>Low</span>
+              <span>Medium</span>
+              <span>High</span>
+          </div>
+      </div>
+  );
+
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-4"> {/* Added padding */}
@@ -103,20 +195,8 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
         />
       </div>
 
-       {/* Priority (using a number input for simplicity, could be drag handle) */}
-       <div>
-        <label htmlFor="priority" className="block text-sm font-medium text-gray-700">Priority</label>
-        <input
-          type="number"
-          id="priority"
-          name="priority"
-          value={goal.priority}
-          onChange={handleChange}
-          min="0" // Assuming 0 is highest priority, adjust as needed
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
-        />
-      </div>
+       {/* Priority Slider */}
+       {renderPrioritySlider()}
 
 
       {/* Target Date */}
@@ -129,8 +209,11 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
           name="targetDate"
           value={goal.targetDate}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
+          // Conditionally disable and style if type is Recurring
+          disabled={goal.type === 'Recurring'}
+          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 ${goal.type === 'Recurring' ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+          // Remove 'required' attribute from the input, handle validation in handleSubmit
+          // required={goal.type === 'One-time'}
         />
       </div>
 
@@ -150,7 +233,8 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
 
 
       {/* Progress input only shown when editing */}
-      {editGoal && (
+      {/* Check if editGoal exists AND has an ID before showing progress */}
+      {editGoal?.id && (
         <div>
           <label htmlFor="progress" className="block text-sm font-medium text-gray-700">Progress (%)</label>
           <input

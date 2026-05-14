@@ -1,103 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import EntryList from '../journal/EntryList';
 import EntryForm from '../journal/EntryForm';
+import EntryDetail from '../journal/EntryDetail'; // Import the new detail component
 import Modal from '../common/Modal'; // Assuming you have a Modal component
-import FloatingNewEntryButton from '../FloatingButton'; // Assuming this is your floating button component
+// Import API functions
+import {
+    fetchJournalEntries,
+    createJournalEntry,
+    updateJournalEntry,
+    deleteJournalEntry
+} from '../../api/api';
 
-// Define your backend API base URL
-const API_BASE_URL = 'http://127.0.0.1:8000/journal'; // Adjust if your API is hosted elsewhere
 
 const JournalPage = () => {
-  const [showEntryModal, setShowEntryModal] = useState(false);
+  const [showEntryFormModal, setShowEntryFormModal] = useState(false); // Renamed form modal state
+  const [showEntryDetailModal, setShowEntryDetailModal] = useState(false); // New state for detail modal
   const [editingEntry, setEditingEntry] = useState(null);
+  const [selectedEntry, setSelectedEntry] = useState(null); // New state for the selected entry for detail view
   const [entries, setEntries] = useState([]); // State to hold journal entries fetched from API
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
-  // --- API Interaction Functions ---
+  // --- Data Fetching ---
 
-  // Fetch entries from the backend
-  const fetchEntries = async () => {
+  // Fetch entries from the backend using the API service
+  const loadEntries = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/entries/`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      // Assuming data is an array of entries, sort by date descending
-      const sortedEntries = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-      setEntries(sortedEntries);
+      const fetchedEntries = await fetchJournalEntries();
+      setEntries(fetchedEntries);
     } catch (error) {
-      console.error("Error fetching entries:", error);
+      console.error("Error loading entries:", error);
       setError("Failed to load journal entries.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Create or update an entry
+  // --- API Interaction Handlers ---
+
+  // Create or update an entry using the API service
   const handleSaveEntry = async (entryToSave) => {
     setError(null); // Clear previous errors
-    const method = entryToSave.id ? 'PUT' : 'POST';
-    const url = entryToSave.id ? `${API_BASE_URL}/entries/${entryToSave.id}` : `${API_BASE_URL}/entries/`;
-
     try {
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Send only the fields expected by the backend Create/Update models
-        body: JSON.stringify({
-            content: entryToSave.content,
-            // Mapping frontend state names to backend model names
-            sentiment_level: entryToSave.sentiment,
-            sleep_quality: entryToSave.sleep,
-            stress_level: entryToSave.stress,
-            social_engagement: entryToSave.socialEngagement,
-            // Note: 'date' and 'title' are not in JournalEntryBase in your provided models,
-            // but they were in your frontend state and previous API interaction.
-            // Assuming your backend actually handles these fields in Create/Update,
-            // or you might need to adjust your backend models or frontend state/mapping.
-            // For now, I'll keep them in the body based on previous code, but be aware
-            // this might need adjustment if your backend strictly follows the provided models.
-            date: entryToSave.date, // Keeping based on previous frontend structure
-            title: entryToSave.title // Keeping based on previous frontend structure
-        }),
-      });
+      let savedEntry;
+      // Prepare data to send, matching backend model expectations
+      const entryData = {
+          content: entryToSave.content,
+          sentiment_level: entryToSave.sentiment,
+          sleep_quality: entryToSave.sleep,
+          stress_level: entryToSave.stress,
+          social_engagement: entryToSave.socialEngagement,
+          date: entryToSave.date,
+          title: entryToSave.title
+      };
 
-      if (!response.ok) {
-         // Attempt to read error message from backend
-         // Check if the response is JSON before trying to parse
-         const contentType = response.headers.get("content-type");
-         if (contentType && contentType.indexOf("application/json") !== -1) {
-             const errorData = await response.json();
-             throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || JSON.stringify(errorData)}`);
-         } else {
-             // If not JSON, read as text and include in error
-             const errorText = await response.text();
-             throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
-         }
-      }
-
-      // Assuming the backend returns the saved/updated entry
-      const savedEntry = await response.json();
-
-      if (method === 'POST') {
-        // Add new entry to the top of the list
-        setEntries([savedEntry, ...entries]);
-      } else {
-        // Update the entry in the list
+      if (entryToSave.id) {
+        // Update existing entry
+        savedEntry = await updateJournalEntry(entryToSave.id, entryData);
+        // Update the entry in the local state
         setEntries(entries.map(entry =>
           entry.id === savedEntry.id ? savedEntry : entry
         ));
+      } else {
+        // Create new entry
+        savedEntry = await createJournalEntry(entryData);
+        // Add new entry to the top of the local state
+        setEntries([savedEntry, ...entries]);
       }
 
-      closeModal(); // Close modal on successful save
-      // Optionally refetch entries to ensure data consistency, especially if backend does processing
-      // fetchEntries();
+      closeFormModal(); // Close form modal on successful save
 
     } catch (error) {
       console.error("Error saving entry:", error);
@@ -106,30 +79,14 @@ const JournalPage = () => {
     }
   };
 
-  // Delete an entry
+  // Delete an entry using the API service
   const handleDeleteEntry = async (entryId) => {
       if (window.confirm("Are you sure you want to delete this entry?")) {
           setError(null); // Clear previous errors
           try {
-              const response = await fetch(`${API_BASE_URL}/entries/${entryId}`, {
-                  method: 'DELETE',
-              });
-
-              if (!response.ok) {
-                 const contentType = response.headers.get("content-type");
-                 if (contentType && contentType.indexOf("application/json") !== -1) {
-                    const errorData = await response.json();
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorData.detail || JSON.stringify(errorData)}`);
-                 } else {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
-                 }
-              }
-
-              // Assuming backend returns success: true or similar, or just a 200 status
-              // Filter out the deleted entry from the state
+              await deleteJournalEntry(entryId);
+              // Remove the entry from the local state
               setEntries(entries.filter(entry => entry.id !== entryId));
-
           } catch (error) {
               console.error("Error deleting entry:", error);
               setError(`Failed to delete entry: ${error.message}`);
@@ -140,31 +97,57 @@ const JournalPage = () => {
 
   // --- Component Lifecycle and Modal Handling ---
 
-  // Fetch entries when the component mounts
+  // Load entries when the component mounts
   useEffect(() => {
-    fetchEntries();
-  }, []); // Empty dependency array means this runs once on mount
+    loadEntries();
+  }, []);
 
+  // Handler for opening the Add Entry form modal
   const openAddEntryModal = () => {
-    setEditingEntry(null); // Ensure editingEntry is null for adding
-    setShowEntryModal(true);
+    setEditingEntry(null);
+    setShowEntryFormModal(true);
   };
 
+  // Handler for opening the Edit Entry form modal
   const openEditEntryModal = (entry) => {
-    setEditingEntry(entry); // Set the entry to be edited
-    setShowEntryModal(true);
+    setEditingEntry(entry);
+    setShowEntryFormModal(true);
   };
 
-  const closeModal = () => {
-    setShowEntryModal(false);
-    setEditingEntry(null); // Clear editingEntry when modal closes
-    setError(null); // Clear errors when modal closes
+  // Handler for selecting an entry to view details
+  const handleSelectEntry = (entry) => {
+      setSelectedEntry(entry);
+      setShowEntryDetailModal(true);
   };
+
+  // Handler for closing the Form modal
+  const closeFormModal = () => {
+    setShowEntryFormModal(false);
+    setEditingEntry(null); // Clear editingEntry when form modal closes
+    setError(null); // Clear errors when form modal closes
+  };
+
+   // Handler for closing the Detail modal
+  const closeDetailModal = () => {
+    setShowEntryDetailModal(false);
+    setSelectedEntry(null); // Clear selectedEntry when detail modal closes
+  };
+
 
   return (
-    // Added pb-20 to ensure space for the floating button at the bottom
-    <div className="relative pb-20">
-      <h1 className="text-2xl font-bold mb-6 text-gray-900">Journal Entries</h1>
+    <div>
+      {/* Header with Title and New Entry Button */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Journal Entries</h1>
+        {/* New Entry Button - Positioned like the New Goal button */}
+        <button
+          onClick={openAddEntryModal}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        >
+          New Entry
+        </button>
+      </div>
+
 
       {/* Loading and Error Messages */}
       {loading && <p className="text-center text-gray-500">Loading entries...</p>}
@@ -174,28 +157,33 @@ const JournalPage = () => {
       {!loading && !error && (
           <EntryList
             entries={entries}
-            onEditEntry={openEditEntryModal}
-            onDeleteEntry={handleDeleteEntry}
+            onEditEntry={openEditEntryModal} // Edit button opens form modal
+            onDeleteEntry={handleDeleteEntry} // Delete button triggers delete
+            onSelectEntry={handleSelectEntry} // Clicking card opens detail modal
           />
       )}
 
 
-      {/* Modal for Add/Edit Entry */}
-      {showEntryModal && (
-        <Modal title={editingEntry ? "Edit Entry" : "New Journal Entry"} onClose={closeModal}>
-          {/* Pass onSave handler and editingEntry to EntryForm */}
+      {/* Modal for Add/Edit Entry Form */}
+      {showEntryFormModal && (
+        <Modal title={editingEntry ? "Edit Entry" : "New Journal Entry"} onClose={closeFormModal}>
           <EntryForm
-            onClose={closeModal}
-            onSave={handleSaveEntry} // Pass the save handler
+            onClose={closeFormModal}
+            onSave={handleSaveEntry}
             editEntry={editingEntry}
           />
         </Modal>
       )}
 
-      {/* Floating New Entry Button - Fixed position */}
-      <div className="fixed bottom-6 right-6 z-40">
-         <FloatingNewEntryButton onClick={openAddEntryModal} />
-      </div>
+       {/* Modal for Journal Entry Detail View */}
+       {showEntryDetailModal && (
+           <Modal title="Journal Entry Detail" onClose={closeDetailModal}> {/* Title for detail modal */}
+               <EntryDetail
+                   entry={selectedEntry} // Pass the selected entry
+                   onClose={closeDetailModal} // Pass the close handler
+               />
+           </Modal>
+       )}
     </div>
   );
 };

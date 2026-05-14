@@ -1,8 +1,8 @@
 import React from 'react';
 import EntryCard from './EntryCard';
 
-// Added entries, onEditEntry, onDeleteEntry props
-const EntryList = ({ entries, onEditEntry, onDeleteEntry }) => {
+// Added entries, onEditEntry, onDeleteEntry, and onSelectEntry props
+const EntryList = ({ entries, onEditEntry, onDeleteEntry, onSelectEntry }) => {
 
   return (
     <div className="grid gap-6">
@@ -13,6 +13,7 @@ const EntryList = ({ entries, onEditEntry, onDeleteEntry }) => {
           entry={entry}
           onEdit={onEditEntry} // Pass the edit handler
           onDelete={onDeleteEntry} // Pass the delete handler
+          onSelect={onSelectEntry} // Pass the select handler
         />
       ))}
        {/* Message if no entries */}
