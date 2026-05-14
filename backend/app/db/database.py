@@ -1,3 +1,9 @@
+"""
+Database setup and SQLAlchemy models for the journal and goal application.
+"""
+
+import os
+from datetime import datetime, timezone
 from sqlalchemy import (
     create_engine,
     Column,
@@ -11,8 +17,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
-import os
-from datetime import datetime, timezone
+
 
 # Get the directory of the current file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,7 +42,7 @@ journal_goal_association = Table(
 
 
 class JournalEntryModel(Base):
-    """Model for journal entries."""
+    """SQLAlchemy model for journal entries."""
 
     __tablename__ = "journal_entries"
     id = Column(Integer, primary_key=True, index=True)
@@ -71,7 +76,7 @@ class JournalEntryModel(Base):
 
 
 class GoalModel(Base):
-    """Model for goals."""
+    """SQLAlchemy model for goals."""
 
     __tablename__ = "goals"
     id = Column(Integer, primary_key=True, index=True)
@@ -97,16 +102,25 @@ class GoalModel(Base):
     )
 
 
-# Create the database tables
 def create_tables():
-    # This will create the new tables and columns.
+    """
+    Creates all defined database tables if they do not already exist.
+    This function binds to the engine and creates tables based on Base.metadata.
+    """
     print("Creating database tables...")
     Base.metadata.create_all(bind=engine)
     print("Tables created.")
 
 
-# Dependency to get the database session
 def get_db():
+    """
+    Dependency function to provide a database session.
+
+    Yields:
+        Session: A SQLAlchemy session object.
+    Finally:
+        Closes the database session.
+    """
     db = SessionLocal()
     try:
         yield db

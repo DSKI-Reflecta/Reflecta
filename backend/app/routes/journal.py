@@ -1,6 +1,11 @@
+"""
+API routes for managing journal entries.
+"""
+
+from typing import List
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
 
 from app.db.database import get_db
 from app.db.crud.journal import (
@@ -10,7 +15,6 @@ from app.db.crud.journal import (
     update_journal_entry,
     delete_journal_entry
 )
-# Import updated models
 from app.models.entry_goal import (
     JournalEntryCreate,
     JournalEntry,
@@ -19,20 +23,30 @@ from app.models.entry_goal import (
 
 router = APIRouter(
     prefix="/journal",
-    tags=["journal"],  # for swagger UI
-    responses={404: {"description": "Not found"}},  # default response
+    tags=["journal"],
+    responses={404: {"description": "Not found"}},
 )
 
 
 @router.get("/entries/", response_model=List[JournalEntry])
 def read_entries(
-    skip: int = Query(0, ge=0,
-                      description="Number of items to skip (where to start)"),
+    skip: int = Query(
+        0, ge=0, description="Number of items to skip (for pagination)"),
     limit: int = Query(100, ge=1, le=100,
                        description="Max number of items to return"),
     db: Session = Depends(get_db)
 ) -> List[JournalEntry]:
-    """Get all journal entries with pagination"""
+    """
+    Retrieves a list of journal entries with pagination.
+
+    Args:
+        skip (int): The number of entries to skip.
+        limit (int): The maximum number of entries to return.
+        db (Session): The database session dependency.
+
+    Returns:
+        List[JournalEntry]: A list of journal entries.
+    """
     entries = get_journal_entries(db, skip=skip, limit=limit)
     return [
         JournalEntry.model_validate(entry, from_attributes=True)
@@ -45,7 +59,19 @@ def read_entry(
     entry_id: int,
     db: Session = Depends(get_db)
 ) -> JournalEntry:
-    """Get a specific journal entry by ID"""
+    """
+    Retrieves a specific journal entry by its ID.
+
+    Args:
+        entry_id (int): The ID of the journal entry to retrieve.
+        db (Session): The database session dependency.
+
+    Raises:
+        HTTPException: If the journal entry is not found.
+
+    Returns:
+        JournalEntry: The retrieved journal entry.
+    """
     db_entry = get_journal_entry(db, entry_id)
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
@@ -58,7 +84,16 @@ def create_entry(
     entry: JournalEntryCreate,
     db: Session = Depends(get_db)
 ) -> JournalEntry:
-    """Create a new journal entry"""
+    """
+    Creates a new journal entry.
+
+    Args:
+        entry (JournalEntryCreate): The journal entry data to create.
+        db (Session): The database session dependency.
+
+    Returns:
+        JournalEntry: The newly created journal entry.
+    """
     db_entry = create_journal_entry(db, entry)
     return JournalEntry.model_validate(db_entry, from_attributes=True)
 
@@ -69,7 +104,20 @@ def update_entry(
     entry_update: JournalEntryUpdate,
     db: Session = Depends(get_db)
 ) -> JournalEntry:
-    """Update a journal entry"""
+    """
+    Updates an existing journal entry.
+
+    Args:
+        entry_id (int): The ID of the journal entry to update.
+        entry_update (JournalEntryUpdate): The updated journal entry data.
+        db (Session): The database session dependency.
+
+    Raises:
+        HTTPException: If the journal entry is not found.
+
+    Returns:
+        JournalEntry: The updated journal entry.
+    """
     db_entry = update_journal_entry(db, entry_id, entry_update)
     if db_entry is None:
         raise HTTPException(status_code=404, detail="Journal entry not found")
@@ -82,9 +130,20 @@ def delete_entry(
     entry_id: int,
     db: Session = Depends(get_db)
 ) -> dict:
-    """Delete a journal entry"""
+    """
+    Deletes a journal entry by its ID.
+
+    Args:
+        entry_id (int): The ID of the journal entry to delete.
+        db (Session): The database session dependency.
+
+    Raises:
+        HTTPException: If the journal entry is not found.
+
+    Returns:
+        dict: A confirmation message.
+    """
     success = delete_journal_entry(db, entry_id)
     if not success:
         raise HTTPException(status_code=404, detail="Journal entry not found")
-    return {"message":
-            f"Journal entry with id {entry_id} deleted successfully"}
+    return {"message": f"Journal entry with id {entry_id} deleted successfully"}

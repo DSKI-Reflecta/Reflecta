@@ -1,16 +1,28 @@
+"""
+Main application file for the Reflecta API.
+Configures FastAPI, CORS, and includes API routers.
+"""
+
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import journal, goal, chatbot, analytics
+
 from app.db.database import create_tables
+from app.routes import journal, goal, chatbot, analytics
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Lifespan event for FastAPI app"""
+    """
+    Handles application startup and shutdown events.
+    During startup, it creates necessary database tables.
+
+    Args:
+        app (FastAPI): The FastAPI application instance.
+    """
     create_tables()
     yield
-    # optional shutdown code here
 
 
 # Create the FastAPI app
@@ -40,5 +52,10 @@ app.include_router(analytics.router)
 
 @app.get("/")
 def read_root() -> dict:
-    """Test root endpoint"""
+    """
+    Root endpoint to test API availability.
+
+    Returns:
+        dict: A welcome message.
+    """
     return {"message": "Welcome to the Reflecta API"}

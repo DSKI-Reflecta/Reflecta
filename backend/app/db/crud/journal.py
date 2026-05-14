@@ -1,11 +1,16 @@
+"""
+CRUD operations for journal entries.
+"""
+
 from datetime import datetime, timezone
 from typing import List, Optional
+
 from sqlalchemy.orm import Session
 
-from app.models.entry_goal import JournalEntryCreate, JournalEntryUpdate
 from app.db.database import JournalEntryModel
-from app.services.gemini_agent import analyze_entry
 from app.db.crud.utils import get_goal_info, get_goals
+from app.models.entry_goal import JournalEntryCreate, JournalEntryUpdate
+from app.services.gemini_agent import analyze_entry
 
 
 def get_journal_entries(
@@ -14,11 +19,20 @@ def get_journal_entries(
     limit: int = 100,
     from_date: Optional[datetime] = None,
 ) -> List[JournalEntryModel]:
-    """Get all journal entries with optional filter
-    and pagination."""
+    """
+    Retrieves a list of journal entries with optional filtering and pagination.
+
+    Args:
+        db (Session): The database session.
+        skip (int): The number of entries to skip (for pagination).
+        limit (int): The maximum number of entries to return (for pagination).
+        from_date (Optional[datetime]): If provided, only entries on or after this date will be returned.
+
+    Returns:
+        List[JournalEntryModel]: A list of journal entry SQLAlchemy models.
+    """
     query = db.query(JournalEntryModel)
 
-    # Filter by date if provided
     if from_date:
         query = query.filter(JournalEntryModel.date >= from_date)
 
@@ -28,31 +42,41 @@ def get_journal_entries(
     ).offset(skip).limit(limit).all()
 
 
-def get_journal_entry(db: Session,
-                      entry_id: int) -> Optional[JournalEntryModel]:
-    # Optional[JournalEntryModel] == Union[JournalEntryModel, None]
-    """Get a specific journal entry by ID"""
+def get_journal_entry(db: Session, entry_id: int) -> Optional[JournalEntryModel]:
+    """
+    Retrieves a specific journal entry by its ID.
+
+    Args:
+        db (Session): The database session.
+        entry_id (int): The ID of the journal entry to retrieve.
+
+    Returns:
+        Optional[JournalEntryModel]: The journal entry SQLAlchemy model if found, otherwise None.
+    """
     return db.get(JournalEntryModel, entry_id)
 
 
-def create_journal_entry(db: Session,
-                         entry: JournalEntryCreate
-                         ) -> JournalEntryModel:
-    """Create a new journal entry with AI-formatted content"""
-    # Get all goal information from the database
+def create_journal_entry(db: Session, entry: JournalEntryCreate) -> JournalEntryModel:
+    """
+    Creates a new journal entry, including AI-generated analysis and goal association.
+
+    Args:
+        db (Session): The database session.
+        entry (JournalEntryCreate): The Pydantic model containing the new journal entry data.
+
+    Returns:
+        JournalEntryModel: The newly created journal entry SQLAlchemy model.
+    """
     goal_info = get_goal_info(db)
-    # Analyze the entry content using the AI service
     formatted_content, activities, sentiments, goal_ids = analyze_entry(
         entry.content, goal_info
     )
-    # Get the goals with the specified IDs
     goals = get_goals(db, goal_ids)
 
     db_entry = JournalEntryModel(
         title=entry.title,
-        date=entry.date,  # Pass the date object
+        date=entry.date,
         content=entry.content,
-        # Explicitly use .value for IntEnum fields to get the integer value
         sentiment_level=(
             entry.sentiment_level.value
             if entry.sentiment_level is not None
@@ -81,7 +105,7 @@ def create_journal_entry(db: Session,
 
     db.add(db_entry)
     db.commit()
-    db.refresh(db_entry)  # Refresh instance to get the new ID and timestamp
+    db.refresh(db_entry)
     return db_entry
 
 
@@ -90,39 +114,41 @@ def update_journal_entry(
     entry_id: int,
     entry_update: JournalEntryUpdate
 ) -> Optional[JournalEntryModel]:
-    """Update a journal entry with optional AI formatting"""
+    """
+    Updates an existing journal entry. If content is updated, AI re-analysis is performed.
+
+    Args:
+        db (Session): The database session.
+        entry_id (int): The ID of the journal entry to update.
+        entry_update (JournalEntryUpdate): The Pydantic model containing the update data.
+
+    Returns:
+        Optional[JournalEntryModel]: The updated journal entry SQLAlchemy model if found, otherwise None.
+    """
     db_entry = get_journal_entry(db, entry_id)
     if db_entry:
-        # only include fields that are set in the update
         update_data: dict = entry_update.model_dump(exclude_unset=True)
 
-        # Update the entry with the new data
         for key, value in update_data.items():
-            # Handle IntEnum fields separately to store their integer values
             if key in ['sentiment_level', 'sleep_quality', 'stress_level',
                        'social_engagement'] and value is not None:
                 setattr(db_entry, key, value.value)
             else:
                 setattr(db_entry, key, value)
 
-        # Update the content and re-analyze if content is provided
         if entry_update.content:
-            # Get all goal information from the database
             goal_info = get_goal_info(db)
-            # Analyze the entry content using the AI service
             formatted, activities, sentiments, goal_ids = analyze_entry(
                 entry_update.content, goal_info
             )
-            # Get the goals with the specified IDs
             goals = get_goals(db, goal_ids)
 
             db_entry.formatted_content = formatted
             db_entry.activities = activities
             db_entry.sentiments = sentiments
-            db_entry.goals.clear()  # Clear existing goals
-            db_entry.goals.extend(goals)  # Add new goals
+            db_entry.goals.clear()
+            db_entry.goals.extend(goals)
 
-        # Update the updated_at timestamp
         db_entry.updated_at = datetime.now(timezone.utc)
 
         db.commit()
@@ -131,7 +157,16 @@ def update_journal_entry(
 
 
 def delete_journal_entry(db: Session, entry_id: int) -> bool:
-    """Delete a journal entry"""
+    """
+    Deletes a journal entry by its ID.
+
+    Args:
+        db (Session): The database session.
+        entry_id (int): The ID of the journal entry to delete.
+
+    Returns:
+        bool: True if the entry was deleted, False otherwise.
+    """
     db_entry = get_journal_entry(db, entry_id)
     if db_entry:
         db.delete(db_entry)

@@ -1,18 +1,18 @@
-from datetime import datetime
-from typing import Optional, List
-from pydantic import BaseModel, Field, ConfigDict # Import ConfigDict
-from datetime import date as date_type  # Import date type with an alias
+"""
+Pydantic models for journal entries and goals, including enums for various metrics.
+"""
+
+from datetime import datetime, date as date_type
 from enum import Enum, IntEnum
+from typing import Optional, List
 
-
-"""
-IntEnum members behave like integers, e.g.:
-SentimentLevel.NEGATIVE < SentimentLevel.POSITIVE  # True
-int(SentimentLevel.NEUTRAL)  # 3
-"""
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class SentimentLevel(IntEnum):
+    """
+    Represents the sentiment level of a journal entry.
+    """
     VERY_NEGATIVE = 1
     NEGATIVE = 2
     NEUTRAL = 3
@@ -21,6 +21,9 @@ class SentimentLevel(IntEnum):
 
 
 class SleepQuality(IntEnum):
+    """
+    Represents the quality of sleep.
+    """
     VERY_POOR = 1
     POOR = 2
     AVERAGE = 3
@@ -29,6 +32,9 @@ class SleepQuality(IntEnum):
 
 
 class StressLevel(IntEnum):
+    """
+    Represents the stress level.
+    """
     VERY_LOW = 1
     LOW = 2
     MODERATE = 3
@@ -37,6 +43,9 @@ class StressLevel(IntEnum):
 
 
 class SocialEngagement(IntEnum):
+    """
+    Represents the level of social engagement.
+    """
     ALONE = 1
     MINIMAL = 2
     MODERATE = 3
@@ -56,7 +65,6 @@ class GoalBase(BaseModel):
     title: str = Field(..., description="The title of the goal")
     type: str = Field(...,
                       description="The type of the goal")
-    # Added alias='targetDate' to map frontend camelCase to backend snake_case
     target_date: Optional[date_type] = Field(
         None,
         description="Target date for the goal (optional for recurring goals)",
@@ -67,7 +75,6 @@ class GoalBase(BaseModel):
     description: Optional[str] = Field(None,
                                        description="A brief goal description")
 
-    # Configure Pydantic to allow population by field name or alias
     model_config = ConfigDict(populate_by_name=True)
 
 
@@ -79,10 +86,8 @@ class GoalCreate(GoalBase):
 
 class GoalUpdate(BaseModel):
     """Model for updating an existing Goal."""
-    # Allow optional updates for all fields
     title: Optional[str] = None
     type: Optional[str] = None
-    # Added alias='targetDate' for the update model as well
     target_date: Optional[date_type] = Field(
         None,
         description="Target date for the goal (optional for recurring goals)",
@@ -96,13 +101,11 @@ class GoalUpdate(BaseModel):
         description="The current progress percentage (0-100)"
     )
 
-    # Configure Pydantic to allow population by field name or alias
     model_config = ConfigDict(populate_by_name=True)
 
 
 class JournalEntryBase(BaseModel):
     """Base model for journal entries."""
-    #  ... stands for required fields
     title: str = Field(..., description="The title of the journal entry")
     date: date_type = Field(..., description="The date of the journal entry")
     content: str = Field(...,
@@ -116,8 +119,7 @@ class JournalEntryBase(BaseModel):
 
 class JournalEntryCreate(JournalEntryBase):
     """Model for creating a new journal entry,
-    inherits all fields from JournalEntryBase.
-    Format content is optional and defaults to False"""
+    inherits all fields from JournalEntryBase."""
     goals: Optional[List[int]] = None
 
 
@@ -138,7 +140,6 @@ class JournalEntryBasic(JournalEntryBase):
     """Model for a journal entry,
     inherits all fields from JournalEntryBase and
     adds additional fields used in the backend"""
-    # Database fields
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
@@ -148,7 +149,6 @@ class JournalEntryBasic(JournalEntryBase):
     activities: Optional[str] = None
     sentiments: Optional[str] = None
 
-    # model can be directly created from SQLAlchemy object
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -156,21 +156,18 @@ class Goal(GoalBase):
     """Model for reading a Goal from the database."""
     id: int
     progress: int = Field(
-        0,  # Default progress is 0
+        0,
         description="The current progress percentage (0-100)")
     created_at: datetime
     updated_at: Optional[datetime] = None
 
-    # relationship with JournalEntry without its goals
     journal_entries: Optional[List[JournalEntryBasic]] = None
 
-    # model can be directly created from SQLAlchemy object
-    model_config = ConfigDict(from_attributes=True, use_enum_values=True) # Use model_config
+    model_config = ConfigDict(from_attributes=True, use_enum_values=True)
 
 
 class JournalEntry(JournalEntryBasic):
     """Model for a journal entry,
     inherits all fields from JournalEntryBasic and
     adds additional fields used in the backend"""
-    # Many-to-many relationship with goals
     goals: Optional[List[Goal]] = None

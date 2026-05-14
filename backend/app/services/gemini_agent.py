@@ -1,10 +1,18 @@
+"""
+Module for interacting with the Gemini AI model for various journaling and goal-setting tasks.
+This includes recommending goals, formatting journal content, extracting activities and sentiments,
+and generating follow-up questions.
+"""
+
 import os
 import concurrent.futures
-from typing import List
 from enum import Enum
-from pydantic import BaseModel, Field
-from google import genai
+from typing import List, Optional
+
 from dotenv import load_dotenv
+from google import genai
+from pydantic import BaseModel, Field
+
 
 # Load environment variables
 load_dotenv()
@@ -16,10 +24,16 @@ model = "gemini-2.0-flash"
 
 
 class Activity(BaseModel):
+    """
+    Pydantic model for an extracted activity.
+    """
     value: str
 
 
 class Sentiment(str, Enum):
+    """
+    Enum for various sentiment levels.
+    """
     HAPPY = "Happy"
     SAD = "Sad"
     ANGRY = "Angry"
@@ -42,22 +56,33 @@ class Sentiment(str, Enum):
     DISAPPOINTED = "Disappointed"
 
 
-# Simple response classes for structured output
 class FormattedText(BaseModel):
+    """
+    Pydantic model for formatted text response.
+    """
     text: str
 
 
 class ActivityList(BaseModel):
+    """
+    Pydantic model for a list of extracted activities.
+    """
     activities: List[Activity] = Field(
         description="List of activities extracted from the journal entry")
 
 
 class SentimentList(BaseModel):
+    """
+    Pydantic model for a list of extracted sentiments.
+    """
     sentiments: List[Sentiment] = Field(
         description="List of sentiments extracted from the journal entry")
 
 
 class RecommendedGoal(BaseModel):
+    """
+    Pydantic model for a recommended goal.
+    """
     title: str = Field(description="A clear, concise title for the goal.")
     description: str = Field(
         description="A brief, motivating description of the goal."
@@ -68,13 +93,24 @@ class RecommendedGoal(BaseModel):
 
 
 class RecommendedGoalList(BaseModel):
+    """
+    Pydantic model for a list of recommended goals.
+    """
     goals: List[RecommendedGoal] = Field(
         description="A list of recommended goals based on the user's journal entries."
     )
 
 
 def recommend_goals(entries: str) -> List[RecommendedGoal]:
-    """Recommend goals based on journal entries."""
+    """
+    Recommends 3-5 specific, actionable, and positive goals based on journal entries.
+
+    Args:
+        entries (str): A string containing the user's recent journal entries.
+
+    Returns:
+        List[RecommendedGoal]: A list of recommended goals.
+    """
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""You are an AI assistant that helps users set meaningful goals based on their journal entries.
@@ -114,7 +150,15 @@ Your task is to recommend 3-5 specific, actionable, and positive goals based on 
 
 
 def format_journal_content(content: str) -> str:
-    """Format the journal entry content."""
+    """
+    Formats the journal entry content by adding section headers and subtle emojis.
+
+    Args:
+        content (str): The raw journal entry content.
+
+    Returns:
+        str: The formatted journal entry content.
+    """
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry:\n\n{content}
@@ -148,7 +192,16 @@ Format the journal entry by adding clear section headers for different times of 
 
 
 def extract_activities(content: str, amount: int) -> str:
-    """Extract activities from the journal entry content."""
+    """
+    Extracts key activities from the journal entry content.
+
+    Args:
+        content (str): The journal entry content.
+        amount (int): The maximum number of activities to extract.
+
+    Returns:
+        str: A comma-separated string of extracted activities.
+    """
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
@@ -168,7 +221,16 @@ def extract_activities(content: str, amount: int) -> str:
 
 
 def extract_sentiments(content: str, amount: int) -> str:
-    """Extract sentiments from the journal entry content."""
+    """
+    Extracts main emotions or feelings expressed in the journal entry.
+
+    Args:
+        content (str): The journal entry content.
+        amount (int): The maximum number of sentiments to extract.
+
+    Returns:
+        str: A comma-separated string of extracted sentiments.
+    """
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""This is a journal entry. \n\n{content}.
@@ -184,8 +246,17 @@ def extract_sentiments(content: str, amount: int) -> str:
         [sentiment.value for sentiment in response.parsed.sentiments])
 
 
-def extract_goals(content: str, goals: str) -> str:
-    """Extract goals from the journal entry content."""
+def extract_goals(content: str, goals: str) -> List[int]:
+    """
+    Identifies and returns the IDs of goals toward which the journal entry shows clear, positive progress.
+
+    Args:
+        content (str): The journal entry content.
+        goals (str): A string representation of available goals with their IDs, titles, and descriptions.
+
+    Returns:
+        List[int]: A list of integer IDs of matched goals.
+    """
     response = genai_client.models.generate_content(
         model=model,
         contents=f"""You are a goal-matching assistant.
@@ -226,7 +297,6 @@ If the entry says something like “I’m trying to improve X” or “I made an
 🚫 Do NOT copy from the examples above. Match goals ONLY based on the actual journal entry provided.
 """,
     )
-    # Convert the response text to a list of integers
     try:
         return [int(x.strip()) for x in response.text.split(",")]
     except ValueError:
@@ -234,7 +304,15 @@ If the entry says something like “I’m trying to improve X” or “I made an
 
 
 def generate_journal_question(current_content: str) -> str:
-    """Generate a follow-up question for the journal entry."""
+    """
+    Generates a thoughtful, open-ended follow-up question for a journal entry.
+
+    Args:
+        current_content (str): The current journal entry content.
+
+    Returns:
+        str: An AI-generated question to deepen reflection.
+    """
     prompt = f"""You are an AI journaling assistant. Your role is to help the user deepen and expand their journal entry by asking thoughtful, open-ended questions.
 
 The user has written the following entry:
@@ -272,8 +350,17 @@ Question:"""
     return response.parsed.text.strip()
 
 
-def enhance_goal_description(title: str, description: str = None) -> str:
-    """Enhance or generate a goal description using AI."""
+def enhance_goal_description(title: str, description: Optional[str] = None) -> str:
+    """
+    Enhances an existing goal description or generates a new one using AI.
+
+    Args:
+        title (str): The title of the goal.
+        description (Optional[str]): The current description of the goal, if any.
+
+    Returns:
+        str: The enhanced or newly generated goal description.
+    """
     prompt = f"""You are an AI assistant specialized in writing clear, motivating, and actionable goal descriptions.
 
 Goal Title: {title}
@@ -307,8 +394,17 @@ Output: "Embark on a journey to master a new skill that aligns with your persona
 
 
 def analyze_entry(content: str, goals: str) -> tuple:
-    """Analyze the journal entry content using concurrent tasks.
-    This means that the tasks will run in parallel."""
+    """
+    Analyzes the journal entry content using concurrent tasks to extract formatted content,
+    activities, sentiments, and associated goals.
+
+    Args:
+        content (str): The journal entry content to analyze.
+        goals (str): A string representation of available goals for extraction.
+
+    Returns:
+        tuple: A tuple containing (formatted_content, activities, sentiments, goal_ids).
+    """
     with concurrent.futures.ThreadPoolExecutor() as executor:
         f1 = executor.submit(format_journal_content, content)
         f2 = executor.submit(extract_activities, content, 8)

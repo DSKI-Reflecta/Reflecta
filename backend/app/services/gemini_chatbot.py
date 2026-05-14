@@ -1,8 +1,13 @@
-# simple gemini chatbot
+"""
+Module for a simple Gemini-powered chatbot assistant.
+Handles user messages and provides responses based on a defined system prompt.
+"""
+
 import os
-from pydantic import BaseModel, Field
-from google import genai
+
 from dotenv import load_dotenv
+from google import genai
+from pydantic import BaseModel, Field
 
 
 # Load environment variables
@@ -13,17 +18,20 @@ genai_client = genai.Client(api_key=api_key)
 model = "gemini-2.0-flash"
 
 
-# pydantic model for the response
-class answer(BaseModel):
+class Answer(BaseModel):
+    """
+    Pydantic model for the chatbot's response.
+    """
     text: str = Field(..., description="The response text from the chatbot")
 
 
-# pydantic model for the request
-class request(BaseModel):
+class Request(BaseModel):
+    """
+    Pydantic model for the user's request to the chatbot.
+    """
     message: str = Field(..., description="The user message to the chatbot")
 
 
-# Sysem prompt for the chatbot
 SYSTEM_PROMPT = """
 You are a supportive, thoughtful, and privacy-respecting AI assistant embedded in a journaling app. Your goal is to help the user reflect, express themselves clearly, and track their personal growth. Your tone is warm, calm, non-judgmental, and emotionally intelligent. You always respect the user’s boundaries and never force interaction.
 
@@ -41,17 +49,21 @@ Respond only in text. Never include emojis or excessive enthusiasm unless the us
 """
 
 
-# Function to get chatbot response
 def get_chatbot_response(user_message: str) -> str:
     """
-    Get a response from the Gemini chatbot based on the user message.
+    Retrieves a response from the Gemini chatbot based on the user's message.
+
+    Args:
+        user_message (str): The message from the user to the chatbot.
+
+    Returns:
+        str: The chatbot's generated text response.
     """
-    # Create a chat message
     chat_message = genai_client.models.generate_content(
         model=model,
         config={"system_instruction": SYSTEM_PROMPT,
                 "response_mime_type": "application/json",
-                "response_schema": answer},
+                "response_schema": Answer},
         contents=user_message,
-        )
+    )
     return chat_message.parsed.text.strip()
