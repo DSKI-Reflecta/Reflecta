@@ -38,7 +38,7 @@ def extract_activities(content: str) -> str:
         Do not include any list formatting, quotes, or explanations.
         Example output: activity 1, activity 2, activity 3"""
     )
-    return response.text.strip()
+    return response.text.strip().lower()
 
 
 def extract_sentiments(content: str) -> str:
@@ -53,7 +53,7 @@ def extract_sentiments(content: str) -> str:
         Do not include any list formatting, quotes, or explanations.
         Example output: excited, calm, frustrated"""
     )
-    return response.text.strip()
+    return response.text.strip().lower()
 
 
 def extract_goals(content: str, goals: str) -> str:

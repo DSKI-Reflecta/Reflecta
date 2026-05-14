@@ -3,6 +3,7 @@ Backend:
 - remove keywords as they are probably not needed
 
 Frontend:
+- Backend already sorts entries (GoalList)
 - Editing on detailed view throws an error, deleting as well
 - More filter and sorting opportunities for journal entries
 - Bigger box to write the Journal in
@@ -12,7 +13,6 @@ Frontend:
 
 General:
 - Besides the Journal, Goals and Calendar Section, also add Plans, Analytics and "Future-Me" letters
-- Connect journal entries to goals by relevance
 - Write AI Chatbot functionality
 - Possibility to include attachments to journals
 - Daily reminder to write journal entry
