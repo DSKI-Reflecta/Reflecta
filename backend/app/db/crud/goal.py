@@ -7,8 +7,6 @@ from ...models.goal import GoalCreate, GoalUpdate, GoalPriority
 from ..database import GoalModel
 
 
-# --- Goal CRUD (New functions, updated for priority and optional date) ---
-
 def get_goals(
     db: Session,
     skip: int = 0,
@@ -67,6 +65,7 @@ def update_goal(
                 setattr(db_goal, key, value.value)
             else:
                 setattr(db_goal, key, value)
+
         # Handle the case where targetDate might be None in the update
             if key == 'target_date':
                 setattr(db_goal, key, value)

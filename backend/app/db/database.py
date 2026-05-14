@@ -56,9 +56,10 @@ class JournalEntryModel(Base):
 class GoalModel(Base):
     """Model for goals."""
 
-    __tablename__ = "goals"  # Table name for goals
+    __tablename__ = "goals"
     id = Column(Integer, primary_key=True, index=True)
 
+    # Main fields
     title = Column(String, nullable=False)
     type = Column(String, nullable=False)  # 'One-time' or 'Recurring'
     target_date = Column(Date, nullable=True)  # Date for one-time goals
@@ -66,6 +67,8 @@ class GoalModel(Base):
     priority = Column(String, nullable=False, default="Low")
     description = Column(Text, nullable=True)
     progress = Column(Integer, nullable=False, default=0)
+
+    # Timestamps
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, nullable=True)
 

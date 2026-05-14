@@ -49,7 +49,7 @@ Your personal, context-aware companion
 * 📬 Can help with goal setting, mood reflection, plan adjustments
 * 🧠 Smart suggestions and check-ins
 
-🧭 8. “Future Me” Letters
+🧭 7. “Future Me” Letters
 Reflect forward.
 * 📝 Write to your future self (e.g., +7, +30 days)
 * 📬 Get a notification with your letter and agent comment:“Here’s what past-you hoped for. How do you feel about it now?

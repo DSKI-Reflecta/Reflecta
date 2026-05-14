@@ -12,8 +12,6 @@ class GoalPriority(str, Enum):
     LOW = "Low"
 
 
-# --- Goals Models (for different CRUD operations) ---
-
 class GoalBase(BaseModel):
     """Base model for Goal attributes."""
     title: str = Field(..., description="The title of the goal")
