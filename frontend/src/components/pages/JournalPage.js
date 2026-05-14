@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import EntryList from "../journal/EntryList";
 import EntryForm from "../journal/EntryForm";
 import EntryDetail from "../journal/EntryDetail";
-import Modal from "../common/Modal";
-import { Search as SearchIcon, Calendar as CalendarIcon } from "lucide-react";
+import {
+  Search as SearchIcon,
+  Calendar as CalendarIcon,
+  X,
+} from "lucide-react";
 import {
   fetchJournalEntries,
   createJournalEntry,
@@ -449,27 +452,39 @@ const JournalPage = () => {
       )}
 
       {showEntryFormModal && (
-        <Modal
-          title={editingEntry ? "Edit Entry" : "New Journal Entry"}
-          onClose={closeFormModal}
-        >
-          <EntryForm
-            onClose={closeFormModal}
-            onSave={handleSaveEntry}
-            editEntry={editingEntry}
-          />
-        </Modal>
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex justify-center items-center p-4">
+          <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full max-w-sm sm:max-w-md md:max-w-3xl lg:max-w-4xl xl:max-w-5xl p-6 max-h-[95vh] flex flex-col">
+            <div className="absolute top-4 right-4">
+              <button
+                type="button"
+                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                onClick={closeFormModal}
+              >
+                <span className="sr-only">Close</span>
+                <X className="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="pb-4 border-b border-gray-200 flex-shrink-0">
+              <h3 className="text-2xl font-bold leading-6 text-gray-900 break-words">
+                {editingEntry ? "Edit Entry" : "New Journal Entry"}
+              </h3>
+            </div>
+            <EntryForm
+              onClose={closeFormModal}
+              onSave={handleSaveEntry}
+              editEntry={editingEntry}
+            />
+          </div>
+        </div>
       )}
 
       {showEntryDetailModal && (
-        <Modal title="Journal Entry Detail" onClose={closeDetailModal}>
-          <EntryDetail
-            entry={selectedEntry}
-            onClose={closeDetailModal}
-            onEdit={handleEditFromDetail}
-            onDelete={handleDeleteEntry}
-          />
-        </Modal>
+        <EntryDetail
+          entry={selectedEntry}
+          onClose={closeDetailModal}
+          onEdit={handleEditFromDetail}
+          onDelete={handleDeleteEntry}
+        />
       )}
     </div>
   );

@@ -146,133 +146,136 @@ const EntryForm = ({ onClose, onSave, editEntry = null }) => {
   );
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 p-4 max-h-full overflow-y-auto"
-    >
-      <div>
-        <label
-          htmlFor="date"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Date
-        </label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={entry.date}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
+      <div className="flex-grow overflow-hidden pr-2 space-y-2">
+        <div>
+          <label
+            htmlFor="date"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Date
+          </label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={entry.date}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+          />
+        </div>
 
-      <div>
-        <label
-          htmlFor="title"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Title
-        </label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={entry.title}
-          onChange={handleChange}
-          placeholder="What's on your mind today?"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
-        />
-      </div>
+        <div>
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Title
+          </label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            value={entry.title}
+            onChange={handleChange}
+            placeholder="What's on your mind today?"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+          />
+        </div>
 
-      <div>
-        <label
-          htmlFor="content"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Journal Entry
-        </label>
-        <textarea
-          id="content"
-          name="content"
-          rows="4"
-          value={entry.content}
-          onChange={handleChange}
-          placeholder="Write your thoughts here..."
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          required
-        ></textarea>
-        {aiJournalingActive && (
-          <div className="mt-2 text-sm text-gray-600">
-            {loadingAiQuestion ? (
-              <span>Loading AI question...</span>
-            ) : (
-              <p className="italic">
-                {aiQuestion || "Start typing to get AI questions."}
-              </p>
+        <div>
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Journal Entry
+          </label>
+          <textarea
+            id="content"
+            name="content"
+            rows="6"
+            value={entry.content}
+            onChange={handleChange}
+            placeholder="Write your thoughts here..."
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            required
+          ></textarea>
+          {aiJournalingActive && (
+            <div className="mt-2 text-sm text-gray-600">
+              {loadingAiQuestion ? (
+                <span>Loading AI question...</span>
+              ) : (
+                <p className="italic">
+                  {aiQuestion || "Start typing to get AI questions."}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-start mb-4">
+          <button
+            type="button"
+            onClick={handleToggleAiJournaling}
+            className={`px-4 py-2 text-sm font-medium rounded-md flex items-center space-x-2 ${
+              aiJournalingActive
+                ? "bg-purple-600 text-white hover:bg-purple-700"
+                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+            }`}
+          >
+            <Sparkles className="h-4 w-4" />
+            <span>
+              {aiJournalingActive
+                ? "AI Journaling ON"
+                : "Activate AI Journaling"}
+            </span>
+          </button>
+        </div>
+
+        <div className="pt-2 border-t border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Track Your State
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {renderSlider(
+              "sentiment",
+              "Sentiment",
+              1,
+              5,
+              <Frown className="h-5 w-5 text-gray-500" />,
+              <Smile className="h-5 w-5 text-gray-500" />
+            )}
+            {renderSlider(
+              "sleep",
+              "Sleep Quality",
+              1,
+              5,
+              <Moon className="h-5 w-5 text-gray-500" />,
+              <Sun className="h-5 w-5 text-gray-500" />
+            )}
+            {renderSlider(
+              "stress",
+              "Stress Level",
+              1,
+              5,
+              <Feather className="h-5 w-5 text-gray-500" />,
+              <Zap className="h-5 w-5 text-gray-500" />
+            )}
+            {renderSlider(
+              "socialEngagement",
+              "Social Engagement",
+              1,
+              5,
+              <User className="h-5 w-5 text-gray-500" />,
+              <Users className="h-5 w-5 text-gray-500" />
             )}
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="flex justify-start mb-4">
-        <button
-          type="button"
-          onClick={handleToggleAiJournaling}
-          className={`px-4 py-2 text-sm font-medium rounded-md flex items-center space-x-2 ${
-            aiJournalingActive
-              ? "bg-purple-600 text-white hover:bg-purple-700"
-              : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-          }`}
-        >
-          <Sparkles className="h-4 w-4" />
-          <span>
-            {aiJournalingActive ? "AI Journaling ON" : "Activate AI Journaling"}
-          </span>
-        </button>
-      </div>
-
-      <div className="space-y-4 pt-4 border-t border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-800">
-          Track Your State
-        </h3>
-        {renderSlider(
-          "sentiment",
-          "Sentiment",
-          1,
-          5,
-          <Frown className="h-5 w-5 text-gray-500" />,
-          <Smile className="h-5 w-5 text-gray-500" />
-        )}
-        {renderSlider(
-          "sleep",
-          "Sleep Quality",
-          1,
-          5,
-          <Moon className="h-5 w-5 text-gray-500" />,
-          <Sun className="h-5 w-5 text-gray-500" />
-        )}
-        {renderSlider(
-          "stress",
-          "Stress Level",
-          1,
-          5,
-          <Feather className="h-5 w-5 text-gray-500" />,
-          <Zap className="h-5 w-5 text-gray-500" />
-        )}
-        {renderSlider(
-          "socialEngagement",
-          "Social Engagement",
-          1,
-          5,
-          <User className="h-5 w-5 text-gray-500" />,
-          <Users className="h-5 w-5 text-gray-500" />
-        )}
-      </div>
-
-      <div className="flex justify-end space-x-3 mt-6 flex-shrink-0">
+      <div className="flex justify-end space-x-3 mt-4 flex-shrink-0 pt-2 border-t border-gray-200">
         <button
           type="button"
           onClick={onClose}
