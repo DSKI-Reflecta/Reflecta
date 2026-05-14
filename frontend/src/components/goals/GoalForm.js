@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, Sparkles } from "lucide-react";
+import { enhanceGoalDescription } from "../../api/api";
+
 const GoalForm = ({ onClose, onSave, editGoal = null }) => {
   const [goal, setGoal] = useState({
     title: "",
@@ -10,6 +12,9 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
     description: "",
     progress: 0,
   });
+
+  const [enhancingDescription, setEnhancingDescription] = useState(false);
+  const [enhanceError, setEnhanceError] = useState(null);
 
   const priorityLevels = ["Low", "Medium", "High"];
   const getPriorityString = (sliderValue) => priorityLevels[sliderValue];
@@ -84,6 +89,23 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
     }
 
     onSave(goalDataToSave);
+  };
+
+  const handleEnhanceDescription = async () => {
+    setEnhancingDescription(true);
+    setEnhanceError(null);
+    try {
+      const enhancedText = await enhanceGoalDescription(
+        goal.title,
+        goal.description
+      );
+      setGoal((prev) => ({ ...prev, description: enhancedText }));
+    } catch (error) {
+      setEnhanceError("Failed to enhance description.");
+      console.error(error);
+    } finally {
+      setEnhancingDescription(false);
+    }
   };
 
   const renderPrioritySlider = () => (
@@ -225,6 +247,18 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
           placeholder="Add details about your goal..."
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         ></textarea>
+        <button
+          type="button"
+          onClick={handleEnhanceDescription}
+          disabled={enhancingDescription || !goal.title}
+          className="mt-2 px-3 py-1 text-sm font-medium rounded-md flex items-center space-x-1 bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
+        >
+          <Sparkles className="h-4 w-4" />
+          {enhancingDescription ? "Enhancing..." : "Enhance with AI"}
+        </button>
+        {enhanceError && (
+          <p className="mt-2 text-sm text-red-600">{enhanceError}</p>
+        )}
       </div>
 
       {editGoal?.id && (
@@ -251,22 +285,7 @@ const GoalForm = ({ onClose, onSave, editGoal = null }) => {
         </div>
       )}
 
-      <div className="flex items-center">
-        <input
-          type="checkbox"
-          id="ai-suggestions"
-          className="form-checkbox text-blue-600"
-          disabled
-        />
-        <label
-          htmlFor="ai-suggestions"
-          className="ml-2 text-sm text-gray-500 italic"
-        >
-          Get AI suggestions for this goal (Coming soon)
-        </label>
-      </div>
-
-      <div className="flex justify-end space-x-3">
+      <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
         <button
           type="button"
           onClick={onClose}

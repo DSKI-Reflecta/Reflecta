@@ -2,10 +2,17 @@ from datetime import datetime, timezone
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
-from ...models.entry_goal import JournalEntryCreate, JournalEntryUpdate
-from ..database import JournalEntryModel
-from ...services.gemini_agent import analyze_entry
-from .utils import get_goal_info, get_goals
+from app.models.entry_goal import JournalEntryCreate, JournalEntryUpdate
+from app.db.database import JournalEntryModel
+from app.services.gemini_agent import analyze_entry
+from app.db.crud.utils import get_goal_info, get_goals
+
+
+def get_journal_entries_by_user(db: Session, user_id: int) -> List[JournalEntryModel]:
+    """Get all journal entries for a user."""
+    # In a real app, you'd filter by user_id.
+    # For now, we'll return all entries.
+    return db.query(JournalEntryModel).all()
 
 
 def get_journal_entries(

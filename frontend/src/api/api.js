@@ -112,6 +112,17 @@ export const fetchGoals = async () => {
   return handleResponse(response);
 };
 
+export const enhanceGoalDescription = async (title, description) => {
+  const response = await fetch(`${API_BASE_URL}/goals/enhance-description`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title, description }),
+  });
+  return handleResponse(response);
+};
+
 export const createGoal = async (goalData) => {
   const response = await fetch(`${API_BASE_URL}/goals/`, {
     method: "POST",
@@ -182,4 +193,14 @@ export const getJournalQuestion = async (content) => {
   });
   const data = await handleResponse(response);
   return data.question;
+};
+
+export const recommendGoals = async () => {
+  const response = await fetch(`${API_BASE_URL}/goals/recommend`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return handleResponse(response);
 };

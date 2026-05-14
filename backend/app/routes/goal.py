@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from ..db.database import get_db
@@ -10,6 +10,15 @@ from ..db.crud.goal import (
     delete_goal
 )
 from ..models.entry_goal import GoalCreate, Goal, GoalUpdate
+from ..services.gemini_agent import recommend_goals, RecommendedGoal, enhance_goal_description
+from ..db.crud.journal import get_journal_entries_by_user
+from pydantic import BaseModel
+
+
+class EnhanceDescriptionRequest(BaseModel):
+    title: str
+    description: Optional[str] = None
+
 
 router = APIRouter(
     prefix="/goals",  # Prefix for goal endpoints
@@ -73,3 +82,32 @@ def delete_existing_goal(
         raise HTTPException(status_code=404, detail="Goal not found")
     return {"message":
             f"Journal entry with id {goal_id} deleted successfully"}
+
+
+@router.post("/recommend", response_model=List[RecommendedGoal])
+def recommend_new_goals(db: Session = Depends(get_db)) -> List[RecommendedGoal]:
+    """Recommend new goals based on journal entries"""
+    # Assuming a single user for now, with user_id=1
+    entries = get_journal_entries_by_user(db, user_id=1)
+    if not entries:
+        return []
+
+    # Combine entries into a single string
+    entry_content = "\n\n".join([entry.content for entry in entries])
+
+    # Get recommendations from the AI service
+    recommendations = recommend_goals(entry_content)
+    return recommendations
+
+
+@router.post("/enhance-description", response_model=str)
+def enhance_description_endpoint(
+    request: EnhanceDescriptionRequest,
+    db: Session = Depends(get_db)
+) -> str:
+    """Enhance or generate a goal description using AI"""
+    enhanced_description = enhance_goal_description(
+        title=request.title,
+        description=request.description
+    )
+    return enhanced_description

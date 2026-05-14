@@ -57,6 +57,62 @@ class SentimentList(BaseModel):
         description="List of sentiments extracted from the journal entry")
 
 
+class RecommendedGoal(BaseModel):
+    title: str = Field(description="A clear, concise title for the goal.")
+    description: str = Field(
+        description="A brief, motivating description of the goal."
+    )
+    category: str = Field(
+        description="A relevant category for the goal (e.g., Health, Career, Personal Growth)."
+    )
+
+
+class RecommendedGoalList(BaseModel):
+    goals: List[RecommendedGoal] = Field(
+        description="A list of recommended goals based on the user's journal entries."
+    )
+
+
+def recommend_goals(entries: str) -> List[RecommendedGoal]:
+    """Recommend goals based on journal entries."""
+    response = genai_client.models.generate_content(
+        model=model,
+        contents=f"""You are an AI assistant that helps users set meaningful goals based on their journal entries.
+
+Here are the user's recent journal entries:
+{entries}
+
+Your task is to recommend 3-5 specific, actionable, and positive goals based on the themes, challenges, and aspirations found in these entries.
+
+**Key Instructions:**
+- **Analyze Deeper Themes:** Look for recurring topics, struggles, or desires (e.g., feeling tired, stressed about work, wanting to connect more with friends).
+- **Frame Goals Positively:** Instead of "Stop being stressed," suggest "Develop a weekly routine for managing stress."
+- **Be Specific and Actionable:** A good goal is measurable. "Exercise more" is vague; "Go for a 30-minute walk three times a week" is better.
+- **Vary the Categories:** Suggest goals across different areas of life if possible (e.g., Health, Career, Social, Personal Growth).
+- **Keep Descriptions Brief:** The description should be motivating and explain the 'why' behind the goal in one or two sentences.
+
+**Example Output Structure:**
+- Goal 1:
+  - Title: "Establish a Consistent Morning Routine"
+  - Description: "Create a calming morning routine to start the day with less stress and more intention. This can help improve focus and overall well-being."
+  - Category: "Personal Growth"
+- Goal 2:
+  - Title: "Dedicate Time for a Hobby Weekly"
+  - Description: "Set aside at least one hour per week for a hobby you enjoy. This is a great way to recharge and reconnect with your passions outside of work."
+  - Category: "Health"
+
+**Important:**
+- Return ONLY the list of recommended goals in the specified JSON format.
+- Do not add any extra commentary or introductory text.
+""",
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": RecommendedGoalList,
+        },
+    )
+    return response.parsed.goals
+
+
 def format_journal_content(content: str) -> str:
     """Format the journal entry content."""
     response = genai_client.models.generate_content(
@@ -205,6 +261,40 @@ Examples:
   Question: "Outside of academics, what has been helping you unwind lately?"
 
 Question:"""
+    response = genai_client.models.generate_content(
+        model=model,
+        contents=prompt,
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": FormattedText,
+        },
+    )
+    return response.parsed.text.strip()
+
+
+def enhance_goal_description(title: str, description: str = None) -> str:
+    """Enhance or generate a goal description using AI."""
+    prompt = f"""You are an AI assistant specialized in writing clear, motivating, and actionable goal descriptions.
+
+Goal Title: {title}
+Current Description: {description if description else "None provided."}
+
+Your task:
+- If a description is provided, rewrite it to be more inspiring, clear, and actionable.
+- If no description is provided, generate a concise and motivating description based on the title.
+- The description should be 1-3 sentences long.
+- Focus on the positive outcome and actionable steps.
+- Return ONLY the enhanced or generated description. No extra commentary.
+
+Example:
+Title: "Read more books"
+Current Description: "I want to read more."
+Output: "Cultivate a consistent reading habit to expand your knowledge and relax your mind. Aim to read for at least 15 minutes daily."
+
+Title: "Learn a new skill"
+Current Description: "None provided."
+Output: "Embark on a journey to master a new skill that aligns with your personal or professional growth. Dedicate regular time to practice and learn."
+"""
     response = genai_client.models.generate_content(
         model=model,
         contents=prompt,
