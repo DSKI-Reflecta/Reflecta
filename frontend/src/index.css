@@ -58,3 +58,33 @@
     @apply badge bg-emerald-50 text-emerald-700;
   }
 }
+
+@keyframes reflecta-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+.reflecta-marquee {
+  animation: reflecta-marquee 30s linear infinite;
+}
+
+.reflecta-marquee:hover {
+  animation-play-state: paused;
+}
+
+.reflecta-grid-bg {
+  background-image: linear-gradient(to right, #f5f5f5 1px, transparent 1px),
+    linear-gradient(to bottom, #f5f5f5 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.reflecta-text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, #9b30ff, #6a0dad);
+}

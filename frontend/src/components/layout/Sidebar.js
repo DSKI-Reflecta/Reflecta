@@ -1,8 +1,8 @@
 import React from "react";
-import { BookOpen, Calendar, CheckSquare, BarChart, Shield, LogOut } from "lucide-react";
+import { BookOpen, Calendar, CheckSquare, BarChart, Shield, LogOut, DoorOpen } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, demoMode = false, onExitDemo }) => {
   const { logout, user } = useAuth();
 
   const navItems = [
@@ -10,8 +10,16 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     { id: "goals", icon: CheckSquare, label: "Goals" },
     { id: "calendar", icon: Calendar, label: "Calendar" },
     { id: "analytics", icon: BarChart, label: "Analytics" },
-    ...(user?.is_admin ? [{ id: "admin", icon: Shield, label: "Admin" }] : []),
+    ...(!demoMode && user?.is_admin ? [{ id: "admin", icon: Shield, label: "Admin" }] : []),
   ];
+
+  const handleExit = () => {
+    if (demoMode && onExitDemo) {
+      onExitDemo();
+    } else {
+      logout();
+    }
+  };
 
   return (
     <div className="w-16 md:w-64 bg-gray-50 flex flex-col">
@@ -99,11 +107,15 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
       <div className="px-2 pb-4">
         <button
-          onClick={logout}
+          onClick={handleExit}
           className="flex items-center w-full p-3 rounded-xl text-gray-500 hover:bg-red-50 hover:text-red-600 transition-all duration-150"
         >
-          <LogOut className="h-5 w-5 mx-auto md:mx-0 md:mr-3" />
-          <span className="hidden md:inline text-sm">Log Out</span>
+          {demoMode ? (
+            <DoorOpen className="h-5 w-5 mx-auto md:mx-0 md:mr-3" />
+          ) : (
+            <LogOut className="h-5 w-5 mx-auto md:mx-0 md:mr-3" />
+          )}
+          <span className="hidden md:inline text-sm">{demoMode ? "Exit Demo" : "Log Out"}</span>
         </button>
       </div>
     </div>

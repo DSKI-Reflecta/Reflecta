@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
-const LoginPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+const LoginPage = ({ onBack, initialMode = "login" }) => {
+  const [isLogin, setIsLogin] = useState(initialMode !== "signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,6 +29,14 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="absolute top-6 left-6 text-sm font-medium text-gray-500 hover:text-[#6A0DAD] transition-colors flex items-center gap-1"
+        >
+          <span aria-hidden="true">&larr;</span> Back to home
+        </button>
+      )}
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <svg
