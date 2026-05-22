@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Reflecta - Fachkonzept Landingpage</title>
+<style>
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: block;
+    src: url('fonts/PlusJakartaSans-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: block;
+    src: url('fonts/PlusJakartaSans-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+  :root {
+    --purple-1: #9B30FF;
+    --purple-2: #6A0DAD;
+    --ink: #171717;
+    --ink-2: #2b2b2b;
+    --muted: #6b7280;
+    --muted-2: #94a3b8;
+    --line: #e5e7eb;
+    --soft: #f8f7fb;
+    --soft-2: #f3e8ff;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+  }
+
+  @page { size: A4; margin: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    background: white;
+  }
+
+  body { font-size: 10pt; line-height: 1.5; }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 18mm 16mm 16mm 16mm;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .page-num {
+    position: absolute;
+    bottom: 10mm;
+    right: 16mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .page-foot {
+    position: absolute;
+    bottom: 10mm;
+    left: 16mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .page-head {
+    position: absolute;
+    top: 8mm;
+    left: 16mm;
+    right: 16mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8pt;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4mm;
+  }
+  .page-head .brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* COVER */
+  .cover {
+    background: white;
+    color: var(--ink);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 18mm;
+    background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 100%);
+  }
+  .cover::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4mm;
+    background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 100%);
+  }
+  .cover-inner { padding: 32mm 22mm 22mm; flex: 1; display: flex; flex-direction: column; position: relative; z-index: 1; }
+  .cover .logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 60mm; }
+  .cover .logo-mark {
+    width: 50px; height: 50px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4mm 10mm rgba(106,13,173,0.18);
+  }
+  .cover .logo-name { font-size: 19pt; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .cover .eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 6mm;
+  }
+  .cover h1 {
+    font-size: 36pt; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.05; margin-bottom: 6mm; color: var(--ink);
+  }
+  .cover h1 .accent { color: var(--purple-2); }
+  .cover .sub { font-size: 12pt; font-weight: 400; color: var(--ink-2); line-height: 1.5; max-width: 130mm; }
+  .cover-meta {
+    border-top: 1px solid var(--line);
+    padding: 10mm 22mm 16mm;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6mm;
+    background: white;
+    position: relative; z-index: 1;
+  }
+  .cover-meta .cell .k { font-size: 7.5pt; color: var(--purple-2); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2mm; font-weight: 700; }
+  .cover-meta .cell .v { font-size: 11pt; font-weight: 600; color: var(--ink); }
+
+  /* TYPOGRAPHY */
+  h2.section {
+    font-size: 20pt; font-weight: 800; letter-spacing: -0.02em;
+    color: var(--ink); margin-bottom: 3mm;
+  }
+  .section-eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 3mm;
+  }
+  .section-lead {
+    font-size: 10.5pt; color: var(--muted); line-height: 1.55;
+    max-width: 165mm; margin-bottom: 5mm;
+  }
+  h3.sub {
+    font-size: 12pt; font-weight: 700; color: var(--ink);
+    margin: 5mm 0 2mm; letter-spacing: -0.01em;
+  }
+  h4.subsub {
+    font-size: 10.5pt; font-weight: 700; color: var(--ink-2);
+    margin: 5mm 0 2mm;
+  }
+  p { margin-bottom: 3mm; color: var(--ink-2); }
+  ul, ol { padding-left: 5mm; margin-bottom: 3mm; }
+  ul li, ol li { margin-bottom: 1.5mm; color: var(--ink-2); }
+  .muted { color: var(--muted); }
+
+  /* TOC */
+  .toc {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding: 6mm 0;
+  }
+  .toc-row {
+    display: flex; align-items: baseline;
+    padding: 3mm 0; border-bottom: 1px dotted var(--line);
+    font-size: 11pt;
+  }
+  .toc-row:last-child { border-bottom: none; }
+  .toc-num { width: 14mm; font-weight: 700; color: var(--purple-2); font-size: 10.5pt; }
+  .toc-title { flex: 1; font-weight: 600; color: var(--ink); }
+  .toc-page { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 10pt; }
+
+  /* TABLE - Dialog List */
+  table.dl {
+    width: 100%; border-collapse: collapse; font-size: 9pt;
+    margin: 4mm 0 6mm;
+  }
+  table.dl thead th {
+    background: var(--ink); color: white;
+    text-align: left; font-weight: 600; font-size: 8.5pt;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3mm 3mm; border-right: 1px solid #333;
+  }
+  table.dl thead th:last-child { border-right: none; }
+  table.dl tbody td {
+    padding: 3mm 3mm; vertical-align: top;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  table.dl tbody td:last-child { border-right: none; }
+  table.dl tbody tr:nth-child(even) td { background: var(--soft); }
+  table.dl tbody td.id {
+    font-weight: 700; color: var(--purple-2);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+    font-size: 8.5pt;
+  }
+  table.dl tbody td.name { font-weight: 600; color: var(--ink); }
+  table.dl ul { padding-left: 4mm; margin: 0; }
+  table.dl ul li { margin-bottom: 0.5mm; font-size: 8.5pt; color: var(--ink-2); }
+  table.dl .pill {
+    display: inline-block; padding: 1mm 2mm; border-radius: 3mm;
+    font-size: 7.5pt; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill.public { background: #dcfce7; color: #166534; }
+  .pill.gated { background: #fef3c7; color: #92400e; }
+  .pill.modal { background: #f3e8ff; color: var(--purple-2); }
+  .pill.responsive { background: #dbeafe; color: #1e40af; }
+
+  /* INFORMATION ARCHITECTURE TREE */
+  .ia-tree {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    background: var(--soft);
+    padding: 8mm 6mm;
+    margin: 5mm 0;
+    page-break-inside: avoid;
+  }
+  .ia-root {
+    text-align: center;
+    margin-bottom: 8mm;
+  }
+  .ia-node {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    color: white;
+    padding: 3mm 6mm;
+    border-radius: 3mm;
+    font-weight: 700;
+    font-size: 10pt;
+    box-shadow: 0 2mm 5mm rgba(106,13,173,0.18);
+  }
+  .ia-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3mm;
+    position: relative;
+    padding-top: 7mm;
+  }
+  .ia-row::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 8.33%; right: 8.33%;
+    height: 4mm;
+    border-top: 1.5px solid var(--purple-2);
+    border-left: 1.5px solid var(--purple-2);
+    border-right: 1.5px solid var(--purple-2);
+    border-radius: 4mm 4mm 0 0;
+    border-bottom: none;
+  }
+  .ia-row::after {
+    content: "";
+    position: absolute;
+    top: -3mm; left: 50%;
+    width: 1.5px; height: 3mm;
+    background: var(--purple-2);
+  }
+  .ia-cell {
+    background: white;
+    border: 1.5px solid var(--purple-2);
+    border-radius: 3mm;
+    padding: 3mm;
+    font-size: 8.5pt;
+    text-align: center;
+    position: relative;
+  }
+  .ia-cell .cell-num {
+    color: var(--purple-2); font-weight: 700; font-size: 7.5pt;
+    letter-spacing: 0.1em; margin-bottom: 1mm; display: block;
+  }
+  .ia-cell .cell-name {
+    color: var(--ink); font-weight: 700; font-size: 9pt; margin-bottom: 1mm;
+  }
+  .ia-cell .cell-children {
+    color: var(--muted); font-size: 7.5pt; line-height: 1.4;
+  }
+  .ia-cell::before {
+    content: "";
+    position: absolute;
+    top: -7mm; left: 50%;
+    width: 1.5px; height: 7mm;
+    background: var(--purple-2);
+  }
+  .ia-aux-row {
+    margin-top: 6mm; padding-top: 6mm; border-top: 1px dashed var(--muted-2);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm;
+  }
+  .ia-aux-cell {
+    background: white; border: 1.5px dashed var(--muted-2);
+    border-radius: 3mm; padding: 3mm; font-size: 8.5pt; text-align: center;
+  }
+  .ia-aux-cell .cell-num { color: var(--muted); font-weight: 700; font-size: 7.5pt; letter-spacing: 0.1em; margin-bottom: 1mm; display: block; }
+  .ia-aux-cell .cell-name { color: var(--ink); font-weight: 700; font-size: 9pt; }
+  .ia-legend {
+    margin-top: 6mm; padding-top: 4mm; border-top: 1px solid var(--line);
+    display: flex; gap: 6mm; font-size: 8pt; color: var(--muted); justify-content: center;
+  }
+  .ia-legend .swatch {
+    display: inline-block; width: 4mm; height: 4mm;
+    border-radius: 1mm; margin-right: 2mm; vertical-align: middle;
+  }
+  .ia-legend .sw-primary { background: linear-gradient(135deg, var(--purple-1), var(--purple-2)); }
+  .ia-legend .sw-section { background: white; border: 1.5px solid var(--purple-2); }
+  .ia-legend .sw-aux { background: white; border: 1.5px dashed var(--muted-2); }
+
+  /* SWIMLANE */
+  .swimlane {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    overflow: hidden;
+    margin: 5mm 0;
+    page-break-inside: avoid;
+  }
+  .swim-row {
+    display: grid;
+    grid-template-columns: 30mm 1fr;
+    border-bottom: 1px solid var(--line);
+    min-height: 22mm;
+  }
+  .swim-row:last-child { border-bottom: none; }
+  .swim-label {
+    background: var(--ink);
+    color: white;
+    padding: 3mm 3mm;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex; align-items: center;
+    writing-mode: horizontal-tb;
+  }
+  .swim-label .l-name { line-height: 1.3; }
+  .swim-row.user .swim-label { background: var(--purple-2); }
+  .swim-row.system .swim-label { background: #1e293b; }
+  .swim-row.ai .swim-label { background: #047857; }
+
+  .swim-track {
+    position: relative;
+    padding: 4mm;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .swim-step {
+    background: white;
+    border: 1.5px solid var(--purple-2);
+    border-radius: 3mm;
+    padding: 2.5mm 3mm;
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+    min-width: 26mm;
+    max-width: 36mm;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 1mm 2mm rgba(0,0,0,0.04);
+  }
+  .swim-step.diamond {
+    background: #fef3c7;
+    border-color: #d97706;
+    border-radius: 0;
+    transform: rotate(0deg);
+  }
+  .swim-step.terminal {
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    color: white;
+    border-color: transparent;
+  }
+  .swim-step.system {
+    border-color: #1e293b;
+    background: white;
+  }
+  .swim-step.ai {
+    border-color: #047857;
+    background: #ecfdf5;
+  }
+  .swim-step .step-num {
+    display: block; font-size: 6.5pt; color: var(--purple-2);
+    font-weight: 700; letter-spacing: 0.1em; margin-bottom: 0.5mm;
+  }
+  .swim-step.terminal .step-num { color: white; opacity: 0.7; }
+  .swim-step.diamond .step-num { color: #d97706; }
+  .swim-step.system .step-num { color: #1e293b; }
+  .swim-step.ai .step-num { color: #047857; }
+  .arrow {
+    flex: 0 0 auto;
+    width: 8mm;
+    height: 1.5px;
+    background: var(--ink);
+    position: relative;
+    margin: 0 1mm;
+  }
+  .arrow::after {
+    content: "";
+    position: absolute;
+    right: -1px; top: 50%;
+    transform: translateY(-50%);
+    border-left: 2.5mm solid var(--ink);
+    border-top: 1.5mm solid transparent;
+    border-bottom: 1.5mm solid transparent;
+  }
+  .arrow.short { width: 4mm; }
+  .swim-cross {
+    grid-column: 1 / -1;
+    height: 0;
+    border-top: 1.5px dashed #94a3b8;
+    margin: 0;
+    position: relative;
+  }
+  .swim-jump {
+    background: white;
+    border: 1.5px dashed var(--muted-2);
+    color: var(--muted);
+    font-size: 7pt;
+    padding: 1mm 2mm;
+    border-radius: 3mm;
+    font-weight: 600;
+    margin: 0 1mm;
+  }
+
+  /* WIREFRAME PAGE */
+  .wf-block {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    overflow: hidden;
+    margin: 4mm 0 8mm;
+    background: white;
+    page-break-inside: avoid;
+  }
+  .wf-meta {
+    background: var(--ink);
+    color: white;
+    padding: 4mm 5mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .wf-meta .wf-id {
+    font-size: 8pt; letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 1mm;
+  }
+  .wf-meta .wf-name {
+    font-size: 12pt; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .wf-meta .wf-tag {
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    padding: 1.5mm 3mm; border-radius: 3mm;
+    font-size: 7.5pt; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .wf-image-wrap {
+    position: relative;
+    background: var(--soft);
+    padding: 0;
+  }
+  .wf-image-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+  .wf-anno {
+    position: absolute;
+    background: var(--ink);
+    color: white;
+    width: 7mm; height: 7mm;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9pt; font-weight: 800;
+    border: 2px solid white;
+    outline: 1px solid rgba(0,0,0,0.25);
+    z-index: 5;
+  }
+  .wf-anno.purple { background: var(--purple-2); }
+  .wf-callouts {
+    background: white;
+    padding: 5mm;
+    border-top: 1px solid var(--line);
+  }
+  .wf-callouts h5 {
+    font-size: 8.5pt; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin-bottom: 3mm;
+  }
+  .wf-callouts ol {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2mm 6mm;
+  }
+  .wf-callouts ol li {
+    font-size: 9pt;
+    color: var(--ink-2);
+    padding-left: 8mm;
+    position: relative;
+    line-height: 1.5;
+  }
+  .wf-callouts ol li::before {
+    content: counter(callout);
+    counter-increment: callout;
+    position: absolute;
+    left: 0; top: 0.4mm;
+    width: 5mm; height: 5mm;
+    background: var(--ink);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7pt; font-weight: 700;
+  }
+  .wf-callouts ol { counter-reset: callout; }
+  .wf-callouts ol li b { color: var(--ink); font-weight: 700; }
+
+  /* DIALOG GROUPS */
+  .dl-group {
+    margin: 4mm 0 6mm;
+  }
+  .dl-group h3 {
+    font-size: 11.5pt; font-weight: 700; color: var(--ink);
+    border-left: 4px solid var(--purple-2);
+    padding: 1mm 0 1mm 4mm;
+    margin-bottom: 3mm;
+  }
+
+  /* MISC */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 3mm;
+    padding: 4mm;
+    background: var(--soft);
+  }
+  .info-card h4 {
+    font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 2mm;
+  }
+  .info-card p { font-size: 9.5pt; color: var(--ink-2); margin: 0; }
+
+  .legend-row {
+    display: flex; gap: 5mm; flex-wrap: wrap;
+    background: var(--soft);
+    border-radius: 3mm;
+    padding: 3mm 4mm;
+    margin-bottom: 4mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+  }
+  .legend-row span { display: inline-flex; align-items: center; gap: 2mm; }
+  .legend-dot { width: 3.5mm; height: 3.5mm; border-radius: 50%; display: inline-block; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER                                                -->
+<!-- ============================================================ -->
+<div class="page cover">
+  <div class="cover-inner">
+    <div class="logo-row">
+      <div class="logo-mark">
+        <svg width="32" height="32" viewBox="10 10 40 40" fill="none">
+          <line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="1.8"/>
+          <path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.4" fill="none" opacity="0.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-name">Reflecta</div>
+    </div>
+
+    <div class="eyebrow">Fachkonzept &middot; Landingpage</div>
+    <h1>Fachkonzept<br>der <span class="accent">Landingpage</span>.</h1>
+    <p class="sub">Dialogliste, Informationsarchitektur, Swimlane-Ablaufdiagramm und annotierte Wireframes der &ouml;ffentlichen Einstiegsfl&auml;che der Reflecta-Plattform.</p>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
+    <div class="cell"><div class="k">Liefergegenstand</div><div class="v">Landingpage Fachkonzept</div></div>
+    <div class="cell"><div class="k">Datum</div><div class="v">22.05.2026</div></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: TABLE OF CONTENTS + INTRO                            -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>Fachkonzept Landingpage</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Dokumentübersicht</div>
+    <h2 class="section">Inhalt</h2>
+    <p class="section-lead">Dieses Dokument spezifiziert die öffentliche Landingpage von Reflecta. Sie ist die erste Oberfläche, der ein potenzieller Nutzer begegnet, und die einzige Ansicht, die ohne Anmeldung erreichbar ist. Das Fachkonzept beschreibt sämtliche Dialoge, deren Informationsarchitektur, den Nutzer-System-Ablauf sowie annotierte Wireframes auf Basis des produktiven Stands.</p>
+
+    <div class="toc">
+      <div class="toc-row"><div class="toc-num">1</div><div class="toc-title">Geltungsbereich &amp; Konventionen</div><div class="toc-page">3</div></div>
+      <div class="toc-row"><div class="toc-num">2</div><div class="toc-title">Dialogliste</div><div class="toc-page">4-5</div></div>
+      <div class="toc-row"><div class="toc-num">3</div><div class="toc-title">Informationsarchitektur</div><div class="toc-page">6</div></div>
+      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">7</div></div>
+      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframes</div><div class="toc-page">8-13</div></div>
+      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">D-01 Hero</div><div class="toc-page">8</div></div>
+      <div class="toc-row"><div class="toc-num">5.2</div><div class="toc-title">D-02 Metrics-Laufband</div><div class="toc-page">9</div></div>
+      <div class="toc-row"><div class="toc-num">5.3</div><div class="toc-title">D-03 Feature - Journal</div><div class="toc-page">10</div></div>
+      <div class="toc-row"><div class="toc-num">5.4</div><div class="toc-title">D-04 Feature - Analytics</div><div class="toc-page">11</div></div>
+      <div class="toc-row"><div class="toc-num">5.5</div><div class="toc-title">D-05 Feature - KI-Synthese</div><div class="toc-page">12</div></div>
+      <div class="toc-row"><div class="toc-num">5.6</div><div class="toc-title">D-06 Reviews</div><div class="toc-page">13</div></div>
+      <div class="toc-row"><div class="toc-num">5.7</div><div class="toc-title">D-07 Final-CTA &amp; Footer</div><div class="toc-page">14</div></div>
+      <div class="toc-row"><div class="toc-num">5.8</div><div class="toc-title">D-08 Auth-Dialog (Anmelden / Registrieren)</div><div class="toc-page">15</div></div>
+      <div class="toc-row"><div class="toc-num">5.9</div><div class="toc-title">D-09 Mobile Navigation</div><div class="toc-page">16</div></div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">02</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SCOPE & CONVENTIONS                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>1. Geltungsbereich &amp; Konventionen</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 1</div>
+    <h2 class="section">Geltungsbereich &amp; Konventionen</h2>
+    <p class="section-lead">Die Landingpage ist der einzige Dialog, der ohne Anmeldung erreichbar ist. Sie übergibt den Besucher an einen von drei Folgepfaden: Registrierung, Anmeldung oder eine interaktive Demo des angemeldeten Produkts. Dieses Dokument umfasst die Landingpage selbst sowie den daraus geöffneten Auth-Dialog.</p>
+
+    <h3 class="sub">1.1 Im Geltungsbereich</h3>
+    <ul>
+      <li><b>Landingpage</b> mit Hero, Metrics-Laufband, drei Feature-Abschnitten, Reviews, CTA und Footer.</li>
+      <li><b>Auth-Dialog</b>, erreichbar von der Landingpage, mit den Modi Anmelden und Registrieren.</li>
+      <li><b>Mobile Navigation</b> als responsive Variante der oberen Navigationsleiste.</li>
+    </ul>
+
+    <h3 class="sub">1.2 Außerhalb des Geltungsbereichs</h3>
+    <ul>
+      <li>Angemeldetes Produkt (Journal, Ziele, Kalender, Analytics) - in einem separaten Fachkonzept dokumentiert.</li>
+      <li>Demo-Banner und Sign-up-Modal innerhalb der angemeldeten Anwendung nach Übergabe von der Landingpage.</li>
+      <li>Backend-API-Schnittstellen.</li>
+    </ul>
+
+    <h3 class="sub">1.3 Bezeichner-Konventionen</h3>
+    <div class="grid-2">
+      <div class="info-card">
+        <h4>Dialog-IDs</h4>
+        <p><b>D-01 bis D-09</b> kennzeichnen jeden Dialog bzw. Teildialog. Hero, Laufband, Feature-Blöcke, Reviews, CTA, Footer, Auth-Dialog und Mobile Navigation tragen jeweils einen eigenen Bezeichner, der in der Dialogliste, im IA-Baum und in den Wireframe-Annotationen wieder aufgegriffen wird.</p>
+      </div>
+      <div class="info-card">
+        <h4>Element-IDs</h4>
+        <p><b>D-01.1, D-01.2, ...</b> kennzeichnen einzelne interaktive Elemente innerhalb eines Dialogs. Sie werden im Swimlane-Ablauf und in den nummerierten Callouts der Wireframes referenziert.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">1.4 Marken- und Typografie-Konventionen</h3>
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:linear-gradient(135deg,#9B30FF,#6A0DAD)"></span>Primärer Lila-Verlauf #9B30FF -> #6A0DAD</span>
+      <span><span class="legend-dot" style="background:#171717"></span>Schrift #171717</span>
+      <span><span class="legend-dot" style="background:#f3e8ff;border:1px solid #ddd"></span>Helles Lila #F3E8FF</span>
+      <span><span class="legend-dot" style="background:#16a34a"></span>Erfolg #16A34A</span>
+    </div>
+    <p>Schriftfamilie ist Plus Jakarta Sans. Display-Gewichte liegen bei 700 - 800, Fließtext bei 400, Beschriftungen bei 500 - 600.</p>
+
+    <h3 class="sub">1.5 Responsive-Breakpoints</h3>
+    <p>Es gelten zwei Layout-Breakpoints: das Desktop-Layout ab 1024 px und das Mobile-Layout unter 768 px. Dazwischen klappt die Navigation in die Mobile-Variante (D-09) und Feature-Blöcke stapeln sich vertikal. Wireframes werden im Desktop-Layout gezeigt, sofern der Dialog nicht mobilspezifisch ist.</p>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">03</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: DIALOG LIST PART 1                                   -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>2. Dialogliste</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 2</div>
+    <h2 class="section">Dialogliste</h2>
+    <p class="section-lead">Jeder Dialog der Landingpage ist mit Bezeichner, Typ, enthaltenen Elementen und Zielen seiner Aktionen aufgeführt. Die Element-Bezeichner werden im Swimlane-Diagramm und in den Wireframe-Callouts erneut aufgegriffen.</p>
+
+    <table class="dl">
+      <colgroup>
+        <col style="width: 13mm">
+        <col style="width: 32mm">
+        <col style="width: 22mm">
+        <col>
+        <col style="width: 35mm">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Dialog</th>
+          <th>Typ</th>
+          <th>Elemente</th>
+          <th>Ziele</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">D-00</td>
+          <td class="name">Obere Navigationsleiste<br><span class="pill responsive">Sticky</span></td>
+          <td>Persistent</td>
+          <td>
+            <ul>
+              <li>D-00.1 Markenzeichen + Wortmarke</li>
+              <li>D-00.2 Ankerlink "Features"</li>
+              <li>D-00.3 Ankerlink "The Science"</li>
+              <li>D-00.4 Ankerlink "Reviews"</li>
+              <li>D-00.5 Textbutton "Log In"</li>
+              <li>D-00.6 Primärer Button "Start Reflecting"</li>
+              <li>D-00.7 Hamburger-Toggle (nur mobil)</li>
+            </ul>
+          </td>
+          <td>
+            #features, #science, #reviews, D-08 (Anmelden), D-08 (Registrieren), D-09 (Drawer)
+          </td>
+        </tr>
+        <tr>
+          <td class="id">D-01</td>
+          <td class="name">Hero<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-01.1 Headline "Quantify your consciousness."</li>
+              <li>D-01.2 Sub-Headline (Nutzenversprechen)</li>
+              <li>D-01.3 Primärer CTA "Start Reflecting"</li>
+              <li>D-01.4 Sekundärer CTA "Try live demo"</li>
+              <li>D-01.5 Ankerlink "or see how it works"</li>
+              <li>D-01.6 Hero-Illustration (App-Shell-Mockup)</li>
+            </ul>
+          </td>
+          <td>
+            D-08 (Registrieren), Demo (angemeldete Anwendung), #features
+          </td>
+        </tr>
+        <tr>
+          <td class="id">D-02</td>
+          <td class="name">Metrics-Laufband<br><span class="pill public">Public</span></td>
+          <td>Dekorativ</td>
+          <td>
+            <ul>
+              <li>D-02.1 Automatisch scrollende Karten: Stress, Mood, Social, Sleep, AI Synthesis Accuracy</li>
+            </ul>
+          </td>
+          <td>Keine (dekorativ)</td>
+        </tr>
+        <tr>
+          <td class="id">D-03</td>
+          <td class="name">Feature - Journal<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-03.1 Section-Eyebrow "The Reflecta Architecture"</li>
+              <li>D-03.2 Abschnittstitel "Decode your cognitive DNA."</li>
+              <li>D-03.3 Headline "Capture the human frequency."</li>
+              <li>D-03.4 Feature-Text + Bullet-Checkliste</li>
+              <li>D-03.5 Interaktives Journal-Mockup (live)</li>
+            </ul>
+          </td>
+          <td>Keine (Demo auf der Seite)</td>
+        </tr>
+        <tr>
+          <td class="id">D-04</td>
+          <td class="name">Feature - Analytics<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-04.1 Headline "Visualize ontological symmetry."</li>
+              <li>D-04.2 Feature-Text</li>
+              <li>D-04.3 Interaktives Analytics-Dashboard-Mockup</li>
+              <li>D-04.4 Inline-Link "Try demo"</li>
+            </ul>
+          </td>
+          <td>Demo (angemeldete Anwendung, Analytics-Tab)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">04</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: DIALOG LIST PART 2                                   -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>2. Dialogliste (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <table class="dl">
+      <colgroup>
+        <col style="width: 13mm">
+        <col style="width: 32mm">
+        <col style="width: 22mm">
+        <col>
+        <col style="width: 35mm">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Dialog</th>
+          <th>Typ</th>
+          <th>Elemente</th>
+          <th>Ziele</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">D-05</td>
+          <td class="name">Feature - KI-Synthese<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-05.1 Headline "Deep synthesis via AI Resonance."</li>
+              <li>D-05.2 Feature-Text</li>
+              <li>D-05.3 KI-Insight-Karte (Beispielzitat)</li>
+              <li>D-05.4 Chat-Vorschau-Kachel</li>
+            </ul>
+          </td>
+          <td>Keine (Vorschau auf der Seite)</td>
+        </tr>
+        <tr>
+          <td class="id">D-06</td>
+          <td class="name">Reviews<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-06.1 Section-Eyebrow "Gravitational Pull"</li>
+              <li>D-06.2 Abschnittstitel</li>
+              <li>D-06.3 Drei Review-Karten (Sternebewertung, Zitat, Autor, Rolle)</li>
+            </ul>
+          </td>
+          <td>Keine</td>
+        </tr>
+        <tr>
+          <td class="id">D-07</td>
+          <td class="name">Final-CTA<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-07.1 Markenzeichen</li>
+              <li>D-07.2 Headline "Collapse the wave function of your thoughts."</li>
+              <li>D-07.3 Sub-Headline</li>
+              <li>D-07.4 Primärer CTA "Sign Up For Free"</li>
+              <li>D-07.5 Sekundärer CTA "Try live demo"</li>
+              <li>D-07.6 Footer (Legal-Links + Copyright)</li>
+            </ul>
+          </td>
+          <td>D-08 (Registrieren), Demo, Scroll nach oben</td>
+        </tr>
+        <tr>
+          <td class="id">D-08</td>
+          <td class="name">Auth-Dialog<br><span class="pill gated">Gated</span></td>
+          <td>Seite</td>
+          <td>
+            <ul>
+              <li>D-08.1 Back-Link "Back to home"</li>
+              <li>D-08.2 Brand-Lockup</li>
+              <li>D-08.3 Tab-Switch "Log In" / "Sign Up"</li>
+              <li>D-08.4 E-Mail-Feld</li>
+              <li>D-08.5 Passwort-Feld (Mindestlänge 8)</li>
+              <li>D-08.6 Inline-Fehlerbereich</li>
+              <li>D-08.7 Primärer Submit "Log In" / "Create Account"</li>
+              <li>D-08.8 OR-Trenner</li>
+              <li>D-08.9 Sekundäre Anmeldung "Continue with GitHub"</li>
+            </ul>
+          </td>
+          <td>D-01 (Zurück), angemeldete Anwendung, GitHub-OAuth</td>
+        </tr>
+        <tr>
+          <td class="id">D-09</td>
+          <td class="name">Mobile Navigation<br><span class="pill modal">Modal</span></td>
+          <td>Slide-down-Panel</td>
+          <td>
+            <ul>
+              <li>D-09.1 Ankerlink "Features"</li>
+              <li>D-09.2 Ankerlink "The Science"</li>
+              <li>D-09.3 Ankerlink "Reviews"</li>
+              <li>D-09.4 Textbutton "Log In"</li>
+              <li>D-09.5 Primärer Button "Start Free Trial"</li>
+              <li>D-09.6 Schließen-X (in der Navigationsleiste)</li>
+            </ul>
+          </td>
+          <td>#features, #science, #reviews, D-08, D-01</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub">2.1 Elementtypen und Lebenszyklus</h3>
+    <p>Öffentliche Abschnitte (D-01 - D-07) sind nicht gesichert, für jeden Besucher sichtbar und indexierbar. Gesicherte Dialoge (D-08) erfordern eine Eingabe von Zugangsdaten, bevor sie an die angemeldete Anwendung übergeben. Modale Dialoge (D-09) überlagern den aktuellen Dialog und schließen ohne Routenwechsel. Die persistente Navigationsleiste (D-00) und der Footer (D-07.6) sind auf jedem Abschnitt der Landingpage vorhanden.</p>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">05</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: INFORMATION ARCHITECTURE                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>3. Informationsarchitektur</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 3</div>
+    <h2 class="section">Informationsarchitektur</h2>
+    <p class="section-lead">Die Landingpage ist eine einzelne scrollbare Oberfläche. Ihre Abschnitte liegen nebeneinander unter dem Public Root und bilden die einzige Hierarchieebene, die ein Besucher durchläuft. Hilfsdialoge (Auth, Drawer) liegen außerhalb des Hauptpfades und sind nur über Aktionen auf diesem Pfad erreichbar.</p>
+
+    <div class="ia-tree">
+      <div class="ia-root">
+        <div class="ia-node">Reflecta &middot; Public Root</div>
+      </div>
+
+      <div class="ia-row">
+        <div class="ia-cell">
+          <span class="cell-num">D-01</span>
+          <div class="cell-name">Hero</div>
+          <div class="cell-children">Headline, zwei CTAs, App-Shell-Mock</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-02</span>
+          <div class="cell-name">Metrics-Laufband</div>
+          <div class="cell-children">5 KPI-Karten, Autoscroll</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-03 / D-04 / D-05</span>
+          <div class="cell-name">Features</div>
+          <div class="cell-children">Journal &middot; Analytics &middot; KI</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-06</span>
+          <div class="cell-name">Reviews</div>
+          <div class="cell-children">3 Testimonial-Karten</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-07</span>
+          <div class="cell-name">Final-CTA</div>
+          <div class="cell-children">Headline, zwei CTAs, Footer</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-00</span>
+          <div class="cell-name">Obere Navigation</div>
+          <div class="cell-children">Anker, Anmelden, Registrieren</div>
+        </div>
+      </div>
+
+      <div class="ia-aux-row">
+        <div class="ia-aux-cell">
+          <span class="cell-num">D-08</span>
+          <div class="cell-name">Auth-Dialog (Anmelden / Registrieren)</div>
+        </div>
+        <div class="ia-aux-cell">
+          <span class="cell-num">D-09</span>
+          <div class="cell-name">Mobile Navigation</div>
+        </div>
+        <div class="ia-aux-cell">
+          <span class="cell-num">EXT</span>
+          <div class="cell-name">Angemeldete Anwendung (Demo / Real)</div>
+        </div>
+      </div>
+
+      <div class="ia-legend">
+        <span><span class="swatch sw-primary"></span>Root</span>
+        <span><span class="swatch sw-section"></span>Abschnitt im Public Path</span>
+        <span><span class="swatch sw-aux"></span>Hilfsdialog oder externe Oberfläche</span>
+      </div>
+    </div>
+
+    <h3 class="sub">3.1 Navigationsregeln</h3>
+    <ul>
+      <li>Die obere Navigationsleiste ist sticky und scrollt alle Ankerziele weich in den Sichtbereich.</li>
+      <li>Das Markenzeichen in D-00 scrollt zurück zum Hero (D-01) und verlässt den Public Path nicht.</li>
+      <li>"Start Reflecting" (D-00.6, D-01.3, D-07.4) führt in den Auth-Dialog (D-08) im Registrierungsmodus.</li>
+      <li>"Log In" (D-00.5) führt in den Auth-Dialog (D-08) im Anmeldemodus.</li>
+      <li>"Try live demo" (D-01.4, D-07.5) und "Try demo" (D-04.4) führen in die angemeldete Anwendung mit vorbefüllten Demo-Daten.</li>
+      <li>Der Auth-Dialog bietet einen Back-Link (D-08.1), der zum Public Root zurückkehrt, ohne die Scrollposition zu verlieren.</li>
+    </ul>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">06</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: SWIMLANE                                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 4</div>
+    <h2 class="section">Swimlane-Ablaufdiagramm</h2>
+    <p class="section-lead">Drei Lanes erfassen die Akteure, die die Landingpage-Erfahrung treiben: den Besucher, den Front-end-Client und die KI/Backend-Dienste, die auf Aktionen auf der Seite antworten. Das Diagramm zeigt den kanonischen Verlauf vom Eintreffen bis zu einem der drei Ausgangspfade (Registrieren, Anmelden, Demo).</p>
+
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:#6A0DAD"></span>Besucher (User)</span>
+      <span><span class="legend-dot" style="background:#1e293b"></span>Front-end (System)</span>
+      <span><span class="legend-dot" style="background:#047857"></span>KI / Backend</span>
+      <span><span class="legend-dot" style="background:#fef3c7;border:1px solid #d97706"></span>Entscheidung</span>
+      <span><span class="legend-dot" style="background:linear-gradient(135deg,#9B30FF,#6A0DAD)"></span>Terminal</span>
+    </div>
+
+    <div class="swimlane">
+      <!-- Lane 1: User -->
+      <div class="swim-row user">
+        <div class="swim-label"><div class="l-name">Besucher<br>(User)</div></div>
+        <div class="swim-track">
+          <div class="swim-step"><span class="step-num">U1</span>Aufruf von /</div>
+          <div class="arrow"></div>
+          <div class="swim-step"><span class="step-num">U2</span>Scrollen &amp; Erkunden</div>
+          <div class="arrow"></div>
+          <div class="swim-step diamond"><span class="step-num">U3</span>Absicht wählen</div>
+          <div class="arrow"></div>
+          <div class="swim-step"><span class="step-num">U4</span>CTA klicken<br>(Reg / Login / Demo)</div>
+        </div>
+      </div>
+
+      <!-- Lane 2: System -->
+      <div class="swim-row system">
+        <div class="swim-label"><div class="l-name">Front-end<br>(System)</div></div>
+        <div class="swim-track">
+          <div class="swim-step system"><span class="step-num">S1</span>Landing rendern (D-01 - D-07)</div>
+          <div class="arrow"></div>
+          <div class="swim-step system"><span class="step-num">S2</span>Anker-Scroll &amp; Live-Mocks</div>
+          <div class="arrow"></div>
+          <div class="swim-step system"><span class="step-num">S3</span>Mockup-Zustand laden</div>
+          <div class="arrow"></div>
+          <div class="swim-step system"><span class="step-num">S4</span>Route zu D-08 oder Demo</div>
+        </div>
+      </div>
+
+      <!-- Lane 3: AI / Backend -->
+      <div class="swim-row ai">
+        <div class="swim-label"><div class="l-name">KI /<br>Backend</div></div>
+        <div class="swim-track">
+          <div class="swim-step ai"><span class="step-num">A1</span>Idle</div>
+          <div class="arrow"></div>
+          <div class="swim-step ai"><span class="step-num">A2</span>Fragenpool an D-03 liefern</div>
+          <div class="arrow"></div>
+          <div class="swim-step ai"><span class="step-num">A3</span>Demo-Daten beim Demo-Einstieg laden</div>
+          <div class="arrow"></div>
+          <div class="swim-step ai"><span class="step-num">A4</span>Auth-Handshake oder Session</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub">4.1 Entscheidungszweige bei U3</h3>
+    <div class="grid-3">
+      <div class="info-card">
+        <h4>Zweig A &middot; Registrieren</h4>
+        <p>U4 wird ausgelöst durch D-00.6, D-01.3 oder D-07.4. S4 führt zu D-08 im Registrierungsmodus. A4 liefert eine neue Session und die Anwendung wird geladen.</p>
+      </div>
+      <div class="info-card">
+        <h4>Zweig B &middot; Anmelden</h4>
+        <p>U4 wird ausgelöst durch D-00.5. S4 führt zu D-08 im Anmeldemodus. A4 ist entweder erfolgreich und die Anwendung wird geladen, oder gibt einen Inline-Fehler in D-08.6 zurück.</p>
+      </div>
+      <div class="info-card">
+        <h4>Zweig C &middot; Demo</h4>
+        <p>U4 wird ausgelöst durch D-01.4, D-04.4 oder D-07.5. S4 setzt das Demo-Flag, A3 lädt den Demo-Datensatz und die Anwendung wird mit aktivem Demo-Banner gemountet.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">4.2 Lane-übergreifende Interaktion</h3>
+    <p>Das Journal-Mockup (D-03.5) ist die einzige Stelle der Public Surface, an der Lane 3 aktiv auf Nutzereingaben antwortet: Jede Tipp-Pause löst einen entprellten Aufruf aus, der einen Prompt aus einem kuratierten Fragenpool zurückgibt. Es verlassen keine persönlichen Daten den Client und die Antwort wird als kursiver Prompt-Text unter dem Eingabefeld ausgegeben.</p>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">07</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: WIREFRAME D-01 HERO                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.1 Wireframe D-01 Hero</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.1</div>
+    <h2 class="section">D-01 Hero</h2>
+    <p class="section-lead">Erster Viewport above the fold. Vermittelt das Nutzenversprechen in zwei Zeilen, zeigt die persistente obere Navigation und bietet zwei klar abgegrenzte Calls to Action.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-01 &middot; Hero</div>
+          <div class="wf-name">Quantify your consciousness.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Above the fold</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/01_hero.png" alt="Hero">
+        <div class="wf-anno purple" style="top: 4%; left: 6%;">1</div>
+        <div class="wf-anno purple" style="top: 4%; right: 26%;">2</div>
+        <div class="wf-anno purple" style="top: 4%; right: 4%;">3</div>
+        <div class="wf-anno" style="top: 28%; left: 6%;">4</div>
+        <div class="wf-anno" style="top: 65%; left: 6%;">5</div>
+        <div class="wf-anno" style="top: 65%; left: 24%;">6</div>
+        <div class="wf-anno" style="top: 45%; right: 4%;">7</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Brand-Lockup (D-00.1)</b> - Icon + Wortmarke, scrollt beim Klick nach oben.</li>
+          <li><b>Anker-Navigation (D-00.2 - D-00.4)</b> - weicher Scroll zu Features, The Science, Reviews.</li>
+          <li><b>Auth-Steuerung (D-00.5 - D-00.6)</b> - Textbutton "Log In" + Gradient-Pill "Start Reflecting".</li>
+          <li><b>Headline (D-01.1)</b> - Schwarz-Lila-Kontrast auf dem Nutzenversprechen.</li>
+          <li><b>Primärer CTA (D-01.3)</b> - "Start Reflecting" -> Auth-Dialog im Registrierungsmodus.</li>
+          <li><b>Sekundärer CTA (D-01.4)</b> - "Try live demo" -> vorbefüllte angemeldete Demo.</li>
+          <li><b>Hero-Illustration (D-01.6)</b> - rotiertes App-Shell-Mock als visueller Produkt-Anker.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">08</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: D-02 MARQUEE                                         -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.2 Wireframe D-02 Metrics-Laufband</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.2</div>
+    <h2 class="section">D-02 Metrics-Laufband</h2>
+    <p class="section-lead">Automatisch scrollendes Band aus fünf Metrik-Karten, die zeigen, welche Signale Reflecta im Produkt erfasst. Rein dekorativ - die Karten verlinken nicht.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-02 &middot; Metrics-Laufband</div>
+          <div class="wf-name">Automatisch scrollendes Proof-Band</div>
+        </div>
+        <div class="wf-tag">Public &middot; Dekorativ</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/03_marquee.png" alt="Laufband">
+        <div class="wf-anno" style="top: 30%; left: 8%;">1</div>
+        <div class="wf-anno" style="top: 30%; left: 26%;">2</div>
+        <div class="wf-anno" style="top: 30%; left: 44%;">3</div>
+        <div class="wf-anno" style="top: 30%; left: 62%;">4</div>
+        <div class="wf-anno" style="top: 30%; left: 80%;">5</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Stress-Karte</b> - Durchschnitt 3,1 / 5, Feather-Icon.</li>
+          <li><b>Mood-Karte</b> - Durchschnitt 3,6 / 5, Smile-Icon.</li>
+          <li><b>Social-Engagement-Karte</b> - Durchschnitt 3,2 / 5, Users-Icon.</li>
+          <li><b>Sleep-Quality-Karte</b> - Durchschnitt 4,1 / 5, Moon-Icon.</li>
+          <li><b>AI-Synthesis-Accuracy-Karte</b> - 98 % Synthese-Genauigkeit, Sparkles-Icon.</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin-top: 3mm; margin-bottom: 1mm;">5.2.1 Verhalten</h3>
+    <p style="font-size: 9pt; line-height: 1.4;">Das Track wird dreifach gerendert und per 30-Sekunden-linearer CSS-Animation in Endlosschleife horizontal verschoben. Die Animation pausiert bei Fokus; Pointer-Hover unterbricht sie nicht.</p>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">09</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10: D-03 FEATURE JOURNAL                                -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.3 Wireframe D-03 Feature - Journal</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.3</div>
+    <h2 class="section">D-03 Feature - Journal</h2>
+    <p class="section-lead">Erster Feature-Block. Verbindet das Journal-Nutzenversprechen mit einem Live-Mockup, das die produktive EntryForm widerspiegelt: Titel, Inhalt, KI-Prompt und vier State-Slider. Das Mockup nimmt Eingaben direkt auf der Landingpage entgegen.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-03 &middot; Feature - Journal</div>
+          <div class="wf-name">Capture the human frequency.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Interaktives Mockup</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/04_features_journal.png" alt="Journal-Feature">
+        <div class="wf-anno purple" style="top: 16%; left: 38%;">1</div>
+        <div class="wf-anno" style="top: 50%; left: 8%;">2</div>
+        <div class="wf-anno" style="top: 72%; left: 8%;">3</div>
+        <div class="wf-anno purple" style="top: 36%; right: 28%;">4</div>
+        <div class="wf-anno purple" style="top: 50%; right: 8%;">5</div>
+        <div class="wf-anno purple" style="top: 78%; right: 30%;">6</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Section-Eyebrow + Headline (D-03.1, D-03.2)</b> - "The Reflecta Architecture - Decode your cognitive DNA."</li>
+          <li><b>Feature-Headline (D-03.3)</b> - "Capture the human frequency."</li>
+          <li><b>Bullet-Checkliste (D-03.4)</b> - reibungslose Eingabe, Multi-State, History-Suche.</li>
+          <li><b>Titelfeld</b> - inline editierbar, spiegelt die produktive EntryForm.</li>
+          <li><b>AI-ON-Pill</b> - Standardmäßig aktiv; entprellte Prompt-Abfrage (1 s) aus dem Fragenpool.</li>
+          <li><b>State-Slider</b> - Sentiment, Sleep, Stress, Social Engagement, Skala 1 - 5.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">10</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 11: D-04 FEATURE ANALYTICS                              -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.4 Wireframe D-04 Feature - Analytics</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.4</div>
+    <h2 class="section">D-04 Feature - Analytics</h2>
+    <p class="section-lead">Zweiter Feature-Block. Zeigt ein interaktives Analytics-Dashboard mit KPI-Kacheln, einem mehrreihigen Wellbeing-Trend-Chart, einem Sentiment-Mix-Balkendiagramm und einem Sleep-Quality-Ring. Dient zugleich als Beleg und als Produktvorschau.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-04 &middot; Feature - Analytics</div>
+          <div class="wf-name">Visualize ontological symmetry.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Live-Charts</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/05_features_analytics.png" alt="Analytics-Feature">
+        <div class="wf-anno purple" style="top: 18%; left: 18%;">1</div>
+        <div class="wf-anno purple" style="top: 36%; left: 18%;">2</div>
+        <div class="wf-anno purple" style="top: 60%; left: 14%;">3</div>
+        <div class="wf-anno purple" style="top: 60%; left: 32%;">4</div>
+        <div class="wf-anno purple" style="top: 78%; left: 22%;">5</div>
+        <div class="wf-anno" style="top: 36%; right: 30%;">6</div>
+        <div class="wf-anno" style="top: 50%; right: 8%;">7</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>KPI-Kacheln</b> - Avg Mood, Avg Sleep, Streak, Entries mit Trendzeile.</li>
+          <li><b>Wellbeing-Trend</b> - Mood-, Sleep- und Stress-Linien mit hover-synchronem Cursor.</li>
+          <li><b>Sentiment-Mix</b> - Balkendiagramm nach Emotionskategorie über die letzten 14 Tage.</li>
+          <li><b>Sleep-Ring</b> - radiale Anzeige der durchschnittlichen Schlafqualität bei 78 %.</li>
+          <li><b>KI-Korrelations-Karte</b> - Insight in Klartext, der Mood und Sleep verknüpft.</li>
+          <li><b>Headline (D-04.1)</b> - "Visualize ontological symmetry."</li>
+          <li><b>Inline-Link (D-04.4)</b> - "Try demo" -> angemeldete Anwendung, Analytics-Tab.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">11</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 12: D-05 FEATURE AI                                     -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.5 Wireframe D-05 Feature - KI-Synthese</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.5</div>
+    <h2 class="section">D-05 Feature - KI-Synthese</h2>
+    <p class="section-lead">Dritter Feature-Block. Zeigt, was die KI-Schicht erzeugt, sobald sich ein Besucher auf das Produkt einlässt: links ein Beispiel-Insight, rechts eine Chat-Karten-Vorschau.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-05 &middot; Feature - KI-Synthese</div>
+          <div class="wf-name">Deep synthesis via AI Resonance.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Statische Vorschau</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/06_features_science.png" alt="KI-Feature">
+        <div class="wf-anno" style="top: 36%; left: 36%;">1</div>
+        <div class="wf-anno" style="top: 48%; left: 8%;">2</div>
+        <div class="wf-anno purple" style="top: 60%; left: 14%;">3</div>
+        <div class="wf-anno purple" style="top: 36%; right: 26%;">4</div>
+        <div class="wf-anno purple" style="top: 52%; right: 22%;">5</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Headline (D-05.1)</b> - "Deep synthesis via AI Resonance."</li>
+          <li><b>Feature-Text (D-05.2)</b> - Pitch zur langfristigen Mustererkennung.</li>
+          <li><b>KI-Insight-Karte (D-05.3)</b> - umrandetes Zitat mit Markenstreifen und Sparkles-Tag.</li>
+          <li><b>Chat-Vorschau-Kachel (D-05.4)</b> - rotierte Karte mit Konversation aus drei Nachrichten.</li>
+          <li><b>Marken-Chat-Bubbles</b> - abwechselnd dunkle und Gradient-Bubbles, die das Produkt-Chat-Erlebnis spiegeln.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">12</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 13: D-06 REVIEWS                                        -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.6 Wireframe D-06 Reviews</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.6</div>
+    <h2 class="section">D-06 Reviews</h2>
+    <p class="section-lead">Drei Testimonial-Karten in einem horizontalen Raster. Jede Karte trägt fünf gefüllte Sterne, ein kursives Zitat und eine Autorenzeile. Liefert Social Proof unmittelbar vor dem finalen CTA.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-06 &middot; Reviews</div>
+          <div class="wf-name">Join a universe of self-aware minds.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Social Proof</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/07_reviews.png" alt="Reviews">
+        <div class="wf-anno" style="top: 8%; left: 47%;">1</div>
+        <div class="wf-anno purple" style="top: 55%; left: 14%;">2</div>
+        <div class="wf-anno purple" style="top: 55%; left: 47%;">3</div>
+        <div class="wf-anno purple" style="top: 55%; left: 80%;">4</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Section-Eyebrow + Headline (D-06.1, D-06.2)</b> - "Gravitational Pull - Join a universe of self-aware minds."</li>
+          <li><b>Review-Karte 1</b> - fünf lila Sterne, Zitat, Autorin Sarah J., Rolle Product Designer.</li>
+          <li><b>Review-Karte 2</b> - Zitat von Michael T., Software Engineer.</li>
+          <li><b>Review-Karte 3</b> - Zitat von Elena R., Creative Director.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">13</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 14: D-07 FINAL CTA + FOOTER                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.7 Wireframe D-07 Final-CTA &amp; Footer</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.7</div>
+    <h2 class="section">D-07 Final-CTA &amp; Footer</h2>
+    <p class="section-lead">Abschlussblock. Ein zentrales Markenzeichen und eine kontrastreiche Headline rahmen das gleiche Dual-CTA-Muster wie im Hero ein, gefolgt von einem schmalen Footer mit Legal-Ankern und Copyright-Zeile.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-07 &middot; Final-CTA &amp; Footer</div>
+          <div class="wf-name">Collapse the wave function of your thoughts.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Conversion</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/08_cta_footer.png" alt="CTA Footer">
+        <div class="wf-anno purple" style="top: 24%; left: 47%;">1</div>
+        <div class="wf-anno" style="top: 40%; left: 47%;">2</div>
+        <div class="wf-anno purple" style="top: 60%; left: 36%;">3</div>
+        <div class="wf-anno purple" style="top: 60%; right: 36%;">4</div>
+        <div class="wf-anno" style="top: 88%; left: 8%;">5</div>
+        <div class="wf-anno" style="top: 88%; right: 22%;">6</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Markenzeichen (D-07.1)</b> - zentriertes Lockup in voller Größe.</li>
+          <li><b>Headline + Sub (D-07.2, D-07.3)</b> - schwarze Headline, gedämpfte Sub-Headline.</li>
+          <li><b>Primärer CTA (D-07.4)</b> - "Sign Up For Free" -> Auth-Dialog im Registrierungsmodus.</li>
+          <li><b>Sekundärer CTA (D-07.5)</b> - "Try live demo" -> vorbefüllte angemeldete Demo.</li>
+          <li><b>Copyright (D-07.6)</b> - gedämpftes Markenzeichen + Copyright-Zeile.</li>
+          <li><b>Legal-Links</b> - Privacy Policy, Terms of Service, Ontology Manifesto (Scroll nach oben).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">14</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 15: D-08 AUTH DIALOG                                    -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.8 Wireframe D-08 Auth-Dialog</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.8</div>
+    <h2 class="section">D-08 Auth-Dialog (Anmelden / Registrieren)</h2>
+    <p class="section-lead">Einzelner Dialog mit Tab-Switch zwischen Anmelde- und Registrierungsmodus. Gleicher E-Mail-und-Passwort-Kontrakt für beide Modi, dazu ein sekundärer GitHub-OAuth-Pfad. Der "Back to home"-Anker führt zurück zur Landingpage.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-08 &middot; Auth-Dialog</div>
+          <div class="wf-name">Anmelden / Registrieren</div>
+        </div>
+        <div class="wf-tag">Gated &middot; Submit</div>
+      </div>
+      <div class="wf-image-wrap">
+        <img src="screenshots/09_login.png" alt="Anmelden">
+        <div class="wf-anno" style="top: 4%; left: 4%;">1</div>
+        <div class="wf-anno" style="top: 20%; left: 47%;">2</div>
+        <div class="wf-anno purple" style="top: 36%; left: 47%;">3</div>
+        <div class="wf-anno" style="top: 46%; left: 30%;">4</div>
+        <div class="wf-anno" style="top: 56%; left: 30%;">5</div>
+        <div class="wf-anno purple" style="top: 67%; left: 47%;">6</div>
+        <div class="wf-anno" style="top: 73%; left: 47%;">7</div>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Back-Link (D-08.1)</b> - "&larr; Back to home" führt zurück zu D-01.</li>
+          <li><b>Brand-Lockup (D-08.2)</b> - Logo + Wortmarke + Sub-Zeile "Your AI-powered journal".</li>
+          <li><b>Tab-Switch (D-08.3)</b> - unterstreicht den aktiven Tab in Markenlila.</li>
+          <li><b>E-Mail-Feld (D-08.4)</b> - HTML5-E-Mail-Validierung, Pflichtfeld.</li>
+          <li><b>Passwort-Feld (D-08.5)</b> - Pflichtfeld, mindestens 8 Zeichen.</li>
+          <li><b>Primärer Submit (D-08.7)</b> - Label wechselt zwischen "Log In" und "Create Account".</li>
+          <li><b>GitHub-OAuth (D-08.9)</b> - sekundärer Pfad unterhalb des OR-Trenners.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">15</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 16: D-09 MOBILE DRAWER                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.9 Wireframe D-09 Mobile-Drawer</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.9</div>
+    <h2 class="section">D-09 Mobile Navigation</h2>
+    <p class="section-lead">Mobile Variante der oberen Navigation. Wird über den Hamburger-Button in D-00.7 ein- und ausgeblendet und erscheint als Slide-down-Panel direkt unterhalb der Navigationsleiste. Überlagert den Hero, ohne die Scrollposition zu verlieren.</p>
+
+    <div style="display: grid; grid-template-columns: 88mm 1fr; gap: 6mm; align-items: start;">
+      <div class="wf-block" style="margin: 0;">
+        <div class="wf-meta">
+          <div>
+            <div class="wf-id">Dialog D-09 &middot; Mobile Drawer</div>
+            <div class="wf-name">414 px Viewport</div>
+          </div>
+          <div class="wf-tag">Mobile &middot; Modal</div>
+        </div>
+        <div class="wf-image-wrap">
+          <img src="screenshots/11_mobile_menu.png" alt="Mobile-Menü" style="max-height: 175mm; object-fit: contain;">
+        </div>
+      </div>
+
+      <div>
+        <h3 class="sub" style="margin-top: 0;">Callouts</h3>
+        <ol style="font-size: 9.5pt; padding-left: 5mm;">
+          <li><b>Brand-Lockup (D-00.1)</b> - identisch zur Desktop-Navigation.</li>
+          <li><b>Schließen-X (D-09.6)</b> - schließt den Drawer.</li>
+          <li><b>Ankerlinks (D-09.1 - D-09.3)</b> - Features, The Science, Reviews. Jeder schließt den Drawer und scrollt zum Ziel.</li>
+          <li><b>Log In (D-09.4)</b> - öffnet den Auth-Dialog (D-08) im Anmeldemodus.</li>
+          <li><b>Start Free Trial (D-09.5)</b> - Gradient-Pill, öffnet den Auth-Dialog (D-08) im Registrierungsmodus.</li>
+        </ol>
+
+        <h3 class="sub">Verhalten</h3>
+        <p style="font-size: 9.5pt;">Der Drawer wird innerhalb der sticky Navigationsleiste gemountet und schiebt den Hero-Inhalt aus dem Sichtbereich. Beim Antippen eines Links wird der Drawer zuerst geschlossen (State-Reset) und anschließend die Navigation ausgeführt, um gestapelte Transitions auf mobile Safari zu vermeiden.</p>
+
+        <h3 class="sub">Breakpoint</h3>
+        <p style="font-size: 9.5pt;">Drawer-Toggle und Panel sind nur unterhalb von 768 px sichtbar. Ab 1024 px wird stattdessen die Inline-Navigation D-00.2 - D-00.6 angezeigt.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">16</div>
+</div>
+
+</body>
+</html>
