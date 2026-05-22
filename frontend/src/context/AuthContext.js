@@ -1,96 +1,46 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import {
-  signIn,
-  signUp,
-  signOut,
-  fetchAuthSession,
-  signInWithRedirect,
-} from "aws-amplify/auth";
-import "../auth/cognito";
+// Demo wireframe build: real AuthContext is replaced with a stub. The login
+// form looks and behaves like the real one, but submitting any email and
+// password "logs in" without contacting Cognito or the backend.
+
+import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
-const DEV_MODE = process.env.REACT_APP_DEV_MODE === "true";
+const DEMO_USER = {
+  id: 1,
+  email: "demo@reflecta.app",
+  cognito_sub: "demo-user",
+  is_admin: true,
+  created_at: new Date().toISOString(),
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  const fetchUser = async () => {
-    try {
-      if (DEV_MODE) {
-        const res = await fetch("http://localhost:8000/auth/me");
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data);
-        }
-      } else {
-        const session = await fetchAuthSession();
-        const idToken = session.tokens?.idToken?.toString();
-
-        if (idToken) {
-          const res = await fetch("http://localhost:8000/auth/me", {
-            headers: { Authorization: `Bearer ${idToken}` },
-          });
-          if (res.ok) {
-            const data = await res.json();
-            setUser(data);
-          } else {
-            setUser(null);
-          }
-        }
-      }
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+  const login = async (_email, _password) => {
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    setUser(DEMO_USER);
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const login = async (email, password) => {
-    if (DEV_MODE) {
-      await fetchUser();
-      return;
-    }
-    await signIn({ username: email, password });
-    await fetchUser();
+  const register = async (email, _password) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    setUser({ ...DEMO_USER, email });
   };
 
-  const register = async (email, password) => {
-    if (DEV_MODE) {
-      await fetchUser();
-      return;
-    }
-    await signUp({
-      username: email,
-      password,
-      options: { userAttributes: { email } },
-    });
-    await signIn({ username: email, password });
-    await fetchUser();
-  };
-
-  const loginWithGitHub = () => {
-    if (DEV_MODE) return;
-    signInWithRedirect({ provider: "GitHub" });
+  const loginWithGitHub = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setUser(DEMO_USER);
   };
 
   const logout = async () => {
-    if (!DEV_MODE) {
-      await signOut();
-    }
     setUser(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, register, loginWithGitHub, logout }}
+      value={{ user, loading: false, login, register, loginWithGitHub, logout }}
     >
       {children}
     </AuthContext.Provider>
