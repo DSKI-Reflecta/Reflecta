@@ -20,3 +20,4 @@ services:
       - backend
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_DEV_MODE=${DEV_MODE}
