@@ -725,7 +725,7 @@
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Abschnitt 3</div>
     <h2 class="section">Informationsarchitektur</h2>
-    <p class="section-lead">Der Admin-Bereich ist eine einzelne, zustandslos gerenderte Seite innerhalb der AuthenticatedApp. Die Hierarchie des Komponentenbaums, der API-Endpunkt und das zugrundeliegende Datenmodell sind nachfolgend dokumentiert.</p>
+    <p class="section-lead">Der Admin-Bereich ist eine einzelne, bedarfsgesteuert gemountete Seite innerhalb der AuthenticatedApp. Sie ist <b>zustandsbehaftet</b> (stateful): beim ersten Rendern lädt <code>useEffect</code> die Statistiken vom Backend und speichert sie via <code>setStats</code> im lokalen React-State. Die Hierarchie des Komponentenbaums, der API-Endpunkt und das zugrundeliegende Datenmodell sind nachfolgend dokumentiert.</p>
 
     <h3 class="sub">3.1 Komponentenbaum</h3>
     <pre class="ia-code"><span class="c-root">App.js</span>
