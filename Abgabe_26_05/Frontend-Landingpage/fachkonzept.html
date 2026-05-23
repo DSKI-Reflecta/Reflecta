@@ -146,13 +146,13 @@
     border-top: 1px solid var(--line);
     padding: 10mm 22mm 16mm;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 6mm;
     background: white;
     position: relative; z-index: 1;
   }
   .cover-meta .cell .k { font-size: 7.5pt; color: var(--purple-2); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2mm; font-weight: 700; }
-  .cover-meta .cell .v { font-size: 11pt; font-weight: 600; color: var(--ink); }
+  .cover-meta .cell .v { font-size: 10pt; font-weight: 600; color: var(--ink); }
 
   /* TYPOGRAPHY */
   h2.section {
@@ -602,8 +602,9 @@
 
   <div class="cover-meta">
     <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
-    <div class="cell"><div class="k">Liefergegenstand</div><div class="v">Landingpage Fachkonzept</div></div>
-    <div class="cell"><div class="k">Datum</div><div class="v">22.05.2026</div></div>
+    <div class="cell"><div class="k">Datum</div><div class="v">23.05.2026</div></div>
+    <div class="cell"><div class="k">Department</div><div class="v">Frontend-Landingpage</div></div>
+    <div class="cell"><div class="k">Mitarbeiter</div><div class="v">5688102</div></div>
   </div>
 </div>
 
@@ -628,17 +629,20 @@
       <div class="toc-row"><div class="toc-num">1</div><div class="toc-title">Geltungsbereich &amp; Konventionen</div><div class="toc-page">3</div></div>
       <div class="toc-row"><div class="toc-num">2</div><div class="toc-title">Dialogliste</div><div class="toc-page">4-5</div></div>
       <div class="toc-row"><div class="toc-num">3</div><div class="toc-title">Informationsarchitektur</div><div class="toc-page">6</div></div>
-      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">7</div></div>
-      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframes</div><div class="toc-page">8-13</div></div>
-      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">D-01 Hero</div><div class="toc-page">8</div></div>
-      <div class="toc-row"><div class="toc-num">5.2</div><div class="toc-title">D-02 Metrics-Laufband</div><div class="toc-page">9</div></div>
-      <div class="toc-row"><div class="toc-num">5.3</div><div class="toc-title">D-03 Feature - Journal</div><div class="toc-page">10</div></div>
-      <div class="toc-row"><div class="toc-num">5.4</div><div class="toc-title">D-04 Feature - Analytics</div><div class="toc-page">11</div></div>
-      <div class="toc-row"><div class="toc-num">5.5</div><div class="toc-title">D-05 Feature - KI-Synthese</div><div class="toc-page">12</div></div>
-      <div class="toc-row"><div class="toc-num">5.6</div><div class="toc-title">D-06 Reviews</div><div class="toc-page">13</div></div>
-      <div class="toc-row"><div class="toc-num">5.7</div><div class="toc-title">D-07 Final-CTA &amp; Footer</div><div class="toc-page">14</div></div>
-      <div class="toc-row"><div class="toc-num">5.8</div><div class="toc-title">D-08 Auth-Dialog (Anmelden / Registrieren)</div><div class="toc-page">15</div></div>
-      <div class="toc-row"><div class="toc-num">5.9</div><div class="toc-title">D-09 Mobile Navigation</div><div class="toc-page">16</div></div>
+      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">7-9</div></div>
+      <div class="toc-row"><div class="toc-num">4.1</div><div class="toc-title">Flow A &mdash; Passiver Besuch &amp; Scroll</div><div class="toc-page">7</div></div>
+      <div class="toc-row"><div class="toc-num">4.2</div><div class="toc-title">Flow B &mdash; Journal-Eintrag &amp; KI-Analyse</div><div class="toc-page">8</div></div>
+      <div class="toc-row"><div class="toc-num">4.3</div><div class="toc-title">Flow C &mdash; CTA &rarr; Auth oder Demo</div><div class="toc-page">9</div></div>
+      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframes</div><div class="toc-page">10-18</div></div>
+      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">D-01 Hero</div><div class="toc-page">10</div></div>
+      <div class="toc-row"><div class="toc-num">5.2</div><div class="toc-title">D-02 Metrics-Laufband</div><div class="toc-page">11</div></div>
+      <div class="toc-row"><div class="toc-num">5.3</div><div class="toc-title">D-03 Feature - Journal</div><div class="toc-page">12</div></div>
+      <div class="toc-row"><div class="toc-num">5.4</div><div class="toc-title">D-04 Feature - Analytics</div><div class="toc-page">13</div></div>
+      <div class="toc-row"><div class="toc-num">5.5</div><div class="toc-title">D-05 Feature - KI-Synthese</div><div class="toc-page">14</div></div>
+      <div class="toc-row"><div class="toc-num">5.6</div><div class="toc-title">D-06 Reviews</div><div class="toc-page">15</div></div>
+      <div class="toc-row"><div class="toc-num">5.7</div><div class="toc-title">D-07 Final-CTA &amp; Footer</div><div class="toc-page">16</div></div>
+      <div class="toc-row"><div class="toc-num">5.8</div><div class="toc-title">D-08 Auth-Dialog (Anmelden / Registrieren)</div><div class="toc-page">17</div></div>
+      <div class="toc-row"><div class="toc-num">5.9</div><div class="toc-title">D-09 Mobile Navigation</div><div class="toc-page">18</div></div>
     </div>
   </div>
 
@@ -1053,78 +1057,89 @@
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Abschnitt 4</div>
     <h2 class="section">Swimlane-Ablaufdiagramm</h2>
-    <p class="section-lead">Drei Lanes erfassen die Akteure, die die Landingpage-Erfahrung treiben: den Besucher, den Front-end-Client und die KI/Backend-Dienste, die auf Aktionen auf der Seite antworten. Das Diagramm zeigt den kanonischen Verlauf vom Eintreffen bis zu einem der drei Ausgangspfade (Registrieren, Anmelden, Demo).</p>
+    <p class="section-lead">Drei Flows decken die wesentlichen Interaktionen ab: Flow A der passive Besuch (Scroll), Flow B die KI-gestützte Reflexionsfrage zur Journal-Eingabe im Mockup (D-03.5), Flow C der CTA-Klick mit Verzweigung zu Auth (D-08) oder Live-Demo. Drei Lanes: Besucher (Browser), React-Frontend, Backend/KI.</p>
 
     <div class="legend-row">
-      <span><span class="legend-dot" style="background:#6A0DAD"></span>Besucher (User)</span>
-      <span><span class="legend-dot" style="background:#1e293b"></span>Front-end (System)</span>
-      <span><span class="legend-dot" style="background:#047857"></span>KI / Backend</span>
-      <span><span class="legend-dot" style="background:#fef3c7;border:1px solid #d97706"></span>Entscheidung</span>
-      <span><span class="legend-dot" style="background:linear-gradient(135deg,#9B30FF,#6A0DAD)"></span>Terminal</span>
+      <span><span class="legend-dot" style="background:#6A0DAD"></span>Besucher / Browser</span>
+      <span><span class="legend-dot" style="background:#1e293b"></span>React (Frontend)</span>
+      <span><span class="legend-dot" style="background:#065f46"></span>Backend / KI</span>
+      <span><span class="legend-dot" style="background:#f0fdf4;border:1.5px solid #16a34a"></span>Erfolgreicher Pfad</span>
+      <span><span class="legend-dot" style="background:#fffbeb;border:1.5px solid #d97706"></span>Entscheidung</span>
     </div>
 
-    <div class="swimlane">
-      <!-- Lane 1: User -->
-      <div class="swim-row user">
-        <div class="swim-label"><div class="l-name">Besucher<br>(User)</div></div>
-        <div class="swim-track">
-          <div class="swim-step"><span class="step-num">U1</span>Aufruf von /</div>
-          <div class="arrow"></div>
-          <div class="swim-step"><span class="step-num">U2</span>Scrollen &amp; Erkunden</div>
-          <div class="arrow"></div>
-          <div class="swim-step diamond"><span class="step-num">U3</span>Absicht wählen</div>
-          <div class="arrow"></div>
-          <div class="swim-step"><span class="step-num">U4</span>CTA klicken<br>(Reg / Login / Demo)</div>
-        </div>
-      </div>
+    <h3 class="sub">4.1 Flow A &mdash; Passiver Besuch &amp; Scroll</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Besucher öffnet die Root-URL, scrollt durch die sieben Sektionen (D-01 bis D-07). Reine Client-seitige Effekte (Fade-ins, Marquee-Autoscroll, Live-Mocks). Backend bleibt idle.</p>
 
-      <!-- Lane 2: System -->
-      <div class="swim-row system">
-        <div class="swim-label"><div class="l-name">Front-end<br>(System)</div></div>
-        <div class="swim-track">
-          <div class="swim-step system"><span class="step-num">S1</span>Landing rendern (D-01 - D-07)</div>
-          <div class="arrow"></div>
-          <div class="swim-step system"><span class="step-num">S2</span>Anker-Scroll &amp; Live-Mocks</div>
-          <div class="arrow"></div>
-          <div class="swim-step system"><span class="step-num">S3</span>Mockup-Zustand laden</div>
-          <div class="arrow"></div>
-          <div class="swim-step system"><span class="step-num">S4</span>Route zu D-08 oder Demo</div>
-        </div>
+    <!-- FLOW A SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:3mm;">
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow A &mdash; GET / (passiv)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Besucher (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; Backend / KI</div>
       </div>
+      <svg viewBox="0 0 680 200" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fA-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+        </defs>
 
-      <!-- Lane 3: AI / Backend -->
-      <div class="swim-row ai">
-        <div class="swim-label"><div class="l-name">KI /<br>Backend</div></div>
-        <div class="swim-track">
-          <div class="swim-step ai"><span class="step-num">A1</span>Idle</div>
-          <div class="arrow"></div>
-          <div class="swim-step ai"><span class="step-num">A2</span>Fragenpool an D-03 liefern</div>
-          <div class="arrow"></div>
-          <div class="swim-step ai"><span class="step-num">A3</span>Demo-Daten beim Demo-Einstieg laden</div>
-          <div class="arrow"></div>
-          <div class="swim-step ai"><span class="step-num">A4</span>Auth-Handshake oder Session</div>
-        </div>
-      </div>
+        <line x1="227" y1="0" x2="227" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="453" y1="0" x2="453" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+
+        <rect x="0" y="0" width="227" height="200" fill="#faf5ff" opacity="0.35"/>
+        <rect x="227" y="0" width="226" height="200" fill="#f8fafc" opacity="0.45"/>
+        <rect x="453" y="0" width="227" height="200" fill="#f0fdf4" opacity="0.25"/>
+
+        <!-- U1: Aufruf "/" -->
+        <rect x="68" y="14" width="90" height="44" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="113" y="32" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="113" y="45" text-anchor="middle" fill="white" font-size="9">Aufruf von</text>
+        <text x="113" y="56" text-anchor="middle" fill="white" font-size="9">https://reflecta/</text>
+
+        <!-- Arrow U1 -> S1 -->
+        <line x1="158" y1="36" x2="293" y2="36" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="225" y="32" text-anchor="middle" fill="#9ca3af" font-size="8">HTTP GET</text>
+
+        <!-- S1: LandingPage rendert -->
+        <rect x="295" y="14" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="32" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="340" y="45" text-anchor="middle" fill="#1e293b" font-size="9">LandingPage</text>
+        <text x="340" y="56" text-anchor="middle" fill="#1e293b" font-size="9">D-01 ... D-07</text>
+
+        <!-- A1: Idle -->
+        <rect x="521" y="14" width="90" height="44" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="566" y="32" text-anchor="middle" fill="#64748b" font-weight="700" font-size="9.5">A1</text>
+        <text x="566" y="45" text-anchor="middle" fill="#64748b" font-size="9">Idle</text>
+        <text x="566" y="56" text-anchor="middle" fill="#64748b" font-size="9">(kein API-Call)</text>
+
+        <!-- U2: Scrollen -->
+        <rect x="68" y="78" width="90" height="44" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="113" y="96" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U2</text>
+        <text x="113" y="109" text-anchor="middle" fill="#5b21b6" font-size="9">Scrollen</text>
+        <text x="113" y="120" text-anchor="middle" fill="#5b21b6" font-size="9">durch Sektionen</text>
+
+        <!-- Arrow U1 -> U2 vertical -->
+        <line x1="113" y1="58" x2="113" y2="76" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+
+        <!-- Arrow U2 -> S2 -->
+        <line x1="158" y1="100" x2="293" y2="100" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="225" y="96" text-anchor="middle" fill="#9ca3af" font-size="8">scroll</text>
+
+        <!-- S2: IntersectionObserver, Marquee, Live-Mocks -->
+        <rect x="295" y="78" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="93" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S2</text>
+        <text x="340" y="105" text-anchor="middle" fill="#1e293b" font-size="8.5">Fade-ins, Marquee,</text>
+        <text x="340" y="115" text-anchor="middle" fill="#1e293b" font-size="8.5">Live-Mocks (CSS/JS)</text>
+
+        <!-- U3: Verweilen -->
+        <rect x="68" y="142" width="90" height="44" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="113" y="160" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U3</text>
+        <text x="113" y="173" text-anchor="middle" fill="#5b21b6" font-size="9">Lesen / verweilen</text>
+        <text x="113" y="184" text-anchor="middle" fill="#5b21b6" font-size="9">(Reviews, Features)</text>
+
+        <line x1="113" y1="122" x2="113" y2="140" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
     </div>
-
-    <h3 class="sub">4.1 Entscheidungszweige bei U3</h3>
-    <div class="grid-3">
-      <div class="info-card">
-        <h4>Zweig A &middot; Registrieren</h4>
-        <p>U4 wird ausgelöst durch D-00.6, D-01.3 oder D-07.4. S4 führt zu D-08 im Registrierungsmodus. A4 liefert eine neue Session und die Anwendung wird geladen.</p>
-      </div>
-      <div class="info-card">
-        <h4>Zweig B &middot; Anmelden</h4>
-        <p>U4 wird ausgelöst durch D-00.5. S4 führt zu D-08 im Anmeldemodus. A4 ist entweder erfolgreich und die Anwendung wird geladen, oder gibt einen Inline-Fehler in D-08.6 zurück.</p>
-      </div>
-      <div class="info-card">
-        <h4>Zweig C &middot; Demo</h4>
-        <p>U4 wird ausgelöst durch D-01.4, D-04.4 oder D-07.5. S4 setzt das Demo-Flag, A3 lädt den Demo-Datensatz und die Anwendung wird mit aktivem Demo-Banner gemountet.</p>
-      </div>
-    </div>
-
-    <h3 class="sub">4.2 Lane-übergreifende Interaktion</h3>
-    <p>Das Journal-Mockup (D-03.5) ist die einzige Stelle der Public Surface, an der Lane 3 aktiv auf Nutzereingaben antwortet: Jede Tipp-Pause löst einen entprellten Aufruf aus, der einen Prompt aus einem kuratierten Fragenpool zurückgibt. Es verlassen keine persönlichen Daten den Client und die Antwort wird als kursiver Prompt-Text unter dem Eingabefeld ausgegeben.</p>
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
@@ -1132,7 +1147,269 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 8: WIREFRAME D-01 HERO                                  -->
+<!-- PAGE 8: SWIMLANE FLOW B (JOURNAL MOCK)                        -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">4.2 Flow B &mdash; Reflexionsfrage zur Journal-Eingabe (D-03.5)</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Besucher tippt im Journal-Mockup der Feature-Sektion D-03. Nach einer Tipp-Pause sendet das Frontend den aktuellen Text-Auszug an einen KI-Service. Die KI generiert eine zur Eingabe passende Reflexionsfrage und liefert sie zurück; die Frage erscheint kursiv unter dem Eingabefeld und macht den KI-gestützten Journaling-Helfer der echten App auf der Landingpage erlebbar. Weitere Analysen (Format, Stimmungen, Aktivitäten, Ziele) sind nicht Teil dieses Mockups.</p>
+
+    <!-- FLOW B SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:3mm;">
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow B &mdash; KI-Reflexionsfrage zur Eingabe</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Besucher (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; Backend / KI</div>
+      </div>
+      <svg viewBox="0 0 680 200" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fB-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fB-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+        </defs>
+
+        <line x1="227" y1="0" x2="227" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="453" y1="0" x2="453" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+
+        <rect x="0" y="0" width="227" height="200" fill="#faf5ff" opacity="0.35"/>
+        <rect x="227" y="0" width="226" height="200" fill="#f8fafc" opacity="0.45"/>
+        <rect x="453" y="0" width="227" height="200" fill="#f0fdf4" opacity="0.25"/>
+
+        <!-- U1: Eintrag tippen -->
+        <rect x="68" y="14" width="90" height="48" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="113" y="32" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="113" y="45" text-anchor="middle" fill="white" font-size="9">Tippen im</text>
+        <text x="113" y="56" text-anchor="middle" fill="white" font-size="9">Journal-Mockup</text>
+
+        <!-- Arrow U1 -> S1 -->
+        <line x1="158" y1="38" x2="293" y2="38" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="225" y="34" text-anchor="middle" fill="#9ca3af" font-size="8">Tipp-Pause</text>
+
+        <!-- S1: Eingabe entprellt absenden -->
+        <rect x="295" y="14" width="90" height="48" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="32" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="340" y="45" text-anchor="middle" fill="#1e293b" font-size="8.5">Text-Auszug</text>
+        <text x="340" y="56" text-anchor="middle" fill="#1e293b" font-size="8.5">an KI senden</text>
+
+        <!-- Arrow S1 -> A1 -->
+        <line x1="385" y1="38" x2="519" y2="38" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="452" y="34" text-anchor="middle" fill="#9ca3af" font-size="8">KI-Anfrage</text>
+
+        <!-- A1: KI generiert Reflexionsfrage -->
+        <rect x="521" y="14" width="90" height="48" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="566" y="32" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">A1</text>
+        <text x="566" y="45" text-anchor="middle" fill="#78350f" font-size="9">Reflexionsfrage</text>
+        <text x="566" y="56" text-anchor="middle" fill="#78350f" font-size="9">generieren</text>
+
+        <!-- A1 -> A2 vertical -->
+        <line x1="566" y1="62" x2="566" y2="116" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- A2: Antwort -->
+        <rect x="521" y="118" width="90" height="48" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="566" y="136" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A2</text>
+        <text x="566" y="149" text-anchor="middle" fill="#065f46" font-size="9">Frage</text>
+        <text x="566" y="160" text-anchor="middle" fill="#065f46" font-size="9">zurückliefern</text>
+
+        <!-- Arrow A2 -> S2 -->
+        <line x1="521" y1="142" x2="387" y2="142" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fB-grn)"/>
+        <text x="454" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">Antwort</text>
+
+        <!-- S2: Frage einblenden -->
+        <rect x="295" y="118" width="90" height="48" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="340" y="136" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">S2</text>
+        <text x="340" y="149" text-anchor="middle" fill="#065f46" font-size="8.5">Frage unter</text>
+        <text x="340" y="160" text-anchor="middle" fill="#065f46" font-size="8.5">Eingabefeld einblenden</text>
+
+        <!-- Arrow S2 -> U2 -->
+        <line x1="295" y1="142" x2="160" y2="142" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fB-grn)"/>
+        <text x="227" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">UI</text>
+
+        <!-- U2: Frage lesen -->
+        <rect x="68" y="118" width="90" height="48" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="113" y="136" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">U2</text>
+        <text x="113" y="149" text-anchor="middle" fill="#065f46" font-size="9">Inspirierende</text>
+        <text x="113" y="160" text-anchor="middle" fill="#065f46" font-size="9">Frage lesen &#x2713;</text>
+
+        <line x1="113" y1="62" x2="113" y2="116" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">08</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: SWIMLANE FLOW C (CTA)                                 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">4.3 Flow C &mdash; CTA-Klick &rarr; Auth (D-08) oder Live-Demo</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Besucher klickt einen CTA. Eine Routing-Entscheidung in React verzweigt zwischen Auth (D-08 mit Modus-Flag) und Live-Demo (Demo-Stub-Login). Beide Pfade enden im AuthenticatedApp-Mount; der Demo-Pfad zusätzlich mit aktivem Demo-Banner.</p>
+
+    <!-- FLOW C SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:3mm;">
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow C &mdash; CTA-Klick mit Verzweigung</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Besucher (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; Backend / Auth</div>
+      </div>
+      <svg viewBox="0 0 680 320" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fC-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fC-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+          <marker id="fC-pur" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#6A0DAD"/></marker>
+        </defs>
+
+        <line x1="227" y1="0" x2="227" y2="320" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="453" y1="0" x2="453" y2="320" stroke="#e5e7eb" stroke-width="1"/>
+
+        <rect x="0" y="0" width="227" height="320" fill="#faf5ff" opacity="0.35"/>
+        <rect x="227" y="0" width="226" height="320" fill="#f8fafc" opacity="0.45"/>
+        <rect x="453" y="0" width="227" height="320" fill="#f0fdf4" opacity="0.25"/>
+
+        <!-- U1: CTA Klick -->
+        <rect x="68" y="14" width="90" height="48" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="113" y="32" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="113" y="45" text-anchor="middle" fill="white" font-size="9">CTA klicken</text>
+        <text x="113" y="56" text-anchor="middle" fill="white" font-size="8.5">(Sign Up / Log In / Demo)</text>
+
+        <!-- Arrow U1 -> S1 -->
+        <line x1="158" y1="38" x2="293" y2="38" stroke="#171717" stroke-width="1.5" marker-end="url(#fC-arr)"/>
+        <text x="225" y="34" text-anchor="middle" fill="#9ca3af" font-size="8">onClick</text>
+
+        <!-- S1: Decision diamond -->
+        <polygon points="340,12 385,42 340,72 295,42" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="340" y="38" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">S1</text>
+        <text x="340" y="50" text-anchor="middle" fill="#78350f" font-size="8.5">CTA-Typ?</text>
+
+        <!-- ── BRANCH 1: AUTH ── -->
+        <!-- S2a: setShowLogin / pendingMode -->
+        <rect x="295" y="92" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="110" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S2a</text>
+        <text x="340" y="123" text-anchor="middle" fill="#1e293b" font-size="8.5">D-08 mounten</text>
+        <text x="340" y="133" text-anchor="middle" fill="#1e293b" font-size="8.5">(login / signup)</text>
+
+        <!-- S1 -> S2a -->
+        <line x1="340" y1="72" x2="340" y2="90" stroke="#9ca3af" stroke-width="1.2"/>
+        <text x="348" y="86" fill="#9ca3af" font-size="8">Auth</text>
+
+        <!-- Arrow S2a -> A1 -->
+        <line x1="385" y1="114" x2="519" y2="114" stroke="#171717" stroke-width="1.5" marker-end="url(#fC-arr)"/>
+        <text x="452" y="110" text-anchor="middle" fill="#9ca3af" font-size="8">Cognito Auth</text>
+
+        <!-- A1: Cognito Auth -->
+        <rect x="521" y="92" width="90" height="44" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="566" y="110" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">A1</text>
+        <text x="566" y="123" text-anchor="middle" fill="#78350f" font-size="9">AWS Cognito</text>
+        <text x="566" y="133" text-anchor="middle" fill="#78350f" font-size="9">SignUp / SignIn</text>
+
+        <!-- A1 -> A2 -->
+        <line x1="566" y1="136" x2="566" y2="152" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- A2: Session JWT -->
+        <rect x="521" y="154" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="566" y="172" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A2</text>
+        <text x="566" y="185" text-anchor="middle" fill="#065f46" font-size="9">Session-JWT</text>
+        <text x="566" y="195" text-anchor="middle" fill="#065f46" font-size="9">+ User-Profil</text>
+
+        <!-- Arrow A2 -> S3a -->
+        <line x1="521" y1="176" x2="387" y2="176" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fC-grn)"/>
+        <text x="454" y="172" text-anchor="middle" fill="#9ca3af" font-size="8">JWT</text>
+
+        <!-- S3a: AuthenticatedApp -->
+        <rect x="295" y="154" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="340" y="172" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">S3a</text>
+        <text x="340" y="185" text-anchor="middle" fill="#065f46" font-size="8.5">AuthenticatedApp</text>
+        <text x="340" y="195" text-anchor="middle" fill="#065f46" font-size="8.5">mountet (real)</text>
+
+        <!-- Arrow S3a -> U2a -->
+        <line x1="295" y1="176" x2="160" y2="176" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fC-grn)"/>
+
+        <!-- U2a: App geöffnet -->
+        <rect x="68" y="154" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="113" y="172" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">U2a</text>
+        <text x="113" y="185" text-anchor="middle" fill="#065f46" font-size="9">Echte App</text>
+        <text x="113" y="195" text-anchor="middle" fill="#065f46" font-size="9">geöffnet &#x2713;</text>
+
+        <!-- ── BRANCH 2: DEMO ── -->
+        <!-- S2b: enterDemo -->
+        <rect x="295" y="232" width="90" height="44" rx="7" fill="white" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="340" y="250" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">S2b</text>
+        <text x="340" y="263" text-anchor="middle" fill="#5b21b6" font-size="8.5">enterDemo(tab)</text>
+        <text x="340" y="273" text-anchor="middle" fill="#5b21b6" font-size="8.5">demoMode = true</text>
+
+        <!-- S1 -> S2b (curve down) -->
+        <path d="M 340 72 Q 430 72 430 232 L 385 232" stroke="#9ca3af" stroke-width="1.2" fill="none"/>
+        <text x="438" y="156" fill="#9ca3af" font-size="8">Demo</text>
+
+        <!-- Arrow S2b -> A3 -->
+        <line x1="385" y1="254" x2="519" y2="254" stroke="#6A0DAD" stroke-width="1.5" marker-end="url(#fC-pur)"/>
+        <text x="452" y="250" text-anchor="middle" fill="#9ca3af" font-size="8">stub login</text>
+
+        <!-- A3: Demo-Stub login -->
+        <rect x="521" y="232" width="90" height="44" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="566" y="250" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">A3</text>
+        <text x="566" y="263" text-anchor="middle" fill="#5b21b6" font-size="8.5">demo@reflecta.app</text>
+        <text x="566" y="273" text-anchor="middle" fill="#5b21b6" font-size="8.5">(seed-Daten)</text>
+
+        <!-- A3 -> S3b: vertical down then horizontal left, single connected path -->
+        <path d="M 566 276 L 566 296 L 387 296" stroke="#6A0DAD" stroke-width="1.5" fill="none" marker-end="url(#fC-pur)"/>
+
+        <!-- S3b: AuthenticatedApp + Banner -->
+        <rect x="295" y="276" width="90" height="40" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="340" y="293" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">S3b</text>
+        <text x="340" y="305" text-anchor="middle" fill="#5b21b6" font-size="8.5">App + DemoBanner</text>
+
+        <!-- Arrow S3b -> U2b -->
+        <line x1="295" y1="296" x2="160" y2="296" stroke="#6A0DAD" stroke-width="1.5" marker-end="url(#fC-pur)"/>
+
+        <!-- U2b: Demo-Modus -->
+        <rect x="68" y="276" width="90" height="40" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="113" y="293" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U2b</text>
+        <text x="113" y="305" text-anchor="middle" fill="#5b21b6" font-size="8.5">Demo-Modus aktiv</text>
+
+        <!-- Vertical browser-lane connectors -->
+        <line x1="113" y1="62" x2="113" y2="152" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="113" y1="198" x2="113" y2="274" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+
+    <div class="grid-2" style="margin-top:2mm;">
+      <div class="info-card">
+        <h4>Auth-Pfad (D-08)</h4>
+        <p>Klick auf <code>Sign Up Free</code>, <code>Log In</code> oder die GitHub-OAuth-Schaltfläche öffnet D-08 mit dem entsprechenden Modus. AWS Cognito übernimmt die eigentliche Authentifizierung; das Frontend speichert das JWT-Token und lädt die echte App.</p>
+      </div>
+      <div class="info-card">
+        <h4>Demo-Pfad</h4>
+        <p>Klick auf <code>Try live demo</code> oder <code>Try demo</code> ruft <code>enterDemo()</code> auf, das mit einem Stub-Login die Demo-Seed-Daten lädt. Die App startet mit Demo-Banner; nach 5 Minuten oder beim Versuch, gesperrte Features zu nutzen, erscheint ein Signup-Modal.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
+  <div class="page-num">09</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10: WIREFRAME D-01 HERO                                  -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1182,11 +1459,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">08</div>
+  <div class="page-num">10</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 9: D-02 MARQUEE                                         -->
+<!-- PAGE 11: D-02 MARQUEE                                         -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1235,11 +1512,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">09</div>
+  <div class="page-num">11</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 10: D-03 FEATURE JOURNAL                                -->
+<!-- PAGE 12: D-03 FEATURE JOURNAL                                -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1287,11 +1564,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">10</div>
+  <div class="page-num">12</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 11: D-04 FEATURE ANALYTICS                              -->
+<!-- PAGE 13: D-04 FEATURE ANALYTICS                              -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1341,11 +1618,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">11</div>
+  <div class="page-num">13</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 12: D-05 FEATURE AI                                     -->
+<!-- PAGE 14: D-05 FEATURE AI                                     -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1391,11 +1668,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">12</div>
+  <div class="page-num">14</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 13: D-06 REVIEWS                                        -->
+<!-- PAGE 15: D-06 REVIEWS                                        -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1439,11 +1716,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">13</div>
+  <div class="page-num">15</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 14: D-07 FINAL CTA + FOOTER                             -->
+<!-- PAGE 16: D-07 FINAL CTA + FOOTER                             -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1491,11 +1768,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">14</div>
+  <div class="page-num">16</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 15: D-08 AUTH DIALOG                                    -->
+<!-- PAGE 17: D-08 AUTH DIALOG                                    -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1545,11 +1822,11 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">15</div>
+  <div class="page-num">17</div>
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 16: D-09 MOBILE DRAWER                                  -->
+<!-- PAGE 18: D-09 MOBILE DRAWER                                  -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -1599,7 +1876,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Landingpage</div>
-  <div class="page-num">16</div>
+  <div class="page-num">18</div>
 </div>
 
 </body>
