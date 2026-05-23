@@ -249,7 +249,8 @@
     font-size: 8.5pt;
     line-height: 1.7;
     color: #cdd6f4;
-    overflow: hidden;
+    white-space: pre;
+    overflow-x: auto;
   }
   .ia-code .c-root  { color: #cba6f7; font-weight: 700; }
   .ia-code .c-node  { color: #89b4fa; }
@@ -396,6 +397,19 @@
     height: auto;
     margin: 0;
   }
+  .wf-anno {
+    position: absolute;
+    background: var(--ink);
+    color: white;
+    width: 7mm; height: 7mm;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9pt; font-weight: 800;
+    border: 2px solid white;
+    outline: 1px solid rgba(0,0,0,0.25);
+    z-index: 5;
+  }
+  .wf-anno.purple { background: var(--purple-2); }
   .wf-callouts {
     background: white;
     padding: 5mm;
@@ -495,15 +509,15 @@
     </div>
 
     <div class="eyebrow">Fachkonzept &middot; Admin-Bereich</div>
-    <h1>Fachkonzept<br>des <span class="accent">Admin-Bereichs</span>.</h1>
-    <p class="sub">Dialogliste, Informationsarchitektur, Swimlane-Ablaufdiagramm und annotierter Wireframe des Admin-Dashboards der Reflecta-Plattform.</p>
+    <h1>Fachkonzept<br>des <span class="accent">Admin-Bereichs</span></h1>
+    <p class="sub">Dialogliste, Informationsarchitektur, Swimlane-Ablaufdiagramm und annotierter Wireframe des Admin-Dashboards der Reflecta-Plattform</p>
   </div>
 
   <div class="cover-meta">
     <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
-    <div class="cell"><div class="k">Bereich</div><div class="v">Frontend-Adminforms</div></div>
     <div class="cell"><div class="k">Datum</div><div class="v">22.05.2026</div></div>
-    <div class="cell"><div class="k">Zielgruppe</div><div class="v">Admins (is_admin = true)</div></div>
+    <div class="cell"><div class="k">Department</div><div class="v">Frontend-Adminforms</div></div>
+    <div class="cell"><div class="k">Mitarbeiter</div><div class="v">8533720</div></div>
   </div>
 </div>
 
@@ -528,9 +542,11 @@
       <div class="toc-row"><div class="toc-num">1</div><div class="toc-title">Geltungsbereich &amp; Konventionen</div><div class="toc-page">3</div></div>
       <div class="toc-row"><div class="toc-num">2</div><div class="toc-title">Dialogliste</div><div class="toc-page">4</div></div>
       <div class="toc-row"><div class="toc-num">3</div><div class="toc-title">Informationsarchitektur</div><div class="toc-page">5</div></div>
-      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">6</div></div>
-      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframe</div><div class="toc-page">7</div></div>
-      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">ADM-00 Stats Overview</div><div class="toc-page">7</div></div>
+      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">6–7</div></div>
+      <div class="toc-row"><div class="toc-num">4.1</div><div class="toc-title">Flow A &mdash; Stats-Übersicht laden (Erfolgsfall)</div><div class="toc-page">6</div></div>
+      <div class="toc-row"><div class="toc-num">4.2</div><div class="toc-title">Flow B &mdash; Zugriff verweigert (HTTP 403 / 401)</div><div class="toc-page">7</div></div>
+      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframe</div><div class="toc-page">8</div></div>
+      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">ADM-00 Stats Overview</div><div class="toc-page">8</div></div>
     </div>
   </div>
 
@@ -712,7 +728,7 @@
     <p class="section-lead">Der Admin-Bereich ist eine einzelne, zustandslos gerenderte Seite innerhalb der AuthenticatedApp. Die Hierarchie des Komponentenbaums, der API-Endpunkt und das zugrundeliegende Datenmodell sind nachfolgend dokumentiert.</p>
 
     <h3 class="sub">3.1 Komponentenbaum</h3>
-    <div class="ia-code"><span class="c-root">App.js</span>
+    <pre class="ia-code"><span class="c-root">App.js</span>
 <span class="c-dim">└──</span> <span class="c-node">AuthenticatedApp</span>   <span class="c-note">[activeTab state]</span>
     <span class="c-dim">├──</span> Sidebar             <span class="c-note">[journal | goals | calendar | analytics | admin]</span>
     <span class="c-dim">├──</span> Header
@@ -726,7 +742,7 @@
         <span class="c-dim">└──</span> <span class="c-leaf">AI Usage Card</span>
             <span class="c-dim">├──</span> Total Calls        <span class="c-note">stats.total_ai_calls</span>
             <span class="c-dim">├──</span> Success Rate (%)   <span class="c-note">stats.ai_success_rate</span>
-            <span class="c-dim">└──</span> Total Tokens       <span class="c-note">stats.ai_tokens_total</span></div>
+            <span class="c-dim">└──</span> Total Tokens       <span class="c-note">stats.ai_tokens_total</span></pre>
 
     <h3 class="sub">3.2 API-Endpunkt</h3>
     <table class="dl">
@@ -796,7 +812,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- PAGE 6: SWIMLANE                                             -->
+<!-- PAGE 6: SWIMLANE FLOW A                                      -->
 <!-- ============================================================ -->
 <div class="page">
   <div class="page-head">
@@ -810,73 +826,265 @@
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Abschnitt 4</div>
     <h2 class="section">Swimlane-Ablaufdiagramm</h2>
-    <p class="section-lead">Drei Lanes erfassen die Akteure des Admin-Datenflusses: den Admin-Nutzer im Browser, das React-Frontend und das FastAPI-Backend mit SQLite-Datenbank. Das Diagramm zeigt den vollständigen Zyklus vom Klick auf &bdquo;Admin&ldquo; bis zur Darstellung der Stats-Zahlen.</p>
+    <p class="section-lead">Zwei Flows dokumentieren den Admin-Datenpfad vollständig: Flow A zeigt den Erfolgsfall (Stats laden), Flow B den Fehlerfall (fehlende Admin-Rechte). Drei Lanes: Admin-Browser, React-Frontend, FastAPI + SQLite.</p>
 
     <div class="legend-row">
       <span><span class="legend-dot" style="background:#6A0DAD"></span>Admin / Browser</span>
       <span><span class="legend-dot" style="background:#1e293b"></span>React (Frontend)</span>
       <span><span class="legend-dot" style="background:#065f46"></span>FastAPI + SQLite</span>
-      <span><span class="legend-dot" style="background:linear-gradient(135deg,#9B30FF,#6A0DAD)"></span>Terminal (Ergebnis)</span>
+      <span><span class="legend-dot" style="background:#f0fdf4;border:1.5px solid #16a34a"></span>Rückweg (Erfolg)</span>
+      <span><span class="legend-dot" style="background:#fef2f2;border:1.5px solid #dc2626"></span>Rückweg (Fehler)</span>
     </div>
 
     <h3 class="sub">4.1 Flow A &mdash; Stats-Übersicht laden (ADM-00)</h3>
-    <p>Admin navigiert zum Admin-Bereich. Die Stats-Seite lädt beim ersten Rendern automatisch. Hinweg (lila) von links nach rechts bis zur DB, Rückweg (grün) zurück.</p>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Erfolgsfall: Admin klickt auf &bdquo;Admin&ldquo; in der Sidebar, das Dashboard mountet, lädt via useEffect die Stats und rendert die StatCards.</p>
 
-    <div class="swimlane" style="margin-top: 4mm;">
-      <!-- Lane 1: Admin / Browser -->
-      <div class="swim-row user">
-        <div class="swim-label"><div class="l-name">Admin<br>(Browser)</div></div>
-        <div class="swim-track">
-          <div class="swim-step terminal"><span class="step-num">U1</span>Klick &bdquo;Admin&ldquo;<br>in der Sidebar</div>
-          <div class="arrow" style="width:12mm;"></div>
-          <div class="swim-step"><span class="step-num">U2</span>Admin-Dashboard<br>sichtbar</div>
-          <div class="arrow green" style="width:14mm; margin-left: auto;"></div>
-          <div class="swim-step success"><span class="step-num">U3</span>Stats-Zahlen<br>angezeigt ✓</div>
-        </div>
+    <!-- FLOW A SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:5mm;">
+      <!-- Title bar -->
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow A &mdash; GET /admin/stats (Erfolg)</div>
+      <!-- Lane headers -->
+      <div style="display:grid;grid-template-columns:28mm 1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);"></div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Admin (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; FastAPI + SQLite</div>
       </div>
+      <svg viewBox="0 0 680 230" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fA-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fA-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+          <marker id="fA-up" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto-start-reverse"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+        </defs>
 
-      <!-- Lane 2: React Frontend -->
-      <div class="swim-row system">
-        <div class="swim-label"><div class="l-name">React<br>(Frontend)</div></div>
-        <div class="swim-track">
-          <div class="swim-step system"><span class="step-num">S1</span>AdminDashboard<br>mountet</div>
-          <div class="arrow" style="width:10mm;"></div>
-          <div class="swim-step system"><span class="step-num">S2</span>useEffect &rarr;<br>getAdminStats()</div>
-          <div class="arrow" style="width:8mm;"></div>
-          <div class="swim-step system"><span class="step-num">S3</span>Bearer-Token<br>anfügen</div>
-          <div class="arrow green" style="width:8mm;"></div>
-          <div class="swim-step success"><span class="step-num">S4</span>setStats(data) &rarr;<br>StatCards rendern</div>
-        </div>
-      </div>
+        <!-- Lane dividers -->
+        <line x1="28" y1="0" x2="28" y2="230" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="254" y1="0" x2="254" y2="230" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="480" y1="0" x2="480" y2="230" stroke="#e5e7eb" stroke-width="1"/>
 
-      <!-- Lane 3: FastAPI + SQLite -->
-      <div class="swim-row db">
-        <div class="swim-label"><div class="l-name">FastAPI<br>+ SQLite</div></div>
-        <div class="swim-track">
-          <div class="swim-step db-step"><span class="step-num">A1</span>GET /admin/stats<br>+ JWT-Prüfung</div>
-          <div class="arrow" style="width:10mm;"></div>
-          <div class="swim-step db-step"><span class="step-num">A2</span>COUNT(users)<br>COUNT DISTINCT<br>COUNT(entries)<br>SUM(ai_logs)</div>
-          <div class="arrow green" style="width:8mm;"></div>
-          <div class="swim-step success"><span class="step-num">A3</span>HTTP 200<br>+ JSON</div>
-        </div>
-      </div>
-    </div>
+        <!-- Lane bg tints -->
+        <rect x="29" y="0" width="224" height="230" fill="#faf5ff" opacity="0.35"/>
+        <rect x="255" y="0" width="224" height="230" fill="#f8fafc" opacity="0.45"/>
+        <rect x="481" y="0" width="199" height="230" fill="#f0fdf4" opacity="0.35"/>
 
-    <h3 class="sub">4.2 Fehlerfall &mdash; Nicht-Admin-Nutzer</h3>
-    <div class="grid-2" style="margin-top: 2mm;">
-      <div class="info-card">
-        <h4>HTTP 403 Forbidden</h4>
-        <p>Ruft ein Nutzer ohne <code>is_admin = true</code> den Endpunkt auf, antwortet FastAPI mit 403. Das Frontend zeigt keinen Admin-Tab an, sodass dieser Fall nur durch direkten API-Aufruf eintreten kann.</p>
-      </div>
-      <div class="info-card">
-        <h4>HTTP 401 Unauthorized</h4>
-        <p>Fehlendes oder abgelaufenes JWT-Token führt zu 401. Das React-Frontend leitet den Nutzer in diesem Fall zurück zur Anmeldung.</p>
-      </div>
+        <!-- Lane labels (rotated) -->
+        <text x="14" y="80" text-anchor="middle" transform="rotate(-90,14,80)" font-size="8" font-weight="700" fill="#6A0DAD" letter-spacing="1">ADMIN</text>
+        <text x="14" y="155" text-anchor="middle" transform="rotate(-90,14,155)" font-size="8" font-weight="700" fill="#1e293b" letter-spacing="1">REACT</text>
+
+        <!-- ── ROW 1: Hinweg (top half) ── -->
+        <!-- U1: Klick Admin -->
+        <rect x="42" y="18" width="90" height="44" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="87" y="36" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="87" y="49" text-anchor="middle" fill="white" font-size="9">Klick „Admin"</text>
+        <text x="87" y="60" text-anchor="middle" fill="white" font-size="9">in der Sidebar</text>
+
+        <!-- Arrow U1→S1 -->
+        <line x1="132" y1="40" x2="182" y2="40" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="157" y="36" text-anchor="middle" fill="#9ca3af" font-size="8">State</text>
+
+        <!-- S1: AdminDashboard mountet -->
+        <rect x="184" y="18" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="229" y="36" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="229" y="49" text-anchor="middle" fill="#1e293b" font-size="9">AdminDashboard</text>
+        <text x="229" y="60" text-anchor="middle" fill="#1e293b" font-size="9">mountet</text>
+
+        <!-- Arrow S1→S2 (within react lane) — goes down then right -->
+        <line x1="229" y1="62" x2="229" y2="80" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- S2: useEffect -->
+        <rect x="184" y="82" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="229" y="100" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S2</text>
+        <text x="229" y="113" text-anchor="middle" fill="#1e293b" font-size="9">useEffect →</text>
+        <text x="229" y="124" text-anchor="middle" fill="#1e293b" font-size="9">getAdminStats()</text>
+
+        <!-- Arrow S2→A1 -->
+        <line x1="274" y1="104" x2="494" y2="104" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="384" y="99" text-anchor="middle" fill="#9ca3af" font-size="8">Bearer JWT</text>
+
+        <!-- A1: GET /admin/stats -->
+        <rect x="496" y="82" width="90" height="44" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="541" y="100" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">A1</text>
+        <text x="541" y="113" text-anchor="middle" fill="#78350f" font-size="9">GET /admin/stats</text>
+        <text x="541" y="124" text-anchor="middle" fill="#78350f" font-size="9">JWT-Prüfung ✓</text>
+
+        <!-- Arrow A1→A2 -->
+        <line x1="541" y1="126" x2="541" y2="148" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- A2: DB Queries -->
+        <rect x="496" y="150" width="90" height="60" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="541" y="167" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A2</text>
+        <text x="541" y="180" text-anchor="middle" fill="#065f46" font-size="8.5">COUNT(users)</text>
+        <text x="541" y="191" text-anchor="middle" fill="#065f46" font-size="8.5">COUNT DISTINCT</text>
+        <text x="541" y="202" text-anchor="middle" fill="#065f46" font-size="8.5">SUM(ai_logs)</text>
+
+        <!-- ── RÜCKWEG (grün) ── -->
+        <!-- A2→A3 HTTP 200 -->
+        <rect x="496" y="150" width="0" height="0"/> <!-- anchor -->
+
+        <!-- A3: HTTP 200 — placed left of A2 in fastapi lane -->
+        <rect x="496" y="18" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="541" y="36" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A3</text>
+        <text x="541" y="49" text-anchor="middle" fill="#065f46" font-size="9">HTTP 200</text>
+        <text x="541" y="60" text-anchor="middle" fill="#065f46" font-size="9">+ JSON</text>
+
+        <!-- Arrow A2→A3 (up within fastapi lane) -->
+        <line x1="496" y1="180" x2="440" y2="180" stroke="#16a34a" stroke-width="1.5"/>
+        <line x1="440" y1="180" x2="440" y2="40" stroke="#16a34a" stroke-width="1.5"/>
+        <line x1="440" y1="40" x2="494" y2="40" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fA-grn)"/>
+        <text x="438" y="176" text-anchor="end" fill="#9ca3af" font-size="8">Rows</text>
+
+        <!-- Arrow A3→S3 setStats -->
+        <line x1="496" y1="40" x2="276" y2="40" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fA-grn)"/>
+        <text x="386" y="36" text-anchor="middle" fill="#9ca3af" font-size="8">JSON</text>
+
+        <!-- S3: setStats -->
+        <rect x="184" y="150" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="229" y="168" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">S3</text>
+        <text x="229" y="181" text-anchor="middle" fill="#065f46" font-size="9">setStats(data)</text>
+        <text x="229" y="192" text-anchor="middle" fill="#065f46" font-size="9">StatCards rendern</text>
+
+        <!-- Arrow S2→S3 (within react, after response) -->
+        <line x1="229" y1="126" x2="229" y2="148" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+        <!-- Arrow S3→U3 -->
+        <line x1="184" y1="172" x2="134" y2="172" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fA-grn)"/>
+        <text x="159" y="168" text-anchor="middle" fill="#9ca3af" font-size="8">UI</text>
+
+        <!-- U3: Stats angezeigt -->
+        <rect x="42" y="150" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="87" y="168" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">U3</text>
+        <text x="87" y="181" text-anchor="middle" fill="#065f46" font-size="9">Stats-Zahlen</text>
+        <text x="87" y="192" text-anchor="middle" fill="#065f46" font-size="9">angezeigt ✓</text>
+
+        <!-- Arrow U1 down to U3 (browser lane vertical) -->
+        <line x1="87" y1="62" x2="87" y2="148" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
     </div>
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
   <div class="page-num">06</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: SWIMLANE FLOW B                                      -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">4.2 Flow B &mdash; Zugriff verweigert (HTTP 403 / 401)</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Fehlerfall: Ein Nutzer ohne Admin-Rechte versucht, den Endpunkt aufzurufen. FastAPI antwortet mit HTTP 403. Das Frontend fängt den Fehler ab und zeigt eine Fehlermeldung; der Admin-Tab ist im Normalfall gar nicht sichtbar.</p>
+
+    <!-- FLOW B SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:5mm;">
+      <div style="background:#dc2626;color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow B &mdash; GET /admin/stats (Fehler: fehlende Rechte)</div>
+      <div style="display:grid;grid-template-columns:28mm 1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--line);"></div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6A0DAD;border-right:1px solid var(--line);text-align:center;">&#x2460; Nutzer (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#b91c1c;text-align:center;">&#x2462; FastAPI + SQLite</div>
+      </div>
+      <svg viewBox="0 0 680 210" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fB-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fB-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#dc2626"/></marker>
+        </defs>
+
+        <!-- Lane dividers -->
+        <line x1="28" y1="0" x2="28" y2="210" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="254" y1="0" x2="254" y2="210" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="480" y1="0" x2="480" y2="210" stroke="#e5e7eb" stroke-width="1"/>
+
+        <!-- Lane bg tints -->
+        <rect x="29" y="0" width="224" height="210" fill="#faf5ff" opacity="0.35"/>
+        <rect x="255" y="0" width="224" height="210" fill="#f8fafc" opacity="0.45"/>
+        <rect x="481" y="0" width="199" height="210" fill="#fff1f2" opacity="0.45"/>
+
+        <!-- Lane labels -->
+        <text x="14" y="75" text-anchor="middle" transform="rotate(-90,14,75)" font-size="8" font-weight="700" fill="#6A0DAD" letter-spacing="1">NUTZER</text>
+        <text x="14" y="145" text-anchor="middle" transform="rotate(-90,14,145)" font-size="8" font-weight="700" fill="#1e293b" letter-spacing="1">REACT</text>
+
+        <!-- U1: Direkter Aufruf / kein Admin-Tab -->
+        <rect x="42" y="16" width="90" height="50" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="87" y="33" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U1</text>
+        <text x="87" y="46" text-anchor="middle" fill="#5b21b6" font-size="9">Direkter API-</text>
+        <text x="87" y="57" text-anchor="middle" fill="#5b21b6" font-size="9">Aufruf (kein Tab)</text>
+
+        <!-- Arrow U1→S1 -->
+        <line x1="132" y1="41" x2="182" y2="41" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="157" y="37" text-anchor="middle" fill="#9ca3af" font-size="8">Request</text>
+
+        <!-- S1: fetch mit Token -->
+        <rect x="184" y="16" width="90" height="50" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="229" y="33" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="229" y="46" text-anchor="middle" fill="#1e293b" font-size="9">fetch() mit</text>
+        <text x="229" y="57" text-anchor="middle" fill="#1e293b" font-size="9">JWT (kein Admin)</text>
+
+        <!-- Arrow S1→A1 -->
+        <line x1="274" y1="41" x2="494" y2="41" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="384" y="37" text-anchor="middle" fill="#9ca3af" font-size="8">Bearer JWT</text>
+
+        <!-- A1: JWT-Prüfung fehlgeschlagen -->
+        <rect x="496" y="16" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="541" y="33" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="9.5">A1</text>
+        <text x="541" y="46" text-anchor="middle" fill="#b91c1c" font-size="9">JWT-Prüfung:</text>
+        <text x="541" y="57" text-anchor="middle" fill="#b91c1c" font-size="9">is_admin = false</text>
+
+        <!-- Arrow A1→A2 -->
+        <line x1="541" y1="66" x2="541" y2="84" stroke="#dc2626" stroke-width="1.5" marker-end="url(#fB-red)"/>
+
+        <!-- A2: HTTP 403 -->
+        <rect x="496" y="86" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="2"/>
+        <text x="541" y="103" text-anchor="middle" fill="#b91c1c" font-weight="800" font-size="10">A2</text>
+        <text x="541" y="117" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="10">HTTP 403</text>
+        <text x="541" y="128" text-anchor="middle" fill="#b91c1c" font-size="9">Forbidden</text>
+
+        <!-- Arrow A2→S2 -->
+        <line x1="496" y1="111" x2="276" y2="111" stroke="#dc2626" stroke-width="1.5" marker-end="url(#fB-red)"/>
+        <text x="386" y="107" text-anchor="middle" fill="#9ca3af" font-size="8">JSON error</text>
+
+        <!-- S2: Fehler abfangen -->
+        <rect x="184" y="86" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="229" y="103" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="9.5">S2</text>
+        <text x="229" y="116" text-anchor="middle" fill="#b91c1c" font-size="9">Fehler abfangen</text>
+        <text x="229" y="127" text-anchor="middle" fill="#b91c1c" font-size="9">setError(true)</text>
+
+        <!-- Arrow S2→U2 -->
+        <line x1="184" y1="111" x2="134" y2="111" stroke="#dc2626" stroke-width="1.5" marker-end="url(#fB-red)"/>
+        <text x="159" y="107" text-anchor="middle" fill="#9ca3af" font-size="8">UI</text>
+
+        <!-- U2: Fehler angezeigt -->
+        <rect x="42" y="86" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="87" y="103" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="9.5">U2</text>
+        <text x="87" y="116" text-anchor="middle" fill="#b91c1c" font-size="9">Fehler angezeigt</text>
+        <text x="87" y="127" text-anchor="middle" fill="#b91c1c" font-size="9">(Zugriff verweigert)</text>
+
+        <!-- Vertical connectors in browser lane -->
+        <line x1="87" y1="66" x2="87" y2="84" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+
+    <div class="grid-2" style="margin-top:2mm;">
+      <div class="info-card">
+        <h4>HTTP 403 Forbidden</h4>
+        <p>FastAPI gibt 403 zurück, wenn <code>user.is_admin == False</code>. Im Normalfall ist der Admin-Tab im Frontend für solche Nutzer nicht gerendert; dieser Fall tritt nur bei direktem API-Zugriff ein.</p>
+      </div>
+      <div class="info-card">
+        <h4>HTTP 401 Unauthorized</h4>
+        <p>Fehlendes oder abgelaufenes JWT führt zu 401. Das React-Frontend leitet den Nutzer zurück zur Anmeldeseite (Auth-Dialog D-08).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">07</div>
 </div>
 
 <!-- ============================================================ -->
@@ -890,6 +1098,7 @@
     </div>
     <div>5.1 Wireframe ADM-00 Stats Overview</div>
   </div>
+  <!-- page number updated: was 07, now 08 -->
 
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Abschnitt 5.1</div>
@@ -905,7 +1114,13 @@
         <div class="wf-tag">Gated &middot; Admin</div>
       </div>
       <div class="wf-image-wrap">
-        <img src="Bildschirmfoto 2026-05-22 um 15.26.17.png" alt="ADM-00 Stats Overview">
+        <img src="Assets/wireframe_adm00.png" alt="ADM-00 Stats Overview">
+        <div class="wf-anno purple" style="top: 70%; left: 12%;">1</div>
+        <div class="wf-anno" style="top: 45%; left: 24%;">2</div>
+        <div class="wf-anno" style="top: 45%; left: 45%;">3</div>
+        <div class="wf-anno" style="top: 45%; left: 65%;">4</div>
+        <div class="wf-anno" style="top: 45%; left: 84%;">5</div>
+        <div class="wf-anno" style="top: 83%; left: 24%;">6</div>
       </div>
       <div class="wf-callouts">
         <h5>Callouts</h5>
@@ -922,7 +1137,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
-  <div class="page-num">07</div>
+  <div class="page-num">08</div>
 </div>
 
 </body>
