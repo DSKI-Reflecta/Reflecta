@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Reflecta - Fachkonzept Admin-Bereich</title>
+<style>
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: block;
+    src: url('../Frontend-Landingpage/fonts/PlusJakartaSans-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: block;
+    src: url('../Frontend-Landingpage/fonts/PlusJakartaSans-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+  :root {
+    --purple-1: #9B30FF;
+    --purple-2: #6A0DAD;
+    --ink: #171717;
+    --ink-2: #2b2b2b;
+    --muted: #6b7280;
+    --muted-2: #94a3b8;
+    --line: #e5e7eb;
+    --soft: #f8f7fb;
+    --soft-2: #f3e8ff;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+  }
+
+  @page { size: A4; margin: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    background: white;
+  }
+
+  body { font-size: 10pt; line-height: 1.5; }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 18mm 16mm 16mm 16mm;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .page-num {
+    position: absolute;
+    bottom: 10mm;
+    right: 16mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .page-foot {
+    position: absolute;
+    bottom: 10mm;
+    left: 16mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .page-head {
+    position: absolute;
+    top: 8mm;
+    left: 16mm;
+    right: 16mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8pt;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4mm;
+  }
+  .page-head .brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* COVER */
+  .cover {
+    background: white;
+    color: var(--ink);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 18mm;
+    background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 100%);
+  }
+  .cover::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4mm;
+    background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 100%);
+  }
+  .cover-inner { padding: 32mm 22mm 22mm; flex: 1; display: flex; flex-direction: column; position: relative; z-index: 1; }
+  .cover .logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 60mm; }
+  .cover .logo-mark {
+    width: 50px; height: 50px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4mm 10mm rgba(106,13,173,0.18);
+  }
+  .cover .logo-name { font-size: 19pt; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .cover .eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 6mm;
+  }
+  .cover h1 {
+    font-size: 36pt; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.05; margin-bottom: 6mm; color: var(--ink);
+  }
+  .cover h1 .accent { color: var(--purple-2); }
+  .cover .sub { font-size: 12pt; font-weight: 400; color: var(--ink-2); line-height: 1.5; max-width: 130mm; }
+  .cover-meta {
+    border-top: 1px solid var(--line);
+    padding: 10mm 22mm 16mm;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6mm;
+    background: white;
+    position: relative; z-index: 1;
+  }
+  .cover-meta .cell .k { font-size: 7.5pt; color: var(--purple-2); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2mm; font-weight: 700; }
+  .cover-meta .cell .v { font-size: 10pt; font-weight: 600; color: var(--ink); }
+
+  /* TYPOGRAPHY */
+  h2.section {
+    font-size: 20pt; font-weight: 800; letter-spacing: -0.02em;
+    color: var(--ink); margin-bottom: 3mm;
+  }
+  .section-eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 3mm;
+  }
+  .section-lead {
+    font-size: 10.5pt; color: var(--muted); line-height: 1.55;
+    max-width: 165mm; margin-bottom: 5mm;
+  }
+  h3.sub {
+    font-size: 12pt; font-weight: 700; color: var(--ink);
+    margin: 5mm 0 2mm; letter-spacing: -0.01em;
+  }
+  h4.subsub {
+    font-size: 10.5pt; font-weight: 700; color: var(--ink-2);
+    margin: 4mm 0 2mm;
+  }
+  p { margin-bottom: 3mm; color: var(--ink-2); }
+  ul, ol { padding-left: 5mm; margin-bottom: 3mm; }
+  ul li, ol li { margin-bottom: 1.5mm; color: var(--ink-2); }
+  .muted { color: var(--muted); }
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 8.5pt;
+    background: var(--soft-2);
+    color: var(--purple-2);
+    padding: 0.5mm 1.5mm;
+    border-radius: 2mm;
+  }
+
+  /* TOC */
+  .toc {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding: 6mm 0;
+  }
+  .toc-row {
+    display: flex; align-items: baseline;
+    padding: 3mm 0; border-bottom: 1px dotted var(--line);
+    font-size: 11pt;
+  }
+  .toc-row:last-child { border-bottom: none; }
+  .toc-num { width: 14mm; font-weight: 700; color: var(--purple-2); font-size: 10.5pt; }
+  .toc-title { flex: 1; font-weight: 600; color: var(--ink); }
+  .toc-page { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 10pt; }
+
+  /* TABLE */
+  table.dl {
+    width: 100%; border-collapse: collapse; font-size: 9pt;
+    margin: 4mm 0 6mm;
+  }
+  table.dl thead th {
+    background: var(--ink); color: white;
+    text-align: left; font-weight: 600; font-size: 8.5pt;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3mm 3mm; border-right: 1px solid #333;
+  }
+  table.dl thead th:last-child { border-right: none; }
+  table.dl tbody td {
+    padding: 3mm 3mm; vertical-align: top;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  table.dl tbody td:last-child { border-right: none; }
+  table.dl tbody tr:nth-child(even) td { background: var(--soft); }
+  table.dl tbody td.id {
+    font-weight: 700; color: var(--purple-2);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+    font-size: 8.5pt;
+  }
+  table.dl tbody td.name { font-weight: 600; color: var(--ink); }
+  table.dl .pill {
+    display: inline-block; padding: 1mm 2mm; border-radius: 3mm;
+    font-size: 7.5pt; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill.gated  { background: #fef3c7; color: #92400e; }
+  .pill.admin  { background: var(--soft-2); color: var(--purple-2); }
+  .pill.get    { background: #d1fae5; color: #065f46; }
+
+  /* INFORMATION ARCHITECTURE TREE (code block style) */
+  .ia-code {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    background: #1a1a2e;
+    padding: 6mm 7mm;
+    margin: 4mm 0 5mm;
+    font-family: 'Courier New', monospace;
+    font-size: 8.5pt;
+    line-height: 1.7;
+    color: #cdd6f4;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .ia-code .c-root  { color: #cba6f7; font-weight: 700; }
+  .ia-code .c-node  { color: #89b4fa; }
+  .ia-code .c-leaf  { color: #a6e3a1; }
+  .ia-code .c-note  { color: #585b70; }
+  .ia-code .c-dim   { color: #6c7086; }
+
+  /* SWIMLANE */
+  .swimlane {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    overflow: hidden;
+    margin: 5mm 0;
+    page-break-inside: avoid;
+  }
+  .swim-row {
+    display: grid;
+    grid-template-columns: 30mm 1fr;
+    border-bottom: 1px solid var(--line);
+    min-height: 22mm;
+  }
+  .swim-row:last-child { border-bottom: none; }
+  .swim-label {
+    background: var(--ink);
+    color: white;
+    padding: 3mm 3mm;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex; align-items: center;
+  }
+  .swim-label .l-name { line-height: 1.3; }
+  .swim-row.user .swim-label   { background: var(--purple-2); }
+  .swim-row.system .swim-label { background: #1e293b; }
+  .swim-row.db .swim-label     { background: #065f46; }
+
+  .swim-track {
+    position: relative;
+    padding: 4mm;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .swim-step {
+    background: white;
+    border: 1.5px solid var(--purple-2);
+    border-radius: 3mm;
+    padding: 2.5mm 3mm;
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+    min-width: 28mm;
+    max-width: 40mm;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 1mm 2mm rgba(0,0,0,0.04);
+  }
+  .swim-step.terminal {
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    color: white;
+    border-color: transparent;
+  }
+  .swim-step.system {
+    border-color: #1e293b;
+    background: white;
+  }
+  .swim-step.db-step {
+    border-color: #065f46;
+    background: #ecfdf5;
+  }
+  .swim-step.success {
+    border-color: var(--green);
+    background: #f0fdf4;
+  }
+  .swim-step .step-num {
+    display: block; font-size: 6.5pt; color: var(--purple-2);
+    font-weight: 700; letter-spacing: 0.1em; margin-bottom: 0.5mm;
+  }
+  .swim-step.terminal .step-num { color: white; opacity: 0.7; }
+  .swim-step.system   .step-num { color: #1e293b; }
+  .swim-step.db-step  .step-num { color: #065f46; }
+  .swim-step.success  .step-num { color: var(--green); }
+  .arrow {
+    flex: 0 0 auto;
+    width: 8mm;
+    height: 1.5px;
+    background: var(--ink);
+    position: relative;
+    margin: 0 1mm;
+  }
+  .arrow::after {
+    content: "";
+    position: absolute;
+    right: -1px; top: 50%;
+    transform: translateY(-50%);
+    border-left: 2.5mm solid var(--ink);
+    border-top: 1.5mm solid transparent;
+    border-bottom: 1.5mm solid transparent;
+  }
+  .arrow.green { background: var(--green); }
+  .arrow.green::after { border-left-color: var(--green); }
+
+  /* WIREFRAME PAGE */
+  .wf-block {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    overflow: hidden;
+    margin: 4mm 0 6mm;
+    background: white;
+    page-break-inside: avoid;
+  }
+  .wf-meta {
+    background: var(--ink);
+    color: white;
+    padding: 4mm 5mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .wf-meta .wf-id {
+    font-size: 8pt; letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 1mm;
+  }
+  .wf-meta .wf-name {
+    font-size: 12pt; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .wf-meta .wf-tag {
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    padding: 1.5mm 3mm; border-radius: 3mm;
+    font-size: 7.5pt; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .wf-image-wrap {
+    position: relative;
+    background: var(--soft);
+    padding: 0;
+  }
+  .wf-image-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+  .wf-anno {
+    position: absolute;
+    background: var(--ink);
+    color: white;
+    width: 7mm; height: 7mm;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9pt; font-weight: 800;
+    border: 2px solid white;
+    outline: 1px solid rgba(0,0,0,0.25);
+    z-index: 5;
+  }
+  .wf-anno.purple { background: var(--purple-2); }
+  .wf-callouts {
+    background: white;
+    padding: 5mm;
+    border-top: 1px solid var(--line);
+  }
+  .wf-callouts h5 {
+    font-size: 8.5pt; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin-bottom: 3mm;
+  }
+  .wf-callouts ol {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2mm 6mm;
+  }
+  .wf-callouts ol li {
+    font-size: 9pt;
+    color: var(--ink-2);
+    padding-left: 8mm;
+    position: relative;
+    line-height: 1.5;
+  }
+  .wf-callouts ol li::before {
+    content: counter(callout);
+    counter-increment: callout;
+    position: absolute;
+    left: 0; top: 0.4mm;
+    width: 5mm; height: 5mm;
+    background: var(--ink);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7pt; font-weight: 700;
+  }
+  .wf-callouts ol { counter-reset: callout; }
+  .wf-callouts ol li b { color: var(--ink); font-weight: 700; }
+
+  /* MISC */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 3mm;
+    padding: 4mm;
+    background: var(--soft);
+  }
+  .info-card h4 {
+    font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 2mm;
+  }
+  .info-card p { font-size: 9.5pt; color: var(--ink-2); margin: 0; }
+
+  .legend-row {
+    display: flex; gap: 5mm; flex-wrap: wrap;
+    background: var(--soft);
+    border-radius: 3mm;
+    padding: 3mm 4mm;
+    margin-bottom: 4mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+  }
+  .legend-row span { display: inline-flex; align-items: center; gap: 2mm; }
+  .legend-dot { width: 3.5mm; height: 3.5mm; border-radius: 50%; display: inline-block; }
+
+  .callout-box {
+    background: var(--soft-2);
+    border-left: 3px solid var(--purple-2);
+    border-radius: 0 3mm 3mm 0;
+    padding: 3mm 4mm;
+    margin: 3mm 0;
+    font-size: 9pt;
+    color: var(--ink-2);
+  }
+  .callout-box.green {
+    background: #f0fdf4;
+    border-left-color: var(--green);
+    color: #14532d;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER                                                -->
+<!-- ============================================================ -->
+<div class="page cover">
+  <div class="cover-inner">
+    <div class="logo-row">
+      <div class="logo-mark">
+        <svg width="32" height="32" viewBox="10 10 40 40" fill="none">
+          <line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="1.8"/>
+          <path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.4" fill="none" opacity="0.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-name">Reflecta</div>
+    </div>
+
+    <div class="eyebrow">Fachkonzept &middot; Admin-Bereich</div>
+    <h1>Fachkonzept<br>des <span class="accent">Admin-Bereichs</span></h1>
+    <p class="sub">Dialogliste, Informationsarchitektur, Swimlane-Ablaufdiagramm und annotierter Wireframe des Admin-Dashboards der Reflecta-Plattform</p>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
+    <div class="cell"><div class="k">Datum</div><div class="v">22.05.2026</div></div>
+    <div class="cell"><div class="k">Department</div><div class="v">Frontend-Adminforms</div></div>
+    <div class="cell"><div class="k">Mitarbeiter</div><div class="v">8533720</div></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: TABLE OF CONTENTS + INTRO                            -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>Fachkonzept Admin-Bereich</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Dokumentübersicht</div>
+    <h2 class="section">Inhalt</h2>
+    <p class="section-lead">Dieses Dokument spezifiziert den Admin-Bereich von Reflecta. Er ist ausschließlich für Nutzer mit <code>is_admin = true</code> zugänglich und stellt Betriebskennzahlen der Plattform dar. Das Fachkonzept beschreibt den einzigen Dialog des Bereichs, dessen Informationsarchitektur, den Ablauffluss sowie einen annotierten Wireframe.</p>
+
+    <div class="toc">
+      <div class="toc-row"><div class="toc-num">1</div><div class="toc-title">Geltungsbereich &amp; Konventionen</div><div class="toc-page">3</div></div>
+      <div class="toc-row"><div class="toc-num">2</div><div class="toc-title">Dialogliste</div><div class="toc-page">4</div></div>
+      <div class="toc-row"><div class="toc-num">3</div><div class="toc-title">Informationsarchitektur</div><div class="toc-page">5–6</div></div>
+      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">7–8</div></div>
+      <div class="toc-row"><div class="toc-num">4.1</div><div class="toc-title">Flow A &mdash; Stats-Übersicht laden (Erfolgsfall)</div><div class="toc-page">7</div></div>
+      <div class="toc-row"><div class="toc-num">4.2</div><div class="toc-title">Flow B &mdash; Zugriff verweigert (HTTP 403 / 401)</div><div class="toc-page">8</div></div>
+      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframe</div><div class="toc-page">9</div></div>
+      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">ADM-00 Stats Overview</div><div class="toc-page">9</div></div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">02</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SCOPE & CONVENTIONS                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>1. Geltungsbereich &amp; Konventionen</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 1</div>
+    <h2 class="section">Geltungsbereich &amp; Konventionen</h2>
+    <p class="section-lead">Der Admin-Bereich ist nur für angemeldete Nutzer mit gesetztem <code>is_admin</code>-Flag zugänglich. Er besteht aus einer einzigen Ansicht und bietet keine weiteren Tabs oder Sub-Dialoge.</p>
+
+    <h3 class="sub">1.1 Im Geltungsbereich</h3>
+    <ul>
+      <li><b>AdminDashboard (ADM-00)</b> mit vier StatCards und einer AI-Usage-Card.</li>
+      <li><b>API-Endpunkt</b> <code>GET /admin/stats</code> mit JWT-geschütztem Zugriff.</li>
+    </ul>
+
+    <h3 class="sub">1.2 Außerhalb des Geltungsbereichs</h3>
+    <ul>
+      <li>Angemeldetes Produkt (Journal, Ziele, Kalender, Analytics) — in einem separaten Fachkonzept dokumentiert.</li>
+      <li>Nutzerverwaltung oder manuelle Eingriffe in Daten über das Frontend.</li>
+      <li>Authentifizierungsablauf und Token-Ausstellung (AWS Cognito).</li>
+    </ul>
+
+    <h3 class="sub">1.3 Bezeichner-Konventionen</h3>
+    <div class="grid-2">
+      <div class="info-card">
+        <h4>Dialog-IDs</h4>
+        <p><b>ADM-00</b> kennzeichnet den einzigen Dialog des Admin-Bereichs. Die ID wird in der Dialogliste, im IA-Baum, im Swimlane-Diagramm und im Wireframe konsistent verwendet.</p>
+      </div>
+      <div class="info-card">
+        <h4>Schutzstufen</h4>
+        <p><b>Gated (Admin)</b> kennzeichnet Dialoge, die ein gültiges JWT mit <code>is_admin = true</code> voraussetzen. Alle ADM-Dialoge tragen diese Stufe &mdash; andernfalls liefert das Backend HTTP 403.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">1.4 Marken- und Typografie-Konventionen</h3>
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:linear-gradient(135deg,#9B30FF,#6A0DAD)"></span>Primärer Lila-Verlauf #9B30FF &rarr; #6A0DAD</span>
+      <span><span class="legend-dot" style="background:#171717"></span>Schrift #171717</span>
+      <span><span class="legend-dot" style="background:#f3e8ff;border:1px solid #ddd"></span>Helles Lila #F3E8FF</span>
+      <span><span class="legend-dot" style="background:#16a34a"></span>Erfolg #16A34A</span>
+    </div>
+    <p>Schriftfamilie ist Plus Jakarta Sans. Display-Gewichte liegen bei 700&ndash;800, Fließtext bei 400, Beschriftungen bei 500&ndash;600.</p>
+
+    <h3 class="sub">1.5 Zugriffsregel</h3>
+    <p>Das Admin-Tab in der Sidebar ist ausschließlich gerendert, wenn der authentifizierte Nutzer <code>is_admin === true</code> zurückgibt. Die Route selbst ist nicht direkt ansteuerbar; das Frontend prüft den Flag clientseitig, das Backend serverseitig via <code>get_current_admin</code>-Dependency.</p>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">03</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: DIALOG LIST                                          -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>2. Dialogliste</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 2</div>
+    <h2 class="section">Dialogliste</h2>
+    <p class="section-lead">Der Admin-Bereich besteht aus einer einzigen Ansicht. Der Dialog-Bezeichner, sein Typ und seine Auslöser sind nachfolgend aufgeführt.</p>
+
+    <table class="dl">
+      <colgroup>
+        <col style="width: 18mm">
+        <col style="width: 36mm">
+        <col style="width: 28mm">
+        <col style="width: 32mm">
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Dialog-ID</th>
+          <th>Name</th>
+          <th>Typ</th>
+          <th>Auslöser</th>
+          <th>Beschreibung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">ADM-00</td>
+          <td class="name">Stats Overview<br><span class="pill admin">Gated &middot; Admin</span></td>
+          <td>Standard-Ansicht</td>
+          <td>Navigation &rarr; Admin</td>
+          <td>Gesamtübersicht: Nutzer, Einträge, AI-Calls, Tokens</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout-box">
+      Der Admin-Bereich besteht aktuell aus einer einzigen Ansicht (<b>AdminDashboard</b>). Die Seite lädt beim ersten Rendern automatisch via <code>useEffect</code> und zeigt die Stats aus <code>GET /admin/stats</code>. Es gibt keine weiteren Tabs oder Dialoge.
+    </div>
+
+    <h3 class="sub">2.1 Elemente in ADM-00</h3>
+    <table class="dl" style="margin-top: 3mm;">
+      <colgroup>
+        <col style="width: 18mm">
+        <col style="width: 50mm">
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Element-ID</th>
+          <th>Name</th>
+          <th>Beschreibung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">ADM-00.1</td>
+          <td class="name">StatCard &mdash; Total Users</td>
+          <td>Gesamtzahl aller registrierten Nutzer aus <code>stats.total_users</code></td>
+        </tr>
+        <tr>
+          <td class="id">ADM-00.2</td>
+          <td class="name">StatCard &mdash; Active Users (7d)</td>
+          <td>Nutzer mit mindestens einem Eintrag in den letzten 7 Tagen aus <code>stats.active_users_7d</code></td>
+        </tr>
+        <tr>
+          <td class="id">ADM-00.3</td>
+          <td class="name">StatCard &mdash; Total Entries</td>
+          <td>Gesamtzahl aller Journaleinträge über alle Nutzer aus <code>stats.total_entries</code></td>
+        </tr>
+        <tr>
+          <td class="id">ADM-00.4</td>
+          <td class="name">StatCard &mdash; AI Calls Today</td>
+          <td>Anzahl der KI-Aufrufe am heutigen Tag aus <code>stats.ai_calls_today</code></td>
+        </tr>
+        <tr>
+          <td class="id">ADM-00.5</td>
+          <td class="name">AI Usage Card</td>
+          <td>Aggregierte KI-Nutzung: Total Calls, Success Rate (%), Total Tokens</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">04</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: INFORMATION ARCHITECTURE                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>3. Informationsarchitektur</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 3</div>
+    <h2 class="section">Informationsarchitektur</h2>
+    <p class="section-lead">Der Admin-Bereich ist eine einzelne, bedarfsgesteuert gemountete Seite innerhalb der AuthenticatedApp. Sie ist <b>zustandsbehaftet</b> (stateful): beim ersten Rendern lädt <code>useEffect</code> die Statistiken vom Backend und speichert sie via <code>setStats</code> im lokalen React-State. Die Hierarchie des Komponentenbaums, der API-Endpunkt und das zugrundeliegende Datenmodell sind nachfolgend dokumentiert.</p>
+
+    <h3 class="sub">3.1 Komponentenbaum</h3>
+    <pre class="ia-code"><span class="c-root">App.js</span>
+<span class="c-dim">└──</span> <span class="c-node">AuthenticatedApp</span>   <span class="c-note">[activeTab state]</span>
+    <span class="c-dim">├──</span> Sidebar             <span class="c-note">[journal | goals | calendar | analytics | admin]</span>
+    <span class="c-dim">├──</span> Header
+    <span class="c-dim">└──</span> <span class="c-node">AdminDashboard</span>      <span class="c-note">← nur wenn activeTab === "admin"</span>
+        <span class="c-dim">│   Lädt via useEffect → getAdminStats() → GET /admin/stats</span>
+        <span class="c-dim">│</span>
+        <span class="c-dim">├──</span> <span class="c-leaf">StatCard: Total Users</span>        <span class="c-note">stats.total_users</span>
+        <span class="c-dim">├──</span> <span class="c-leaf">StatCard: Active Users (7d)</span>  <span class="c-note">stats.active_users_7d</span>
+        <span class="c-dim">├──</span> <span class="c-leaf">StatCard: Total Entries</span>      <span class="c-note">stats.total_entries</span>
+        <span class="c-dim">├──</span> <span class="c-leaf">StatCard: AI Calls Today</span>     <span class="c-note">stats.ai_calls_today</span>
+        <span class="c-dim">└──</span> <span class="c-leaf">AI Usage Card</span>
+            <span class="c-dim">├──</span> Total Calls        <span class="c-note">stats.total_ai_calls</span>
+            <span class="c-dim">├──</span> Success Rate (%)   <span class="c-note">stats.ai_success_rate</span>
+            <span class="c-dim">└──</span> Total Tokens       <span class="c-note">stats.ai_tokens_total</span></pre>
+
+    <h3 class="sub">3.2 API-Endpunkt</h3>
+    <table class="dl">
+      <colgroup>
+        <col style="width: 20mm">
+        <col style="width: 36mm">
+        <col>
+        <col style="width: 22mm">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Methode</th>
+          <th>Endpunkt</th>
+          <th>Antwort-Felder</th>
+          <th>Schutz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill get">GET</span></td>
+          <td><code>/admin/stats</code></td>
+          <td>total_users, active_users_7d, total_entries, total_ai_calls, ai_success_rate, ai_calls_today, ai_tokens_total</td>
+          <td><span class="pill admin">is_admin</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout-box">
+      Der Endpunkt verwendet die <code>get_current_admin</code>-Dependency. FastAPI prüft das JWT-Token und stellt sicher, dass <code>user.is_admin == True</code> &mdash; andernfalls HTTP&nbsp;403.
+    </div>
+
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">05</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: IA CONTINUED — DATENMODELL                          -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>3. Informationsarchitektur (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">3.3 Datenmodell (relevante DB-Tabellen)</h3>
+    <table class="dl">
+      <colgroup>
+        <col style="width: 36mm">
+        <col style="width: 70mm">
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Tabelle</th>
+          <th>Relevante Felder</th>
+          <th>Genutzt für</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">users</td>
+          <td>id, is_admin, created_at</td>
+          <td>total_users</td>
+        </tr>
+        <tr>
+          <td class="name">journal_entries</td>
+          <td>id, user_id, created_at</td>
+          <td>total_entries, active_users_7d</td>
+        </tr>
+        <tr>
+          <td class="name">ai_usage_logs</td>
+          <td>id, success, input_tokens, output_tokens, created_at</td>
+          <td>total_ai_calls, ai_calls_today, ai_success_rate, ai_tokens_total</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">06</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: SWIMLANE FLOW A                                      -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 4</div>
+    <h2 class="section">Swimlane-Ablaufdiagramm</h2>
+    <p class="section-lead">Zwei Flows dokumentieren den Admin-Datenpfad vollständig: Flow A zeigt den Erfolgsfall (Stats laden), Flow B den Fehlerfall (fehlende Admin-Rechte). Drei Lanes: Admin-Browser, React-Frontend, FastAPI + SQLite.</p>
+
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:#6A0DAD"></span>Admin / Browser</span>
+      <span><span class="legend-dot" style="background:#1e293b"></span>React (Frontend)</span>
+      <span><span class="legend-dot" style="background:#065f46"></span>FastAPI + SQLite</span>
+      <span><span class="legend-dot" style="background:#f0fdf4;border:1.5px solid #16a34a"></span>Rückweg (Erfolg)</span>
+      <span><span class="legend-dot" style="background:#fef2f2;border:1.5px solid #dc2626"></span>Rückweg (Fehler)</span>
+    </div>
+
+    <h3 class="sub">4.1 Flow A &mdash; Stats-Übersicht laden (ADM-00)</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Erfolgsfall: Admin klickt auf &bdquo;Admin&ldquo; in der Sidebar, das Dashboard mountet, lädt via useEffect die Stats und rendert die StatCards.</p>
+
+    <!-- FLOW A SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:5mm;">
+      <!-- Title bar -->
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow A &mdash; GET /admin/stats (Erfolg)</div>
+      <!-- Lane headers -->
+      <div style="display:grid;grid-template-columns:28mm 1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);"></div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Admin (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; FastAPI + SQLite</div>
+      </div>
+      <svg viewBox="0 0 680 230" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fA-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fA-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+          <marker id="fA-up" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto-start-reverse"><polygon points="0 0,7 2.5,0 5" fill="#16a34a"/></marker>
+        </defs>
+
+        <!-- Lane dividers -->
+        <line x1="28" y1="0" x2="28" y2="230" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="254" y1="0" x2="254" y2="230" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="480" y1="0" x2="480" y2="230" stroke="#e5e7eb" stroke-width="1"/>
+
+        <!-- Lane bg tints -->
+        <rect x="29" y="0" width="224" height="230" fill="#faf5ff" opacity="0.35"/>
+        <rect x="255" y="0" width="224" height="230" fill="#f8fafc" opacity="0.45"/>
+        <rect x="481" y="0" width="199" height="230" fill="#f0fdf4" opacity="0.35"/>
+
+        <!-- Lane labels (rotated) -->
+        <text x="14" y="80" text-anchor="middle" transform="rotate(-90,14,80)" font-size="8" font-weight="700" fill="#6A0DAD" letter-spacing="1">ADMIN</text>
+        <text x="14" y="155" text-anchor="middle" transform="rotate(-90,14,155)" font-size="8" font-weight="700" fill="#1e293b" letter-spacing="1">REACT</text>
+
+        <!-- ── ROW 1: Hinweg (top half) ── -->
+        <!-- U1: Klick Admin -->
+        <rect x="42" y="18" width="90" height="44" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="87" y="36" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="87" y="49" text-anchor="middle" fill="white" font-size="9">Klick „Admin"</text>
+        <text x="87" y="60" text-anchor="middle" fill="white" font-size="9">in der Sidebar</text>
+
+        <!-- Arrow U1→S1 -->
+        <line x1="132" y1="40" x2="182" y2="40" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="157" y="36" text-anchor="middle" fill="#9ca3af" font-size="8">State</text>
+
+        <!-- S1: AdminDashboard mountet -->
+        <rect x="184" y="18" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="229" y="36" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="229" y="49" text-anchor="middle" fill="#1e293b" font-size="9">AdminDashboard</text>
+        <text x="229" y="60" text-anchor="middle" fill="#1e293b" font-size="9">mountet</text>
+
+        <!-- Arrow S1→S2 (within react lane) — goes down then right -->
+        <line x1="229" y1="62" x2="229" y2="80" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- S2: useEffect -->
+        <rect x="184" y="82" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="229" y="100" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S2</text>
+        <text x="229" y="113" text-anchor="middle" fill="#1e293b" font-size="9">useEffect →</text>
+        <text x="229" y="124" text-anchor="middle" fill="#1e293b" font-size="9">getAdminStats()</text>
+
+        <!-- Arrow S2→A1 -->
+        <line x1="274" y1="104" x2="494" y2="104" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="384" y="99" text-anchor="middle" fill="#9ca3af" font-size="8">Bearer JWT</text>
+
+        <!-- A1: GET /admin/stats -->
+        <rect x="496" y="82" width="90" height="44" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="541" y="100" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">A1</text>
+        <text x="541" y="113" text-anchor="middle" fill="#78350f" font-size="9">GET /admin/stats</text>
+        <text x="541" y="124" text-anchor="middle" fill="#78350f" font-size="9">JWT-Prüfung ✓</text>
+
+        <!-- Arrow A1→A2 -->
+        <line x1="541" y1="126" x2="541" y2="148" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- A2: DB Queries -->
+        <rect x="496" y="150" width="90" height="60" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="541" y="167" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A2</text>
+        <text x="541" y="180" text-anchor="middle" fill="#065f46" font-size="8.5">COUNT(users)</text>
+        <text x="541" y="191" text-anchor="middle" fill="#065f46" font-size="8.5">COUNT DISTINCT</text>
+        <text x="541" y="202" text-anchor="middle" fill="#065f46" font-size="8.5">SUM(ai_logs)</text>
+
+        <!-- ── RÜCKWEG (grün) ── -->
+        <!-- A2→A3 HTTP 200 -->
+        <rect x="496" y="150" width="0" height="0"/> <!-- anchor -->
+
+        <!-- A3: HTTP 200 — placed left of A2 in fastapi lane -->
+        <rect x="496" y="18" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="541" y="36" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A3</text>
+        <text x="541" y="49" text-anchor="middle" fill="#065f46" font-size="9">HTTP 200</text>
+        <text x="541" y="60" text-anchor="middle" fill="#065f46" font-size="9">+ JSON</text>
+
+        <!-- Arrow A2→A3 (up within fastapi lane) -->
+        <line x1="496" y1="180" x2="440" y2="180" stroke="#16a34a" stroke-width="1.5"/>
+        <line x1="440" y1="180" x2="440" y2="40" stroke="#16a34a" stroke-width="1.5"/>
+        <line x1="440" y1="40" x2="494" y2="40" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fA-grn)"/>
+        <text x="438" y="176" text-anchor="end" fill="#9ca3af" font-size="8">Rows</text>
+
+        <!-- Arrow A3→S3 setStats -->
+        <line x1="496" y1="40" x2="276" y2="40" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fA-grn)"/>
+        <text x="386" y="36" text-anchor="middle" fill="#9ca3af" font-size="8">JSON</text>
+
+        <!-- S3: setStats -->
+        <rect x="184" y="150" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="229" y="168" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">S3</text>
+        <text x="229" y="181" text-anchor="middle" fill="#065f46" font-size="9">setStats(data)</text>
+        <text x="229" y="192" text-anchor="middle" fill="#065f46" font-size="9">StatCards rendern</text>
+
+        <!-- Arrow S2→S3 (within react, after response) -->
+        <line x1="229" y1="126" x2="229" y2="148" stroke="#9ca3af" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+        <!-- Arrow S3→U3 -->
+        <line x1="184" y1="172" x2="134" y2="172" stroke="#16a34a" stroke-width="1.5" marker-end="url(#fA-grn)"/>
+        <text x="159" y="168" text-anchor="middle" fill="#9ca3af" font-size="8">UI</text>
+
+        <!-- U3: Stats angezeigt -->
+        <rect x="42" y="150" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+        <text x="87" y="168" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">U3</text>
+        <text x="87" y="181" text-anchor="middle" fill="#065f46" font-size="9">Stats-Zahlen</text>
+        <text x="87" y="192" text-anchor="middle" fill="#065f46" font-size="9">angezeigt ✓</text>
+
+        <!-- Arrow U1 down to U3 (browser lane vertical) -->
+        <line x1="87" y1="62" x2="87" y2="148" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">07</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: SWIMLANE FLOW B                                      -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">4.2 Flow B &mdash; Zugriff verweigert (HTTP 403 / 401)</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Fehlerfall: Ein Nutzer ohne Admin-Rechte versucht, den Endpunkt aufzurufen. FastAPI antwortet mit HTTP 403. Das Frontend fängt den Fehler ab und zeigt eine Fehlermeldung; der Admin-Tab ist im Normalfall gar nicht sichtbar.</p>
+
+    <!-- FLOW B SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:5mm;">
+      <div style="background:#dc2626;color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow B &mdash; GET /admin/stats (Fehler: fehlende Rechte)</div>
+      <div style="display:grid;grid-template-columns:28mm 1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--line);"></div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6A0DAD;border-right:1px solid var(--line);text-align:center;">&#x2460; Nutzer (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#b91c1c;text-align:center;">&#x2462; FastAPI + SQLite</div>
+      </div>
+      <svg viewBox="0 0 680 210" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fB-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fB-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#dc2626"/></marker>
+        </defs>
+
+        <!-- Lane dividers -->
+        <line x1="28" y1="0" x2="28" y2="210" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="254" y1="0" x2="254" y2="210" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="480" y1="0" x2="480" y2="210" stroke="#e5e7eb" stroke-width="1"/>
+
+        <!-- Lane bg tints -->
+        <rect x="29" y="0" width="224" height="210" fill="#faf5ff" opacity="0.35"/>
+        <rect x="255" y="0" width="224" height="210" fill="#f8fafc" opacity="0.45"/>
+        <rect x="481" y="0" width="199" height="210" fill="#fff1f2" opacity="0.45"/>
+
+        <!-- Lane labels -->
+        <text x="14" y="75" text-anchor="middle" transform="rotate(-90,14,75)" font-size="8" font-weight="700" fill="#6A0DAD" letter-spacing="1">NUTZER</text>
+        <text x="14" y="145" text-anchor="middle" transform="rotate(-90,14,145)" font-size="8" font-weight="700" fill="#1e293b" letter-spacing="1">REACT</text>
+
+        <!-- U1: Direkter Aufruf / kein Admin-Tab -->
+        <rect x="42" y="16" width="90" height="50" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="87" y="33" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U1</text>
+        <text x="87" y="46" text-anchor="middle" fill="#5b21b6" font-size="9">Direkter API-</text>
+        <text x="87" y="57" text-anchor="middle" fill="#5b21b6" font-size="9">Aufruf (kein Tab)</text>
+
+        <!-- Arrow U1→S1 -->
+        <line x1="132" y1="41" x2="182" y2="41" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="157" y="37" text-anchor="middle" fill="#9ca3af" font-size="8">Request</text>
+
+        <!-- S1: fetch mit Token -->
+        <rect x="184" y="16" width="90" height="50" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="229" y="33" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="229" y="46" text-anchor="middle" fill="#1e293b" font-size="9">fetch() mit</text>
+        <text x="229" y="57" text-anchor="middle" fill="#1e293b" font-size="9">JWT (kein Admin)</text>
+
+        <!-- Arrow S1→A1 -->
+        <line x1="274" y1="41" x2="494" y2="41" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="384" y="37" text-anchor="middle" fill="#9ca3af" font-size="8">Bearer JWT</text>
+
+        <!-- A1: JWT-Prüfung fehlgeschlagen -->
+        <rect x="496" y="16" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="541" y="33" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="9.5">A1</text>
+        <text x="541" y="46" text-anchor="middle" fill="#b91c1c" font-size="9">JWT-Prüfung:</text>
+        <text x="541" y="57" text-anchor="middle" fill="#b91c1c" font-size="9">is_admin = false</text>
+
+        <!-- Arrow A1→A2 -->
+        <line x1="541" y1="66" x2="541" y2="84" stroke="#dc2626" stroke-width="1.5" marker-end="url(#fB-red)"/>
+
+        <!-- A2: HTTP 403 -->
+        <rect x="496" y="86" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="2"/>
+        <text x="541" y="103" text-anchor="middle" fill="#b91c1c" font-weight="800" font-size="10">A2</text>
+        <text x="541" y="117" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="10">HTTP 403</text>
+        <text x="541" y="128" text-anchor="middle" fill="#b91c1c" font-size="9">Forbidden</text>
+
+        <!-- Arrow A2→S2 -->
+        <line x1="496" y1="111" x2="276" y2="111" stroke="#dc2626" stroke-width="1.5" marker-end="url(#fB-red)"/>
+        <text x="386" y="107" text-anchor="middle" fill="#9ca3af" font-size="8">JSON error</text>
+
+        <!-- S2: Fehler abfangen -->
+        <rect x="184" y="86" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="229" y="103" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="9.5">S2</text>
+        <text x="229" y="116" text-anchor="middle" fill="#b91c1c" font-size="9">Fehler abfangen</text>
+        <text x="229" y="127" text-anchor="middle" fill="#b91c1c" font-size="9">setError(true)</text>
+
+        <!-- Arrow S2→U2 -->
+        <line x1="184" y1="111" x2="134" y2="111" stroke="#dc2626" stroke-width="1.5" marker-end="url(#fB-red)"/>
+        <text x="159" y="107" text-anchor="middle" fill="#9ca3af" font-size="8">UI</text>
+
+        <!-- U2: Fehler angezeigt -->
+        <rect x="42" y="86" width="90" height="50" rx="7" fill="#fff1f2" stroke="#dc2626" stroke-width="1.5"/>
+        <text x="87" y="103" text-anchor="middle" fill="#b91c1c" font-weight="700" font-size="9.5">U2</text>
+        <text x="87" y="116" text-anchor="middle" fill="#b91c1c" font-size="9">Fehler angezeigt</text>
+        <text x="87" y="127" text-anchor="middle" fill="#b91c1c" font-size="9">(Zugriff verweigert)</text>
+
+        <!-- Vertical connectors in browser lane -->
+        <line x1="87" y1="66" x2="87" y2="84" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+
+    <div class="grid-2" style="margin-top:2mm;">
+      <div class="info-card">
+        <h4>HTTP 403 Forbidden</h4>
+        <p>FastAPI gibt 403 zurück, wenn <code>user.is_admin == False</code>. Im Normalfall ist der Admin-Tab im Frontend für solche Nutzer nicht gerendert; dieser Fall tritt nur bei direktem API-Zugriff ein.</p>
+      </div>
+      <div class="info-card">
+        <h4>HTTP 401 Unauthorized</h4>
+        <p>Fehlendes oder abgelaufenes JWT führt zu 401. Das React-Frontend leitet den Nutzer zurück zur Anmeldeseite (Auth-Dialog D-08).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">08</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: WIREFRAME ADM-00                                     -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.1 Wireframe ADM-00 Stats Overview</div>
+  </div>
+  <!-- page number updated: was 07, now 08 -->
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.1</div>
+    <h2 class="section">ADM-00 Stats Overview</h2>
+    <p class="section-lead">Einzige Ansicht des Admin-Bereichs. Vier StatCards zeigen die wichtigsten Plattformkennzahlen; eine AI-Usage-Card fasst die KI-Nutzungsstatistik zusammen. Alle Werte werden beim ersten Rendern über <code>GET /admin/stats</code> geladen.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog ADM-00 &middot; Stats Overview</div>
+          <div class="wf-name">Admin-Dashboard</div>
+        </div>
+        <div class="wf-tag">Gated &middot; Admin</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- App-Shell Hintergrund -->
+          <rect x="20" y="20" width="1160" height="740" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+
+          <!-- Sidebar -->
+          <rect x="40" y="40" width="200" height="700" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <!-- Brand-Block -->
+          <rect x="60" y="60" width="32" height="32" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="76" y="81" text-anchor="middle" font-size="9" fill="#475569" font-weight="700">R</text>
+          <text x="104" y="82" font-size="12" fill="#1e293b" font-weight="700">Reflecta</text>
+          <line x1="60" y1="112" x2="220" y2="112" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- Sidebar-Tabs -->
+          <text x="60" y="142" font-size="9" fill="#94a3b8" letter-spacing="1.5" font-weight="600">NAVIGATION</text>
+          <rect x="56" y="156" width="168" height="34" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="74" y="178" font-size="11" fill="#475569">Journal</text>
+          <rect x="56" y="196" width="168" height="34" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="74" y="218" font-size="11" fill="#475569">Goals</text>
+          <rect x="56" y="236" width="168" height="34" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="74" y="258" font-size="11" fill="#475569">Calendar</text>
+          <rect x="56" y="276" width="168" height="34" rx="6" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="74" y="298" font-size="11" fill="#475569">Analytics</text>
+          <!-- Aktiver Admin-Tab (nur für is_admin sichtbar) -->
+          <rect x="56" y="316" width="168" height="34" rx="6" fill="#1e293b" stroke="#1e293b" stroke-width="1"/>
+          <text x="74" y="338" font-size="11" fill="white" font-weight="700">Admin</text>
+          <text x="60" y="378" font-size="8" fill="#94a3b8" font-style="italic">nur if is_admin === true</text>
+
+          <!-- Hauptbereich -->
+          <!-- Header -->
+          <rect x="260" y="40" width="900" height="60" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="280" y="76" font-size="16" fill="#1e293b" font-weight="700">Admin Dashboard</text>
+          <text x="280" y="92" font-size="9" fill="#94a3b8">Plattform-Statistiken &middot; GET /admin/stats</text>
+
+          <!-- StatCards-Reihe (4 Karten) -->
+          <!-- Card 1: Total Users -->
+          <rect x="260" y="120" width="210" height="120" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <rect x="280" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="296" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="280" y="194" font-size="10" fill="#475569" font-weight="600">Total Users</text>
+          <text x="280" y="222" font-size="22" fill="#1e293b" font-weight="700">42</text>
+          <text x="312" y="222" font-size="9" fill="#94a3b8">stats.total_users</text>
+
+          <!-- Card 2: Active Users (7d) -->
+          <rect x="490" y="120" width="210" height="120" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <rect x="510" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="526" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="510" y="194" font-size="10" fill="#475569" font-weight="600">Active Users (7d)</text>
+          <text x="510" y="222" font-size="22" fill="#1e293b" font-weight="700">17</text>
+          <text x="542" y="222" font-size="9" fill="#94a3b8">stats.active_users_7d</text>
+
+          <!-- Card 3: Total Entries -->
+          <rect x="720" y="120" width="210" height="120" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <rect x="740" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="756" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="740" y="194" font-size="10" fill="#475569" font-weight="600">Total Entries</text>
+          <text x="740" y="222" font-size="22" fill="#1e293b" font-weight="700">318</text>
+          <text x="784" y="222" font-size="9" fill="#94a3b8">stats.total_entries</text>
+
+          <!-- Card 4: AI Calls Today -->
+          <rect x="950" y="120" width="210" height="120" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <rect x="970" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="986" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="970" y="194" font-size="10" fill="#475569" font-weight="600">AI Calls Today</text>
+          <text x="970" y="222" font-size="22" fill="#1e293b" font-weight="700">24</text>
+          <text x="1002" y="222" font-size="9" fill="#94a3b8">stats.ai_calls_today</text>
+
+          <!-- AI Usage Card (volle Breite) -->
+          <rect x="260" y="270" width="900" height="200" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="280" y="298" font-size="9" fill="#94a3b8" letter-spacing="1.5" font-weight="600">AI USAGE CARD (ADM-00.5)</text>
+          <line x1="280" y1="312" x2="1140" y2="312" stroke="#e2e8f0" stroke-width="1"/>
+
+          <!-- 3 Sub-Metriken in der AI Usage Card -->
+          <!-- Total Calls -->
+          <rect x="300" y="338" width="260" height="100" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="320" y="362" font-size="10" fill="#475569" font-weight="600">Total Calls</text>
+          <text x="320" y="398" font-size="22" fill="#1e293b" font-weight="700">1247</text>
+          <text x="320" y="420" font-size="9" fill="#94a3b8">stats.total_ai_calls</text>
+          <!-- Success Rate -->
+          <rect x="580" y="338" width="260" height="100" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="600" y="362" font-size="10" fill="#475569" font-weight="600">Success Rate (%)</text>
+          <text x="600" y="398" font-size="22" fill="#1e293b" font-weight="700">98.4</text>
+          <text x="650" y="398" font-size="12" fill="#94a3b8">%</text>
+          <text x="600" y="420" font-size="9" fill="#94a3b8">stats.ai_success_rate</text>
+          <!-- Total Tokens -->
+          <rect x="860" y="338" width="280" height="100" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="880" y="362" font-size="10" fill="#475569" font-weight="600">Total Tokens</text>
+          <text x="880" y="398" font-size="22" fill="#1e293b" font-weight="700">412 580</text>
+          <text x="880" y="420" font-size="9" fill="#94a3b8">stats.ai_tokens_total (in + out)</text>
+
+          <!-- Hinweis-Strip / Loading-State -->
+          <rect x="260" y="500" width="900" height="60" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="280" y="526" font-size="10" fill="#475569" font-weight="600">Initialer Ladevorgang &mdash; useEffect &rarr; getAdminStats()</text>
+          <text x="280" y="546" font-size="9" fill="#94a3b8">Während des Requests werden alle Werte als &bdquo;-&ldquo; oder Skeleton dargestellt; setStats() ersetzt sie nach erfolgreicher Antwort.</text>
+
+          <!-- Footer-Hinweis -->
+          <text x="280" y="600" font-size="9" fill="#94a3b8" letter-spacing="1.5" font-weight="600">DATENQUELLE: GET /admin/stats &middot; SCHUTZ: get_current_admin (is_admin === true)</text>
+          <line x1="260" y1="612" x2="1160" y2="612" stroke="#e2e8f0" stroke-width="1"/>
+          <text x="280" y="640" font-size="9" fill="#94a3b8">Keine weiteren Tabs oder Sub-Dialoge in diesem Bereich (siehe Dialogliste &sect; 2).</text>
+
+          <!-- Annotation-Marker, inline an den jeweiligen Elementen -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="40" cy="333" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="338" text-anchor="middle" fill="white">1</text>
+            <circle cx="260" cy="120" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="260" y="125" text-anchor="middle" fill="white">2</text>
+            <circle cx="490" cy="120" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="490" y="125" text-anchor="middle" fill="white">3</text>
+            <circle cx="720" cy="120" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="720" y="125" text-anchor="middle" fill="white">4</text>
+            <circle cx="950" cy="120" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="950" y="125" text-anchor="middle" fill="white">5</text>
+            <circle cx="260" cy="270" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="260" y="275" text-anchor="middle" fill="white">6</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Sidebar-Tab &bdquo;Admin&ldquo; (ADM-00)</b> &mdash; nur für is_admin-Nutzer sichtbar; aktiver Tab ist lila hinterlegt.</li>
+          <li><b>StatCard Total Users (ADM-00.1)</b> &mdash; Gesamtzahl registrierter Nutzer aus stats.total_users.</li>
+          <li><b>StatCard Active Users (ADM-00.2)</b> &mdash; Nutzer mit Aktivität der letzten 7 Tage aus stats.active_users_7d.</li>
+          <li><b>StatCard Total Entries (ADM-00.3)</b> &mdash; Gesamte Journaleinträge über alle Konten aus stats.total_entries.</li>
+          <li><b>StatCard AI Calls Today (ADM-00.4)</b> &mdash; KI-Aufrufe am heutigen Datum aus stats.ai_calls_today.</li>
+          <li><b>AI Usage Card (ADM-00.5)</b> &mdash; Total Calls, Success Rate (%) und Total Tokens in einer Zeile.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
+  <div class="page-num">09</div>
+</div>
+
+</body>
+</html>
