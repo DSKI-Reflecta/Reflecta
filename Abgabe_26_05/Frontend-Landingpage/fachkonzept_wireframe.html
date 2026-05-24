@@ -1,0 +1,2358 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Reflecta - Fachkonzept Landingpage</title>
+<style>
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: block;
+    src: url('fonts/PlusJakartaSans-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 200 800;
+    font-display: block;
+    src: url('fonts/PlusJakartaSans-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+
+  :root {
+    --purple-1: #9B30FF;
+    --purple-2: #6A0DAD;
+    --ink: #171717;
+    --ink-2: #2b2b2b;
+    --muted: #6b7280;
+    --muted-2: #94a3b8;
+    --line: #e5e7eb;
+    --soft: #f8f7fb;
+    --soft-2: #f3e8ff;
+    --green: #16a34a;
+    --amber: #d97706;
+    --red: #dc2626;
+  }
+
+  @page { size: A4; margin: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    background: white;
+  }
+
+  body { font-size: 10pt; line-height: 1.5; }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 18mm 16mm 16mm 16mm;
+    position: relative;
+    page-break-after: always;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .page-num {
+    position: absolute;
+    bottom: 10mm;
+    right: 16mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .page-foot {
+    position: absolute;
+    bottom: 10mm;
+    left: 16mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .page-head {
+    position: absolute;
+    top: 8mm;
+    left: 16mm;
+    right: 16mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8pt;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4mm;
+  }
+  .page-head .brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* COVER */
+  .cover {
+    background: white;
+    color: var(--ink);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 18mm;
+    background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 100%);
+  }
+  .cover::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4mm;
+    background: linear-gradient(135deg, var(--purple-1) 0%, var(--purple-2) 100%);
+  }
+  .cover-inner { padding: 32mm 22mm 22mm; flex: 1; display: flex; flex-direction: column; position: relative; z-index: 1; }
+  .cover .logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 60mm; }
+  .cover .logo-mark {
+    width: 50px; height: 50px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4mm 10mm rgba(106,13,173,0.18);
+  }
+  .cover .logo-name { font-size: 19pt; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+  .cover .eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 6mm;
+  }
+  .cover h1 {
+    font-size: 36pt; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.05; margin-bottom: 6mm; color: var(--ink);
+  }
+  .cover h1 .accent { color: var(--purple-2); }
+  .cover .sub { font-size: 12pt; font-weight: 400; color: var(--ink-2); line-height: 1.5; max-width: 130mm; }
+  .cover-meta {
+    border-top: 1px solid var(--line);
+    padding: 10mm 22mm 16mm;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6mm;
+    background: white;
+    position: relative; z-index: 1;
+  }
+  .cover-meta .cell .k { font-size: 7.5pt; color: var(--purple-2); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 2mm; font-weight: 700; }
+  .cover-meta .cell .v { font-size: 10pt; font-weight: 600; color: var(--ink); }
+
+  /* TYPOGRAPHY */
+  h2.section {
+    font-size: 20pt; font-weight: 800; letter-spacing: -0.02em;
+    color: var(--ink); margin-bottom: 3mm;
+  }
+  .section-eyebrow {
+    font-size: 8.5pt; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 3mm;
+  }
+  .section-lead {
+    font-size: 10.5pt; color: var(--muted); line-height: 1.55;
+    max-width: 165mm; margin-bottom: 5mm;
+  }
+  h3.sub {
+    font-size: 12pt; font-weight: 700; color: var(--ink);
+    margin: 5mm 0 2mm; letter-spacing: -0.01em;
+  }
+  h4.subsub {
+    font-size: 10.5pt; font-weight: 700; color: var(--ink-2);
+    margin: 5mm 0 2mm;
+  }
+  p { margin-bottom: 3mm; color: var(--ink-2); }
+  ul, ol { padding-left: 5mm; margin-bottom: 3mm; }
+  ul li, ol li { margin-bottom: 1.5mm; color: var(--ink-2); }
+  .muted { color: var(--muted); }
+
+  /* TOC */
+  .toc {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--line);
+    padding: 6mm 0;
+  }
+  .toc-row {
+    display: flex; align-items: baseline;
+    padding: 3mm 0; border-bottom: 1px dotted var(--line);
+    font-size: 11pt;
+  }
+  .toc-row:last-child { border-bottom: none; }
+  .toc-num { width: 14mm; font-weight: 700; color: var(--purple-2); font-size: 10.5pt; }
+  .toc-title { flex: 1; font-weight: 600; color: var(--ink); }
+  .toc-page { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 10pt; }
+
+  /* TABLE - Dialog List */
+  table.dl {
+    width: 100%; border-collapse: collapse; font-size: 9pt;
+    margin: 4mm 0 6mm;
+  }
+  table.dl thead th {
+    background: var(--ink); color: white;
+    text-align: left; font-weight: 600; font-size: 8.5pt;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3mm 3mm; border-right: 1px solid #333;
+  }
+  table.dl thead th:last-child { border-right: none; }
+  table.dl tbody td {
+    padding: 3mm 3mm; vertical-align: top;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  table.dl tbody td:last-child { border-right: none; }
+  table.dl tbody tr:nth-child(even) td { background: var(--soft); }
+  table.dl tbody td.id {
+    font-weight: 700; color: var(--purple-2);
+    font-variant-numeric: tabular-nums; white-space: nowrap;
+    font-size: 8.5pt;
+  }
+  table.dl tbody td.name { font-weight: 600; color: var(--ink); }
+  table.dl ul { padding-left: 4mm; margin: 0; }
+  table.dl ul li { margin-bottom: 0.5mm; font-size: 8.5pt; color: var(--ink-2); }
+  table.dl .pill {
+    display: inline-block; padding: 1mm 2mm; border-radius: 3mm;
+    font-size: 7.5pt; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill.public { background: #dcfce7; color: #166534; }
+  .pill.gated { background: #fef3c7; color: #92400e; }
+  .pill.modal { background: #f3e8ff; color: var(--purple-2); }
+  .pill.responsive { background: #dbeafe; color: #1e40af; }
+
+  /* INFORMATION ARCHITECTURE TREE */
+  .ia-tree {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    background: var(--soft);
+    padding: 8mm 6mm;
+    margin: 5mm 0;
+    page-break-inside: avoid;
+  }
+  .ia-root {
+    text-align: center;
+    margin-bottom: 8mm;
+  }
+  .ia-node {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    color: white;
+    padding: 3mm 6mm;
+    border-radius: 3mm;
+    font-weight: 700;
+    font-size: 10pt;
+    box-shadow: 0 2mm 5mm rgba(106,13,173,0.18);
+  }
+  .ia-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3mm;
+    position: relative;
+    padding-top: 7mm;
+  }
+  .ia-row::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 8.33%; right: 8.33%;
+    height: 4mm;
+    border-top: 1.5px solid var(--purple-2);
+    border-left: 1.5px solid var(--purple-2);
+    border-right: 1.5px solid var(--purple-2);
+    border-radius: 4mm 4mm 0 0;
+    border-bottom: none;
+  }
+  .ia-row::after {
+    content: "";
+    position: absolute;
+    top: -3mm; left: 50%;
+    width: 1.5px; height: 3mm;
+    background: var(--purple-2);
+  }
+  .ia-cell {
+    background: white;
+    border: 1.5px solid var(--purple-2);
+    border-radius: 3mm;
+    padding: 3mm;
+    font-size: 8.5pt;
+    text-align: center;
+    position: relative;
+  }
+  .ia-cell .cell-num {
+    color: var(--purple-2); font-weight: 700; font-size: 7.5pt;
+    letter-spacing: 0.1em; margin-bottom: 1mm; display: block;
+  }
+  .ia-cell .cell-name {
+    color: var(--ink); font-weight: 700; font-size: 9pt; margin-bottom: 1mm;
+  }
+  .ia-cell .cell-children {
+    color: var(--muted); font-size: 7.5pt; line-height: 1.4;
+  }
+  .ia-cell::before {
+    content: "";
+    position: absolute;
+    top: -7mm; left: 50%;
+    width: 1.5px; height: 7mm;
+    background: var(--purple-2);
+  }
+  .ia-aux-row {
+    margin-top: 6mm; padding-top: 6mm; border-top: 1px dashed var(--muted-2);
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm;
+  }
+  .ia-aux-cell {
+    background: white; border: 1.5px dashed var(--muted-2);
+    border-radius: 3mm; padding: 3mm; font-size: 8.5pt; text-align: center;
+  }
+  .ia-aux-cell .cell-num { color: var(--muted); font-weight: 700; font-size: 7.5pt; letter-spacing: 0.1em; margin-bottom: 1mm; display: block; }
+  .ia-aux-cell .cell-name { color: var(--ink); font-weight: 700; font-size: 9pt; }
+  .ia-legend {
+    margin-top: 6mm; padding-top: 4mm; border-top: 1px solid var(--line);
+    display: flex; gap: 6mm; font-size: 8pt; color: var(--muted); justify-content: center;
+  }
+  .ia-legend .swatch {
+    display: inline-block; width: 4mm; height: 4mm;
+    border-radius: 1mm; margin-right: 2mm; vertical-align: middle;
+  }
+  .ia-legend .sw-primary { background: linear-gradient(135deg, var(--purple-1), var(--purple-2)); }
+  .ia-legend .sw-section { background: white; border: 1.5px solid var(--purple-2); }
+  .ia-legend .sw-aux { background: white; border: 1.5px dashed var(--muted-2); }
+
+  /* SWIMLANE */
+  .swimlane {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    overflow: hidden;
+    margin: 5mm 0;
+    page-break-inside: avoid;
+  }
+  .swim-row {
+    display: grid;
+    grid-template-columns: 30mm 1fr;
+    border-bottom: 1px solid var(--line);
+    min-height: 22mm;
+  }
+  .swim-row:last-child { border-bottom: none; }
+  .swim-label {
+    background: var(--ink);
+    color: white;
+    padding: 3mm 3mm;
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex; align-items: center;
+    writing-mode: horizontal-tb;
+  }
+  .swim-label .l-name { line-height: 1.3; }
+  .swim-row.user .swim-label { background: var(--purple-2); }
+  .swim-row.system .swim-label { background: #1e293b; }
+  .swim-row.ai .swim-label { background: #047857; }
+
+  .swim-track {
+    position: relative;
+    padding: 4mm;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .swim-step {
+    background: white;
+    border: 1.5px solid var(--purple-2);
+    border-radius: 3mm;
+    padding: 2.5mm 3mm;
+    font-size: 8pt;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+    min-width: 26mm;
+    max-width: 36mm;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 1mm 2mm rgba(0,0,0,0.04);
+  }
+  .swim-step.diamond {
+    background: #fef3c7;
+    border-color: #d97706;
+    border-radius: 0;
+    transform: rotate(0deg);
+  }
+  .swim-step.terminal {
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    color: white;
+    border-color: transparent;
+  }
+  .swim-step.system {
+    border-color: #1e293b;
+    background: white;
+  }
+  .swim-step.ai {
+    border-color: #047857;
+    background: #ecfdf5;
+  }
+  .swim-step .step-num {
+    display: block; font-size: 6.5pt; color: var(--purple-2);
+    font-weight: 700; letter-spacing: 0.1em; margin-bottom: 0.5mm;
+  }
+  .swim-step.terminal .step-num { color: white; opacity: 0.7; }
+  .swim-step.diamond .step-num { color: #d97706; }
+  .swim-step.system .step-num { color: #1e293b; }
+  .swim-step.ai .step-num { color: #047857; }
+  .arrow {
+    flex: 0 0 auto;
+    width: 8mm;
+    height: 1.5px;
+    background: var(--ink);
+    position: relative;
+    margin: 0 1mm;
+  }
+  .arrow::after {
+    content: "";
+    position: absolute;
+    right: -1px; top: 50%;
+    transform: translateY(-50%);
+    border-left: 2.5mm solid var(--ink);
+    border-top: 1.5mm solid transparent;
+    border-bottom: 1.5mm solid transparent;
+  }
+  .arrow.short { width: 4mm; }
+  .swim-cross {
+    grid-column: 1 / -1;
+    height: 0;
+    border-top: 1.5px dashed #94a3b8;
+    margin: 0;
+    position: relative;
+  }
+  .swim-jump {
+    background: white;
+    border: 1.5px dashed var(--muted-2);
+    color: var(--muted);
+    font-size: 7pt;
+    padding: 1mm 2mm;
+    border-radius: 3mm;
+    font-weight: 600;
+    margin: 0 1mm;
+  }
+
+  /* WIREFRAME PAGE */
+  .wf-block {
+    border: 1px solid var(--line);
+    border-radius: 4mm;
+    overflow: hidden;
+    margin: 4mm 0 8mm;
+    background: white;
+    page-break-inside: avoid;
+  }
+  .wf-meta {
+    background: var(--ink);
+    color: white;
+    padding: 4mm 5mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .wf-meta .wf-id {
+    font-size: 8pt; letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.7; margin-bottom: 1mm;
+  }
+  .wf-meta .wf-name {
+    font-size: 12pt; font-weight: 700; letter-spacing: -0.01em;
+  }
+  .wf-meta .wf-tag {
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    padding: 1.5mm 3mm; border-radius: 3mm;
+    font-size: 7.5pt; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .wf-image-wrap {
+    position: relative;
+    background: var(--soft);
+    padding: 0;
+  }
+  .wf-image-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+  .wf-anno {
+    position: absolute;
+    background: var(--ink);
+    color: white;
+    width: 7mm; height: 7mm;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9pt; font-weight: 800;
+    border: 2px solid white;
+    outline: 1px solid rgba(0,0,0,0.25);
+    z-index: 5;
+  }
+  .wf-anno.purple { background: var(--purple-2); }
+  .wf-callouts {
+    background: white;
+    padding: 5mm;
+    border-top: 1px solid var(--line);
+  }
+  .wf-callouts h5 {
+    font-size: 8.5pt; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; margin-bottom: 3mm;
+  }
+  .wf-callouts ol {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2mm 6mm;
+  }
+  .wf-callouts ol li {
+    font-size: 9pt;
+    color: var(--ink-2);
+    padding-left: 8mm;
+    position: relative;
+    line-height: 1.5;
+  }
+  .wf-callouts ol li::before {
+    content: counter(callout);
+    counter-increment: callout;
+    position: absolute;
+    left: 0; top: 0.4mm;
+    width: 5mm; height: 5mm;
+    background: var(--ink);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7pt; font-weight: 700;
+  }
+  .wf-callouts ol { counter-reset: callout; }
+  .wf-callouts ol li b { color: var(--ink); font-weight: 700; }
+
+  /* DIALOG GROUPS */
+  .dl-group {
+    margin: 4mm 0 6mm;
+  }
+  .dl-group h3 {
+    font-size: 11.5pt; font-weight: 700; color: var(--ink);
+    border-left: 4px solid var(--purple-2);
+    padding: 1mm 0 1mm 4mm;
+    margin-bottom: 3mm;
+  }
+
+  /* MISC */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .info-card {
+    border: 1px solid var(--line);
+    border-radius: 3mm;
+    padding: 4mm;
+    background: var(--soft);
+  }
+  .info-card h4 {
+    font-size: 9pt; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--purple-2); font-weight: 700; margin-bottom: 2mm;
+  }
+  .info-card p { font-size: 9.5pt; color: var(--ink-2); margin: 0; }
+
+  .legend-row {
+    display: flex; gap: 5mm; flex-wrap: wrap;
+    background: var(--soft);
+    border-radius: 3mm;
+    padding: 3mm 4mm;
+    margin-bottom: 4mm;
+    font-size: 8.5pt;
+    color: var(--muted);
+  }
+  .legend-row span { display: inline-flex; align-items: center; gap: 2mm; }
+  .legend-dot { width: 3.5mm; height: 3.5mm; border-radius: 50%; display: inline-block; }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER                                                -->
+<!-- ============================================================ -->
+<div class="page cover">
+  <div class="cover-inner">
+    <div class="logo-row">
+      <div class="logo-mark">
+        <svg width="32" height="32" viewBox="10 10 40 40" fill="none">
+          <line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="1.8"/>
+          <path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.4" fill="none" opacity="0.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-name">Reflecta</div>
+    </div>
+
+    <div class="eyebrow">Fachkonzept &middot; Landingpage</div>
+    <h1>Fachkonzept<br>der <span class="accent">Landingpage</span>.</h1>
+    <p class="sub">Dialogliste, Informationsarchitektur, Swimlane-Ablaufdiagramm und annotierte Wireframes der &ouml;ffentlichen Einstiegsfl&auml;che der Reflecta-Plattform.</p>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
+    <div class="cell"><div class="k">Datum</div><div class="v">24.05.2026</div></div>
+    <div class="cell"><div class="k">Department</div><div class="v">Frontend-Landingpage</div></div>
+    <div class="cell"><div class="k">Mitarbeiter</div><div class="v">5688102</div></div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: TABLE OF CONTENTS + INTRO                            -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>Fachkonzept Landingpage</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Dokumentübersicht</div>
+    <h2 class="section">Inhalt</h2>
+    <p class="section-lead">Dieses Dokument spezifiziert die öffentliche Landingpage von Reflecta. Sie ist die erste Oberfläche, der ein potenzieller Nutzer begegnet, und die einzige Ansicht, die ohne Anmeldung erreichbar ist. Das Fachkonzept beschreibt sämtliche Dialoge, deren Informationsarchitektur, den Nutzer-System-Ablauf sowie annotierte Wireframes auf Basis des produktiven Stands.</p>
+
+    <div class="toc">
+      <div class="toc-row"><div class="toc-num">1</div><div class="toc-title">Geltungsbereich &amp; Konventionen</div><div class="toc-page">3</div></div>
+      <div class="toc-row"><div class="toc-num">2</div><div class="toc-title">Dialogliste</div><div class="toc-page">4-5</div></div>
+      <div class="toc-row"><div class="toc-num">3</div><div class="toc-title">Informationsarchitektur</div><div class="toc-page">6</div></div>
+      <div class="toc-row"><div class="toc-num">4</div><div class="toc-title">Swimlane-Ablaufdiagramm</div><div class="toc-page">7-9</div></div>
+      <div class="toc-row"><div class="toc-num">4.1</div><div class="toc-title">Flow A &mdash; Passiver Besuch &amp; Scroll</div><div class="toc-page">7</div></div>
+      <div class="toc-row"><div class="toc-num">4.2</div><div class="toc-title">Flow B &mdash; Journal-Eintrag &amp; KI-Analyse</div><div class="toc-page">8</div></div>
+      <div class="toc-row"><div class="toc-num">4.3</div><div class="toc-title">Flow C &mdash; CTA &rarr; Auth oder Demo</div><div class="toc-page">9</div></div>
+      <div class="toc-row"><div class="toc-num">5</div><div class="toc-title">Wireframes</div><div class="toc-page">10-18</div></div>
+      <div class="toc-row"><div class="toc-num">5.1</div><div class="toc-title">D-01 Hero</div><div class="toc-page">10</div></div>
+      <div class="toc-row"><div class="toc-num">5.2</div><div class="toc-title">D-02 Metrics-Laufband</div><div class="toc-page">11</div></div>
+      <div class="toc-row"><div class="toc-num">5.3</div><div class="toc-title">D-03 Feature - Journal</div><div class="toc-page">12</div></div>
+      <div class="toc-row"><div class="toc-num">5.4</div><div class="toc-title">D-04 Feature - Analytics</div><div class="toc-page">13</div></div>
+      <div class="toc-row"><div class="toc-num">5.5</div><div class="toc-title">D-05 Feature - KI-Synthese</div><div class="toc-page">14</div></div>
+      <div class="toc-row"><div class="toc-num">5.6</div><div class="toc-title">D-06 Reviews</div><div class="toc-page">15</div></div>
+      <div class="toc-row"><div class="toc-num">5.7</div><div class="toc-title">D-07 Final-CTA &amp; Footer</div><div class="toc-page">16</div></div>
+      <div class="toc-row"><div class="toc-num">5.8</div><div class="toc-title">D-08 Auth-Dialog (Anmelden / Registrieren)</div><div class="toc-page">17</div></div>
+      <div class="toc-row"><div class="toc-num">5.9</div><div class="toc-title">D-09 Mobile Navigation</div><div class="toc-page">18</div></div>
+    </div>
+  </div>
+
+  <div class="page-num">02</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SCOPE & CONVENTIONS                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>1. Geltungsbereich &amp; Konventionen</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 1</div>
+    <h2 class="section">Geltungsbereich &amp; Konventionen</h2>
+    <p class="section-lead">Die Landingpage ist der einzige Dialog, der ohne Anmeldung erreichbar ist. Sie übergibt den Besucher an einen von drei Folgepfaden: Registrierung, Anmeldung oder eine interaktive Demo des angemeldeten Produkts. Dieses Dokument umfasst die Landingpage selbst sowie den daraus geöffneten Auth-Dialog.</p>
+
+    <h3 class="sub">1.1 Im Geltungsbereich</h3>
+    <ul>
+      <li><b>Landingpage</b> mit Hero, Metrics-Laufband, drei Feature-Abschnitten, Reviews, CTA und Footer.</li>
+      <li><b>Auth-Dialog</b>, erreichbar von der Landingpage, mit den Modi Anmelden und Registrieren.</li>
+      <li><b>Mobile Navigation</b> als responsive Variante der oberen Navigationsleiste.</li>
+    </ul>
+
+    <h3 class="sub">1.2 Außerhalb des Geltungsbereichs</h3>
+    <ul>
+      <li>Angemeldetes Produkt (Journal, Ziele, Kalender, Analytics) - in einem separaten Fachkonzept dokumentiert.</li>
+      <li>Demo-Banner und Sign-up-Modal innerhalb der angemeldeten Anwendung nach Übergabe von der Landingpage.</li>
+      <li>Backend-API-Schnittstellen.</li>
+    </ul>
+
+    <h3 class="sub">1.3 Bezeichner-Konventionen</h3>
+    <div class="grid-2">
+      <div class="info-card">
+        <h4>Dialog-IDs</h4>
+        <p><b>D-01 bis D-09</b> kennzeichnen jeden Dialog bzw. Teildialog. Hero, Laufband, Feature-Blöcke, Reviews, CTA, Footer, Auth-Dialog und Mobile Navigation tragen jeweils einen eigenen Bezeichner, der in der Dialogliste, im IA-Baum und in den Wireframe-Annotationen wieder aufgegriffen wird.</p>
+      </div>
+      <div class="info-card">
+        <h4>Element-IDs</h4>
+        <p><b>D-01.1, D-01.2, ...</b> kennzeichnen einzelne interaktive Elemente innerhalb eines Dialogs. Sie werden im Swimlane-Ablauf und in den nummerierten Callouts der Wireframes referenziert.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">1.4 Responsive-Breakpoints</h3>
+    <p>Es gelten zwei Layout-Breakpoints: das Desktop-Layout ab 1024 px und das Mobile-Layout unter 768 px. Dazwischen klappt die Navigation in die Mobile-Variante (D-09) und Feature-Blöcke stapeln sich vertikal. Wireframes werden im Desktop-Layout gezeigt, sofern der Dialog nicht mobilspezifisch ist.</p>
+  </div>
+
+  <div class="page-num">03</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: DIALOG LIST PART 1                                   -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>2. Dialogliste</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 2</div>
+    <h2 class="section">Dialogliste</h2>
+    <p class="section-lead">Jeder Dialog der Landingpage ist mit Bezeichner, Typ, enthaltenen Elementen und Zielen seiner Aktionen aufgeführt. Die Element-Bezeichner werden im Swimlane-Diagramm und in den Wireframe-Callouts erneut aufgegriffen.</p>
+
+    <table class="dl">
+      <colgroup>
+        <col style="width: 13mm">
+        <col style="width: 32mm">
+        <col style="width: 22mm">
+        <col>
+        <col style="width: 35mm">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Dialog</th>
+          <th>Typ</th>
+          <th>Elemente</th>
+          <th>Ziele</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">D-00</td>
+          <td class="name">Obere Navigationsleiste<br><span class="pill responsive">Sticky</span></td>
+          <td>Persistent</td>
+          <td>
+            <ul>
+              <li>D-00.1 Markenzeichen + Wortmarke</li>
+              <li>D-00.2 Ankerlink "Features"</li>
+              <li>D-00.3 Ankerlink "The Science"</li>
+              <li>D-00.4 Ankerlink "Reviews"</li>
+              <li>D-00.5 Textbutton "Log In"</li>
+              <li>D-00.6 Primärer Button "Start Reflecting"</li>
+              <li>D-00.7 Hamburger-Toggle (nur mobil)</li>
+            </ul>
+          </td>
+          <td>
+            #features, #science, #reviews, D-08 (Anmelden), D-08 (Registrieren), D-09 (Drawer)
+          </td>
+        </tr>
+        <tr>
+          <td class="id">D-01</td>
+          <td class="name">Hero<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-01.1 Headline "Quantify your consciousness."</li>
+              <li>D-01.2 Sub-Headline (Nutzenversprechen)</li>
+              <li>D-01.3 Primärer CTA "Start Reflecting"</li>
+              <li>D-01.4 Sekundärer CTA "Try live demo"</li>
+              <li>D-01.5 Ankerlink "or see how it works"</li>
+              <li>D-01.6 Hero-Illustration (App-Shell-Mockup)</li>
+            </ul>
+          </td>
+          <td>
+            D-08 (Registrieren), Demo (angemeldete Anwendung), #features
+          </td>
+        </tr>
+        <tr>
+          <td class="id">D-02</td>
+          <td class="name">Metrics-Laufband<br><span class="pill public">Public</span></td>
+          <td>Dekorativ</td>
+          <td>
+            <ul>
+              <li>D-02.1 Automatisch scrollende Karten: Stress, Mood, Social, Sleep, AI Synthesis Accuracy</li>
+            </ul>
+          </td>
+          <td>Keine (dekorativ)</td>
+        </tr>
+        <tr>
+          <td class="id">D-03</td>
+          <td class="name">Feature - Journal<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-03.1 Section-Eyebrow "The Reflecta Architecture"</li>
+              <li>D-03.2 Abschnittstitel "Decode your cognitive DNA."</li>
+              <li>D-03.3 Headline "Capture the human frequency."</li>
+              <li>D-03.4 Feature-Text + Bullet-Checkliste</li>
+              <li>D-03.5 Interaktives Journal-Mockup (live)</li>
+            </ul>
+          </td>
+          <td>Keine (Demo auf der Seite)</td>
+        </tr>
+        <tr>
+          <td class="id">D-04</td>
+          <td class="name">Feature - Analytics<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-04.1 Headline "Visualize ontological symmetry."</li>
+              <li>D-04.2 Feature-Text</li>
+              <li>D-04.3 Interaktives Analytics-Dashboard-Mockup</li>
+              <li>D-04.4 Inline-Link "Try demo"</li>
+            </ul>
+          </td>
+          <td>Demo (angemeldete Anwendung, Analytics-Tab)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-num">04</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: DIALOG LIST PART 2                                   -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>2. Dialogliste (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <table class="dl">
+      <colgroup>
+        <col style="width: 13mm">
+        <col style="width: 32mm">
+        <col style="width: 22mm">
+        <col>
+        <col style="width: 35mm">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Dialog</th>
+          <th>Typ</th>
+          <th>Elemente</th>
+          <th>Ziele</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">D-05</td>
+          <td class="name">Feature - KI-Synthese<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-05.1 Headline "Deep synthesis via AI Resonance."</li>
+              <li>D-05.2 Feature-Text</li>
+              <li>D-05.3 KI-Insight-Karte (Beispielzitat)</li>
+              <li>D-05.4 Chat-Vorschau-Kachel</li>
+            </ul>
+          </td>
+          <td>Keine (Vorschau auf der Seite)</td>
+        </tr>
+        <tr>
+          <td class="id">D-06</td>
+          <td class="name">Reviews<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-06.1 Section-Eyebrow "Gravitational Pull"</li>
+              <li>D-06.2 Abschnittstitel</li>
+              <li>D-06.3 Drei Review-Karten (Sternebewertung, Zitat, Autor, Rolle)</li>
+            </ul>
+          </td>
+          <td>Keine</td>
+        </tr>
+        <tr>
+          <td class="id">D-07</td>
+          <td class="name">Final-CTA<br><span class="pill public">Public</span></td>
+          <td>Abschnitt</td>
+          <td>
+            <ul>
+              <li>D-07.1 Markenzeichen</li>
+              <li>D-07.2 Headline "Collapse the wave function of your thoughts."</li>
+              <li>D-07.3 Sub-Headline</li>
+              <li>D-07.4 Primärer CTA "Sign Up For Free"</li>
+              <li>D-07.5 Sekundärer CTA "Try live demo"</li>
+              <li>D-07.6 Footer (Legal-Links + Copyright)</li>
+            </ul>
+          </td>
+          <td>D-08 (Registrieren), Demo, Scroll nach oben</td>
+        </tr>
+        <tr>
+          <td class="id">D-08</td>
+          <td class="name">Auth-Dialog<br><span class="pill gated">Gated</span></td>
+          <td>Seite</td>
+          <td>
+            <ul>
+              <li>D-08.1 Back-Link "Back to home"</li>
+              <li>D-08.2 Brand-Lockup</li>
+              <li>D-08.3 Tab-Switch "Log In" / "Sign Up"</li>
+              <li>D-08.4 E-Mail-Feld</li>
+              <li>D-08.5 Passwort-Feld (Mindestlänge 8)</li>
+              <li>D-08.6 Inline-Fehlerbereich</li>
+              <li>D-08.7 Primärer Submit "Log In" / "Create Account"</li>
+              <li>D-08.8 OR-Trenner</li>
+              <li>D-08.9 Sekundäre Anmeldung "Continue with GitHub"</li>
+            </ul>
+          </td>
+          <td>D-01 (Zurück), angemeldete Anwendung, GitHub-OAuth</td>
+        </tr>
+        <tr>
+          <td class="id">D-09</td>
+          <td class="name">Mobile Navigation<br><span class="pill modal">Modal</span></td>
+          <td>Slide-down-Panel</td>
+          <td>
+            <ul>
+              <li>D-09.1 Ankerlink "Features"</li>
+              <li>D-09.2 Ankerlink "The Science"</li>
+              <li>D-09.3 Ankerlink "Reviews"</li>
+              <li>D-09.4 Textbutton "Log In"</li>
+              <li>D-09.5 Primärer Button "Start Free Trial"</li>
+              <li>D-09.6 Schließen-X (in der Navigationsleiste)</li>
+            </ul>
+          </td>
+          <td>#features, #science, #reviews, D-08, D-01</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub">2.1 Elementtypen und Lebenszyklus</h3>
+    <p>Öffentliche Abschnitte (D-01 - D-07) sind nicht gesichert, für jeden Besucher sichtbar und indexierbar. Gesicherte Dialoge (D-08) erfordern eine Eingabe von Zugangsdaten, bevor sie an die angemeldete Anwendung übergeben. Modale Dialoge (D-09) überlagern den aktuellen Dialog und schließen ohne Routenwechsel. Die persistente Navigationsleiste (D-00) und der Footer (D-07.6) sind auf jedem Abschnitt der Landingpage vorhanden.</p>
+  </div>
+
+  <div class="page-num">05</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 6: INFORMATION ARCHITECTURE                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>3. Informationsarchitektur</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 3</div>
+    <h2 class="section">Informationsarchitektur</h2>
+    <p class="section-lead">Die Landingpage ist eine einzelne scrollbare Oberfläche. Ihre Abschnitte liegen nebeneinander unter dem Public Root und bilden die einzige Hierarchieebene, die ein Besucher durchläuft. Hilfsdialoge (Auth, Drawer) liegen außerhalb des Hauptpfades und sind nur über Aktionen auf diesem Pfad erreichbar.</p>
+
+    <div class="ia-tree">
+      <div class="ia-root">
+        <div class="ia-node">Reflecta &middot; Public Root</div>
+      </div>
+
+      <div class="ia-row">
+        <div class="ia-cell">
+          <span class="cell-num">D-01</span>
+          <div class="cell-name">Hero</div>
+          <div class="cell-children">Headline, zwei CTAs, App-Shell-Mock</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-02</span>
+          <div class="cell-name">Metrics-Laufband</div>
+          <div class="cell-children">5 KPI-Karten, Autoscroll</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-03 / D-04 / D-05</span>
+          <div class="cell-name">Features</div>
+          <div class="cell-children">Journal &middot; Analytics &middot; KI</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-06</span>
+          <div class="cell-name">Reviews</div>
+          <div class="cell-children">3 Testimonial-Karten</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-07</span>
+          <div class="cell-name">Final-CTA</div>
+          <div class="cell-children">Headline, zwei CTAs, Footer</div>
+        </div>
+        <div class="ia-cell">
+          <span class="cell-num">D-00</span>
+          <div class="cell-name">Obere Navigation</div>
+          <div class="cell-children">Anker, Anmelden, Registrieren</div>
+        </div>
+      </div>
+
+      <div class="ia-aux-row">
+        <div class="ia-aux-cell">
+          <span class="cell-num">D-08</span>
+          <div class="cell-name">Auth-Dialog (Anmelden / Registrieren)</div>
+        </div>
+        <div class="ia-aux-cell">
+          <span class="cell-num">D-09</span>
+          <div class="cell-name">Mobile Navigation</div>
+        </div>
+        <div class="ia-aux-cell">
+          <span class="cell-num">EXT</span>
+          <div class="cell-name">Angemeldete Anwendung (Demo / Real)</div>
+        </div>
+      </div>
+
+      <div class="ia-legend">
+        <span><span class="swatch sw-primary"></span>Root</span>
+        <span><span class="swatch sw-section"></span>Abschnitt im Public Path</span>
+        <span><span class="swatch sw-aux"></span>Hilfsdialog oder externe Oberfläche</span>
+      </div>
+    </div>
+
+    <h3 class="sub">3.1 Navigationsregeln</h3>
+    <ul>
+      <li>Die obere Navigationsleiste ist sticky und scrollt alle Ankerziele weich in den Sichtbereich.</li>
+      <li>Das Markenzeichen in D-00 scrollt zurück zum Hero (D-01) und verlässt den Public Path nicht.</li>
+      <li>"Start Reflecting" (D-00.6, D-01.3, D-07.4) führt in den Auth-Dialog (D-08) im Registrierungsmodus.</li>
+      <li>"Log In" (D-00.5) führt in den Auth-Dialog (D-08) im Anmeldemodus.</li>
+      <li>"Try live demo" (D-01.4, D-07.5) und "Try demo" (D-04.4) führen in die angemeldete Anwendung mit vorbefüllten Demo-Daten.</li>
+      <li>Der Auth-Dialog bietet einen Back-Link (D-08.1), der zum Public Root zurückkehrt, ohne die Scrollposition zu verlieren.</li>
+    </ul>
+  </div>
+
+  <div class="page-num">06</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 7: SWIMLANE                                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 4</div>
+    <h2 class="section">Swimlane-Ablaufdiagramm</h2>
+    <p class="section-lead">Drei Flows decken die wesentlichen Interaktionen ab: Flow A der passive Besuch (Scroll), Flow B die KI-gestützte Reflexionsfrage zur Journal-Eingabe im Mockup (D-03.5), Flow C der CTA-Klick mit Verzweigung zu Auth (D-08) oder Live-Demo. Drei Lanes: Besucher (Browser), React-Frontend, Backend/KI.</p>
+
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:#6A0DAD"></span>Besucher / Browser</span>
+      <span><span class="legend-dot" style="background:#1e293b"></span>React (Frontend)</span>
+      <span><span class="legend-dot" style="background:#065f46"></span>Backend / KI</span>
+      <span><span class="legend-dot" style="background:#f0fdf4;border:1.5px solid #16a34a"></span>Erfolgreicher Pfad</span>
+      <span><span class="legend-dot" style="background:#fffbeb;border:1.5px solid #d97706"></span>Entscheidung</span>
+    </div>
+
+    <h3 class="sub">4.1 Flow A &mdash; Passiver Besuch &amp; Scroll</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Besucher öffnet die Root-URL, scrollt durch die sieben Sektionen (D-01 bis D-07). Reine Client-seitige Effekte (Fade-ins, Marquee-Autoscroll, Live-Mocks). Backend bleibt idle.</p>
+
+    <!-- FLOW A SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:3mm;">
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow A &mdash; GET / (passiv)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Besucher (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; Backend / KI</div>
+      </div>
+      <svg viewBox="0 0 680 200" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fA-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+        </defs>
+
+        <line x1="227" y1="0" x2="227" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="453" y1="0" x2="453" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+
+        <rect x="0" y="0" width="227" height="200" fill="#faf5ff" opacity="0.35"/>
+        <rect x="227" y="0" width="226" height="200" fill="#f8fafc" opacity="0.45"/>
+        <rect x="453" y="0" width="227" height="200" fill="#f0fdf4" opacity="0.25"/>
+
+        <!-- U1: Aufruf "/" -->
+        <rect x="68" y="14" width="90" height="44" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="113" y="32" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="113" y="45" text-anchor="middle" fill="white" font-size="9">Aufruf von</text>
+        <text x="113" y="56" text-anchor="middle" fill="white" font-size="9">https://reflecta/</text>
+
+        <!-- Arrow U1 -> S1 -->
+        <line x1="158" y1="36" x2="293" y2="36" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="225" y="32" text-anchor="middle" fill="#9ca3af" font-size="8">HTTP GET</text>
+
+        <!-- S1: LandingPage rendert -->
+        <rect x="295" y="14" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="32" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="340" y="45" text-anchor="middle" fill="#1e293b" font-size="9">LandingPage</text>
+        <text x="340" y="56" text-anchor="middle" fill="#1e293b" font-size="9">D-01 ... D-07</text>
+
+        <!-- A1: Idle -->
+        <rect x="521" y="14" width="90" height="44" rx="7" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="566" y="32" text-anchor="middle" fill="#64748b" font-weight="700" font-size="9.5">A1</text>
+        <text x="566" y="45" text-anchor="middle" fill="#64748b" font-size="9">Idle</text>
+        <text x="566" y="56" text-anchor="middle" fill="#64748b" font-size="9">(kein API-Call)</text>
+
+        <!-- U2: Scrollen -->
+        <rect x="68" y="78" width="90" height="44" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="113" y="96" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U2</text>
+        <text x="113" y="109" text-anchor="middle" fill="#5b21b6" font-size="9">Scrollen</text>
+        <text x="113" y="120" text-anchor="middle" fill="#5b21b6" font-size="9">durch Sektionen</text>
+
+        <!-- Arrow U1 -> U2 vertical -->
+        <line x1="113" y1="58" x2="113" y2="76" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+
+        <!-- Arrow U2 -> S2 -->
+        <line x1="158" y1="100" x2="293" y2="100" stroke="#171717" stroke-width="1.5" marker-end="url(#fA-arr)"/>
+        <text x="225" y="96" text-anchor="middle" fill="#9ca3af" font-size="8">scroll</text>
+
+        <!-- S2: IntersectionObserver, Marquee, Live-Mocks -->
+        <rect x="295" y="78" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="93" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S2</text>
+        <text x="340" y="105" text-anchor="middle" fill="#1e293b" font-size="8.5">Fade-ins, Marquee,</text>
+        <text x="340" y="115" text-anchor="middle" fill="#1e293b" font-size="8.5">Live-Mocks (CSS/JS)</text>
+
+        <!-- U3: Verweilen -->
+        <rect x="68" y="142" width="90" height="44" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="113" y="160" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U3</text>
+        <text x="113" y="173" text-anchor="middle" fill="#5b21b6" font-size="9">Lesen / verweilen</text>
+        <text x="113" y="184" text-anchor="middle" fill="#5b21b6" font-size="9">(Reviews, Features)</text>
+
+        <line x1="113" y1="122" x2="113" y2="140" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="page-num">07</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 8: SWIMLANE FLOW B (JOURNAL MOCK)                        -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">4.2 Flow B &mdash; Reflexionsfrage zur Journal-Eingabe (D-03.5)</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Besucher tippt im Journal-Mockup der Feature-Sektion D-03. Nach einer Tipp-Pause sendet das Frontend den aktuellen Text-Auszug an einen KI-Service. Die KI generiert eine zur Eingabe passende Reflexionsfrage und liefert sie zurück; die Frage erscheint kursiv unter dem Eingabefeld und macht den KI-gestützten Journaling-Helfer der echten App auf der Landingpage erlebbar. Weitere Analysen (Format, Stimmungen, Aktivitäten, Ziele) sind nicht Teil dieses Mockups.</p>
+
+    <!-- FLOW B SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:3mm;">
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow B &mdash; KI-Reflexionsfrage zur Eingabe</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Besucher (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; Backend / KI</div>
+      </div>
+      <svg viewBox="0 0 680 200" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fB-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fB-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#1e293b"/></marker>
+        </defs>
+
+        <line x1="227" y1="0" x2="227" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="453" y1="0" x2="453" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+
+        <rect x="0" y="0" width="227" height="200" fill="#faf5ff" opacity="0.35"/>
+        <rect x="227" y="0" width="226" height="200" fill="#f8fafc" opacity="0.45"/>
+        <rect x="453" y="0" width="227" height="200" fill="#f0fdf4" opacity="0.25"/>
+
+        <!-- U1: Eintrag tippen -->
+        <rect x="68" y="14" width="90" height="48" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="113" y="32" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="113" y="45" text-anchor="middle" fill="white" font-size="9">Tippen im</text>
+        <text x="113" y="56" text-anchor="middle" fill="white" font-size="9">Journal-Mockup</text>
+
+        <!-- Arrow U1 -> S1 -->
+        <line x1="158" y1="38" x2="293" y2="38" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="225" y="34" text-anchor="middle" fill="#9ca3af" font-size="8">Tipp-Pause</text>
+
+        <!-- S1: Eingabe entprellt absenden -->
+        <rect x="295" y="14" width="90" height="48" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="32" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S1</text>
+        <text x="340" y="45" text-anchor="middle" fill="#1e293b" font-size="8.5">Text-Auszug</text>
+        <text x="340" y="56" text-anchor="middle" fill="#1e293b" font-size="8.5">an KI senden</text>
+
+        <!-- Arrow S1 -> A1 -->
+        <line x1="385" y1="38" x2="519" y2="38" stroke="#171717" stroke-width="1.5" marker-end="url(#fB-arr)"/>
+        <text x="452" y="34" text-anchor="middle" fill="#9ca3af" font-size="8">KI-Anfrage</text>
+
+        <!-- A1: KI generiert Reflexionsfrage -->
+        <rect x="521" y="14" width="90" height="48" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="566" y="32" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">A1</text>
+        <text x="566" y="45" text-anchor="middle" fill="#78350f" font-size="9">Reflexionsfrage</text>
+        <text x="566" y="56" text-anchor="middle" fill="#78350f" font-size="9">generieren</text>
+
+        <!-- A1 -> A2 vertical -->
+        <line x1="566" y1="62" x2="566" y2="116" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- A2: Antwort -->
+        <rect x="521" y="118" width="90" height="48" rx="7" fill="#f0fdf4" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="566" y="136" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A2</text>
+        <text x="566" y="149" text-anchor="middle" fill="#065f46" font-size="9">Frage</text>
+        <text x="566" y="160" text-anchor="middle" fill="#065f46" font-size="9">zurückliefern</text>
+
+        <!-- Arrow A2 -> S2 -->
+        <line x1="521" y1="142" x2="387" y2="142" stroke="#1e293b" stroke-width="1.5" marker-end="url(#fB-grn)"/>
+        <text x="454" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">Antwort</text>
+
+        <!-- S2: Frage einblenden -->
+        <rect x="295" y="118" width="90" height="48" rx="7" fill="#f0fdf4" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="136" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">S2</text>
+        <text x="340" y="149" text-anchor="middle" fill="#065f46" font-size="8.5">Frage unter</text>
+        <text x="340" y="160" text-anchor="middle" fill="#065f46" font-size="8.5">Eingabefeld einblenden</text>
+
+        <!-- Arrow S2 -> U2 -->
+        <line x1="295" y1="142" x2="160" y2="142" stroke="#1e293b" stroke-width="1.5" marker-end="url(#fB-grn)"/>
+        <text x="227" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">UI</text>
+
+        <!-- U2: Frage lesen -->
+        <rect x="68" y="118" width="90" height="48" rx="7" fill="#f0fdf4" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="113" y="136" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">U2</text>
+        <text x="113" y="149" text-anchor="middle" fill="#065f46" font-size="9">Inspirierende</text>
+        <text x="113" y="160" text-anchor="middle" fill="#065f46" font-size="9">Frage lesen &#x2713;</text>
+
+        <line x1="113" y1="62" x2="113" y2="116" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="page-num">08</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 9: SWIMLANE FLOW C (CTA)                                 -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>4. Swimlane-Ablaufdiagramm (Fortsetzung)</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">4.3 Flow C &mdash; CTA-Klick &rarr; Auth (D-08) oder Live-Demo</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Besucher klickt einen CTA. Eine Routing-Entscheidung in React verzweigt zwischen Auth (D-08 mit Modus-Flag) und Live-Demo (Demo-Stub-Login). Beide Pfade enden im AuthenticatedApp-Mount; der Demo-Pfad zusätzlich mit aktivem Demo-Banner.</p>
+
+    <!-- FLOW C SVG -->
+    <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:3mm;">
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow C &mdash; CTA-Klick mit Verzweigung</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1.5px solid var(--line);">
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Besucher (Browser)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; Backend / Auth</div>
+      </div>
+      <svg viewBox="0 0 680 320" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
+        <defs>
+          <marker id="fC-arr" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#171717"/></marker>
+          <marker id="fC-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#1e293b"/></marker>
+          <marker id="fC-pur" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#6A0DAD"/></marker>
+        </defs>
+
+        <line x1="227" y1="0" x2="227" y2="320" stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="453" y1="0" x2="453" y2="320" stroke="#e5e7eb" stroke-width="1"/>
+
+        <rect x="0" y="0" width="227" height="320" fill="#faf5ff" opacity="0.35"/>
+        <rect x="227" y="0" width="226" height="320" fill="#f8fafc" opacity="0.45"/>
+        <rect x="453" y="0" width="227" height="320" fill="#f0fdf4" opacity="0.25"/>
+
+        <!-- U1: CTA Klick -->
+        <rect x="68" y="14" width="90" height="48" rx="7" fill="#6A0DAD" stroke="none"/>
+        <text x="113" y="32" text-anchor="middle" fill="white" font-weight="700" font-size="9.5">U1</text>
+        <text x="113" y="45" text-anchor="middle" fill="white" font-size="9">CTA klicken</text>
+        <text x="113" y="56" text-anchor="middle" fill="white" font-size="8.5">(Sign Up / Log In / Demo)</text>
+
+        <!-- Arrow U1 -> S1 -->
+        <line x1="158" y1="38" x2="293" y2="38" stroke="#171717" stroke-width="1.5" marker-end="url(#fC-arr)"/>
+        <text x="225" y="34" text-anchor="middle" fill="#9ca3af" font-size="8">onClick</text>
+
+        <!-- S1: Decision diamond -->
+        <polygon points="340,12 385,42 340,72 295,42" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="340" y="38" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">S1</text>
+        <text x="340" y="50" text-anchor="middle" fill="#78350f" font-size="8.5">CTA-Typ?</text>
+
+        <!-- ── BRANCH 1: AUTH ── -->
+        <!-- S2a: setShowLogin / pendingMode -->
+        <rect x="295" y="92" width="90" height="44" rx="7" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="110" text-anchor="middle" fill="#1e293b" font-weight="700" font-size="9.5">S2a</text>
+        <text x="340" y="123" text-anchor="middle" fill="#1e293b" font-size="8.5">D-08 mounten</text>
+        <text x="340" y="133" text-anchor="middle" fill="#1e293b" font-size="8.5">(login / signup)</text>
+
+        <!-- S1 -> S2a -->
+        <line x1="340" y1="72" x2="340" y2="90" stroke="#9ca3af" stroke-width="1.2"/>
+        <text x="348" y="86" fill="#9ca3af" font-size="8">Auth</text>
+
+        <!-- Arrow S2a -> A1 -->
+        <line x1="385" y1="114" x2="519" y2="114" stroke="#171717" stroke-width="1.5" marker-end="url(#fC-arr)"/>
+        <text x="452" y="110" text-anchor="middle" fill="#9ca3af" font-size="8">Cognito Auth</text>
+
+        <!-- A1: Cognito Auth -->
+        <rect x="521" y="92" width="90" height="44" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+        <text x="566" y="110" text-anchor="middle" fill="#78350f" font-weight="700" font-size="9.5">A1</text>
+        <text x="566" y="123" text-anchor="middle" fill="#78350f" font-size="9">AWS Cognito</text>
+        <text x="566" y="133" text-anchor="middle" fill="#78350f" font-size="9">SignUp / SignIn</text>
+
+        <!-- A1 -> A2 -->
+        <line x1="566" y1="136" x2="566" y2="152" stroke="#9ca3af" stroke-width="1.2"/>
+
+        <!-- A2: Session JWT -->
+        <rect x="521" y="154" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="566" y="172" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">A2</text>
+        <text x="566" y="185" text-anchor="middle" fill="#065f46" font-size="9">Session-JWT</text>
+        <text x="566" y="195" text-anchor="middle" fill="#065f46" font-size="9">+ User-Profil</text>
+
+        <!-- Arrow A2 -> S3a -->
+        <line x1="521" y1="176" x2="387" y2="176" stroke="#1e293b" stroke-width="1.5" marker-end="url(#fC-grn)"/>
+        <text x="454" y="172" text-anchor="middle" fill="#9ca3af" font-size="8">JWT</text>
+
+        <!-- S3a: AuthenticatedApp -->
+        <rect x="295" y="154" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="340" y="172" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">S3a</text>
+        <text x="340" y="185" text-anchor="middle" fill="#065f46" font-size="8.5">AuthenticatedApp</text>
+        <text x="340" y="195" text-anchor="middle" fill="#065f46" font-size="8.5">mountet (real)</text>
+
+        <!-- Arrow S3a -> U2a -->
+        <line x1="295" y1="176" x2="160" y2="176" stroke="#1e293b" stroke-width="1.5" marker-end="url(#fC-grn)"/>
+
+        <!-- U2a: App geöffnet -->
+        <rect x="68" y="154" width="90" height="44" rx="7" fill="#f0fdf4" stroke="#1e293b" stroke-width="1.5"/>
+        <text x="113" y="172" text-anchor="middle" fill="#065f46" font-weight="700" font-size="9.5">U2a</text>
+        <text x="113" y="185" text-anchor="middle" fill="#065f46" font-size="9">Echte App</text>
+        <text x="113" y="195" text-anchor="middle" fill="#065f46" font-size="9">geöffnet &#x2713;</text>
+
+        <!-- ── BRANCH 2: DEMO ── -->
+        <!-- S2b: enterDemo -->
+        <rect x="295" y="232" width="90" height="44" rx="7" fill="white" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="340" y="250" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">S2b</text>
+        <text x="340" y="263" text-anchor="middle" fill="#5b21b6" font-size="8.5">enterDemo(tab)</text>
+        <text x="340" y="273" text-anchor="middle" fill="#5b21b6" font-size="8.5">demoMode = true</text>
+
+        <!-- S1 -> S2b (curve down) -->
+        <path d="M 340 72 Q 430 72 430 232 L 385 232" stroke="#9ca3af" stroke-width="1.2" fill="none"/>
+        <text x="438" y="156" fill="#9ca3af" font-size="8">Demo</text>
+
+        <!-- Arrow S2b -> A3 -->
+        <line x1="385" y1="254" x2="519" y2="254" stroke="#6A0DAD" stroke-width="1.5" marker-end="url(#fC-pur)"/>
+        <text x="452" y="250" text-anchor="middle" fill="#9ca3af" font-size="8">stub login</text>
+
+        <!-- A3: Demo-Stub login -->
+        <rect x="521" y="232" width="90" height="44" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="566" y="250" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">A3</text>
+        <text x="566" y="263" text-anchor="middle" fill="#5b21b6" font-size="8.5">demo@reflecta.app</text>
+        <text x="566" y="273" text-anchor="middle" fill="#5b21b6" font-size="8.5">(seed-Daten)</text>
+
+        <!-- A3 -> S3b: vertical down then horizontal left, single connected path -->
+        <path d="M 566 276 L 566 296 L 387 296" stroke="#6A0DAD" stroke-width="1.5" fill="none" marker-end="url(#fC-pur)"/>
+
+        <!-- S3b: AuthenticatedApp + Banner -->
+        <rect x="295" y="276" width="90" height="40" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="340" y="293" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">S3b</text>
+        <text x="340" y="305" text-anchor="middle" fill="#5b21b6" font-size="8.5">App + DemoBanner</text>
+
+        <!-- Arrow S3b -> U2b -->
+        <line x1="295" y1="296" x2="160" y2="296" stroke="#6A0DAD" stroke-width="1.5" marker-end="url(#fC-pur)"/>
+
+        <!-- U2b: Demo-Modus -->
+        <rect x="68" y="276" width="90" height="40" rx="7" fill="#f5f3ff" stroke="#6A0DAD" stroke-width="1.5"/>
+        <text x="113" y="293" text-anchor="middle" fill="#5b21b6" font-weight="700" font-size="9.5">U2b</text>
+        <text x="113" y="305" text-anchor="middle" fill="#5b21b6" font-size="8.5">Demo-Modus aktiv</text>
+
+        <!-- Vertical browser-lane connectors -->
+        <line x1="113" y1="62" x2="113" y2="152" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="113" y1="198" x2="113" y2="274" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+      </svg>
+    </div>
+
+    <div class="grid-2" style="margin-top:2mm;">
+      <div class="info-card">
+        <h4>Auth-Pfad (D-08)</h4>
+        <p>Klick auf <code>Sign Up Free</code>, <code>Log In</code> oder die GitHub-OAuth-Schaltfläche öffnet D-08 mit dem entsprechenden Modus. AWS Cognito übernimmt die eigentliche Authentifizierung; das Frontend speichert das JWT-Token und lädt die echte App.</p>
+      </div>
+      <div class="info-card">
+        <h4>Demo-Pfad</h4>
+        <p>Klick auf <code>Try live demo</code> oder <code>Try demo</code> ruft <code>enterDemo()</code> auf, das mit einem Stub-Login die Demo-Seed-Daten lädt. Die App startet mit Demo-Banner; nach 5 Minuten oder beim Versuch, gesperrte Features zu nutzen, erscheint ein Signup-Modal.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">09</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 10: WIREFRAME D-01 HERO                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.1 Wireframe D-01 Hero</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.1</div>
+    <h2 class="section">D-01 Hero</h2>
+    <p class="section-lead">Erster Viewport above the fold. Vermittelt das Nutzenversprechen in zwei Zeilen, zeigt die persistente obere Navigation und bietet zwei klar abgegrenzte Calls to Action.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-01 &middot; Hero</div>
+          <div class="wf-name">Quantify your consciousness.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Above the fold</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Top nav -->
+          <rect x="40" y="40" width="1120" height="56" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <rect x="64" y="56" width="120" height="24" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="124" y="72" text-anchor="middle" fill="#475569" font-size="10" font-weight="600">Reflecta</text>
+          <text x="560" y="74" text-anchor="middle" font-size="10" fill="#475569">Features</text>
+          <text x="660" y="74" text-anchor="middle" font-size="10" fill="#475569">The Science</text>
+          <text x="760" y="74" text-anchor="middle" font-size="10" fill="#475569">Reviews</text>
+          <text x="980" y="74" font-size="10" fill="#475569">Log In</text>
+          <rect x="1030" y="52" width="120" height="32" rx="16" fill="#1e293b"/>
+          <text x="1090" y="72" text-anchor="middle" font-size="10" fill="white" font-weight="600">Start Reflecting</text>
+          <!-- Left column: headline placeholders with real text -->
+          <rect x="60" y="180" width="480" height="60" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="74" y="218" font-size="14" fill="#1e293b" font-weight="700">"Quantify your"  (D-01.1)</text>
+          <rect x="60" y="252" width="480" height="60" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="74" y="290" font-size="14" fill="#475569" font-weight="700" font-style="italic">"consciousness."  (Lila-Akzent)</text>
+          <line x1="60" y1="344" x2="540" y2="344" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="60" y1="362" x2="500" y2="362" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="60" y1="380" x2="460" y2="380" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="60" y="406" font-size="9" fill="#94a3b8">Sub (D-01.2): "The AI-powered journal that maps your emotional DNA ..."</text>
+          <rect x="60" y="432" width="180" height="48" rx="24" fill="#1e293b"/>
+          <text x="150" y="462" text-anchor="middle" font-size="13" fill="white" font-weight="600">Start Reflecting</text>
+          <rect x="260" y="432" width="160" height="48" rx="24" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+          <text x="340" y="462" text-anchor="middle" font-size="13" fill="#1e293b">Try live demo</text>
+          <text x="60" y="510" font-size="11" fill="#475569" text-decoration="underline">or see how it works &#8595;</text>
+          <text x="60" y="530" font-size="9" fill="#94a3b8">Anker-Link (D-01.5)</text>
+          <!-- Right column: rotated app-shell mockup placeholder -->
+          <g transform="rotate(-3 880 350)">
+            <rect x="640" y="170" width="480" height="380" rx="14" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="640" y1="206" x2="1120" y2="206" stroke="#cbd5e1" stroke-width="1"/>
+            <rect x="660" y="184" width="60" height="14" fill="#e2e8f0" stroke="#94a3b8" stroke-width="0.5"/>
+            <text x="690" y="194" text-anchor="middle" font-size="8" fill="#475569" font-weight="600">Reflecta</text>
+            <text x="660" y="240" font-size="11" fill="#1e293b" font-weight="700">My Journal</text>
+            <rect x="1020" y="222" width="80" height="22" rx="11" fill="#1e293b"/>
+            <line x1="660" y1="276" x2="900" y2="276" stroke="#cbd5e1" stroke-width="3"/>
+            <line x1="660" y1="300" x2="1100" y2="300" stroke="#cbd5e1" stroke-width="2"/>
+            <line x1="660" y1="320" x2="1080" y2="320" stroke="#cbd5e1" stroke-width="2"/>
+            <line x1="660" y1="358" x2="900" y2="358" stroke="#1e293b" stroke-width="3"/>
+            <line x1="660" y1="382" x2="1100" y2="382" stroke="#cbd5e1" stroke-width="2"/>
+            <line x1="660" y1="402" x2="1060" y2="402" stroke="#cbd5e1" stroke-width="2"/>
+            <line x1="660" y1="440" x2="980" y2="440" stroke="#cbd5e1" stroke-width="2"/>
+            <line x1="660" y1="460" x2="1040" y2="460" stroke="#cbd5e1" stroke-width="2"/>
+            <rect x="940" y="500" width="160" height="32" rx="16" fill="white" stroke="#1e293b" stroke-width="1"/>
+            <text x="1020" y="520" text-anchor="middle" font-size="9" fill="#1e293b" font-weight="600">Reflecta AI</text>
+          </g>
+          <text x="640" y="568" font-size="9" fill="#94a3b8">App-Shell-Mockup (D-01.6) - rotiert, statischer Visual-Anker</text>
+          <!-- Bottom: marquee preview strip -->
+          <rect x="40" y="640" width="1120" height="120" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="60" y="666" font-size="9" fill="#94a3b8" letter-spacing="1.5" font-weight="600">METRICS-LAUFBAND (D-02) - VORSCHAU</text>
+          <rect x="60" y="684" width="200" height="56" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <rect x="280" y="684" width="200" height="56" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <rect x="500" y="684" width="200" height="56" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <rect x="720" y="684" width="200" height="56" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <rect x="940" y="684" width="200" height="56" fill="white" stroke="#cbd5e1" stroke-width="1"/>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="40" cy="68" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="73" text-anchor="middle" fill="white">1</text>
+            <circle cx="500" cy="68" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="500" y="73" text-anchor="middle" fill="white">2</text>
+            <circle cx="1170" cy="68" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="1170" y="73" text-anchor="middle" fill="white">3</text>
+            <circle cx="40" cy="246" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="251" text-anchor="middle" fill="white">4</text>
+            <circle cx="40" cy="456" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="461" text-anchor="middle" fill="white">5</text>
+            <circle cx="440" cy="456" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="440" y="461" text-anchor="middle" fill="white">6</text>
+            <circle cx="1170" cy="280" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="1170" y="285" text-anchor="middle" fill="white">7</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Brand-Lockup (D-00.1)</b> - Icon + Wortmarke "Reflecta"; Klick scrollt zum Seitenanfang.</li>
+          <li><b>Anker-Navigation (D-00.2 - D-00.4)</b> - "Features", "The Science", "Reviews"; weicher Scroll zur jeweiligen Section.</li>
+          <li><b>Auth-Steuerung (D-00.5 - D-00.6)</b> - Textbutton "Log In" + Gradient-Pill "Start Reflecting".</li>
+          <li><b>Headline (D-01.1)</b> - Schwarz-Lila-Kontrast auf dem Nutzenversprechen: "Quantify your" in Schwarz, "consciousness." als Lila-Gradient (Zeilenumbruch).</li>
+          <li><b>Primärer CTA (D-01.3)</b> - "Start Reflecting" -&gt; Auth-Dialog (D-08) im Registrierungsmodus.</li>
+          <li><b>Sekundärer CTA (D-01.4)</b> - "Try live demo" -&gt; vorbefüllte angemeldete Demo (D-Demo).</li>
+          <li><b>Hero-Illustration (D-01.6)</b> - rotiertes App-Shell-Mock mit "My Journal", lila Action-Pill und "Reflecta AI"-Floating-Tag als visueller Produkt-Anker.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">10</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 11: D-02 MARQUEE                                         -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.2 Wireframe D-02 Metrics-Laufband</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.2</div>
+    <h2 class="section">D-02 Metrics-Laufband</h2>
+    <p class="section-lead">Automatisch scrollendes Band aus fünf Metrik-Karten, die zeigen, welche Signale Reflecta im Produkt erfasst. Rein dekorativ - die Karten verlinken nicht.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-02 &middot; Metrics-Laufband</div>
+          <div class="wf-name">Automatisch scrollendes Proof-Band</div>
+        </div>
+        <div class="wf-tag">Public &middot; Dekorativ</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 360" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <rect x="20" y="20" width="1160" height="320" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="60" y="56" font-size="10" fill="#94a3b8" letter-spacing="1.5" font-weight="600">METRICS-LAUFBAND - AUTO-SCROLL (30s LINEAR LOOP)</text>
+          <line x1="60" y1="74" x2="1140" y2="74" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- 5 metric cards -->
+          <g>
+            <rect x="80" y="120" width="200" height="160" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="100" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+            <text x="116" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+            <text x="100" y="208" font-size="11" fill="#475569" font-weight="600">Stress Level</text>
+            <text x="100" y="240" font-size="22" fill="#1e293b" font-weight="700">3.1</text>
+            <text x="146" y="240" font-size="10" fill="#94a3b8">/ 5</text>
+            <line x1="100" y1="262" x2="260" y2="262" stroke="#cbd5e1" stroke-width="1"/>
+          </g>
+          <g>
+            <rect x="300" y="120" width="200" height="160" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="320" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+            <text x="336" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+            <text x="320" y="208" font-size="11" fill="#475569" font-weight="600">Mood Score</text>
+            <text x="320" y="240" font-size="22" fill="#1e293b" font-weight="700">3.6</text>
+            <text x="366" y="240" font-size="10" fill="#94a3b8">/ 5</text>
+            <line x1="320" y1="262" x2="480" y2="262" stroke="#cbd5e1" stroke-width="1"/>
+          </g>
+          <g>
+            <rect x="520" y="120" width="200" height="160" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="540" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+            <text x="556" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+            <text x="540" y="208" font-size="11" fill="#475569" font-weight="600">Social Engagement</text>
+            <text x="540" y="240" font-size="22" fill="#1e293b" font-weight="700">3.2</text>
+            <text x="586" y="240" font-size="10" fill="#94a3b8">/ 5</text>
+            <line x1="540" y1="262" x2="700" y2="262" stroke="#cbd5e1" stroke-width="1"/>
+          </g>
+          <g>
+            <rect x="740" y="120" width="200" height="160" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="760" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+            <text x="776" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+            <text x="760" y="208" font-size="11" fill="#475569" font-weight="600">Sleep Quality</text>
+            <text x="760" y="240" font-size="22" fill="#1e293b" font-weight="700">4.1</text>
+            <text x="806" y="240" font-size="10" fill="#94a3b8">/ 5</text>
+            <line x1="760" y1="262" x2="920" y2="262" stroke="#cbd5e1" stroke-width="1"/>
+          </g>
+          <g>
+            <rect x="960" y="120" width="200" height="160" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="980" y="138" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+            <text x="996" y="159" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+            <text x="980" y="208" font-size="11" fill="#475569" font-weight="600">AI Synthesis Accuracy</text>
+            <text x="980" y="240" font-size="22" fill="#1e293b" font-weight="700">98%</text>
+            <line x1="980" y1="262" x2="1140" y2="262" stroke="#cbd5e1" stroke-width="1"/>
+          </g>
+          <!-- Loop indicators -->
+          <text x="40" y="206" font-size="14" fill="#94a3b8">&larr;</text>
+          <text x="1148" y="206" font-size="14" fill="#94a3b8">&rarr;</text>
+          <text x="600" y="316" text-anchor="middle" font-size="9" fill="#94a3b8" letter-spacing="1">DREIFACH GERENDERTES TRACK - ENDLOSSCHLEIFE</text>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="180" cy="100" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="180" y="105" text-anchor="middle" fill="white">1</text>
+            <circle cx="400" cy="100" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="400" y="105" text-anchor="middle" fill="white">2</text>
+            <circle cx="620" cy="100" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="620" y="105" text-anchor="middle" fill="white">3</text>
+            <circle cx="840" cy="100" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="840" y="105" text-anchor="middle" fill="white">4</text>
+            <circle cx="1060" cy="100" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="1060" y="105" text-anchor="middle" fill="white">5</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Stress-Karte</b> - Label "Stress Level", Wert "3.1 / 5", Feather-Icon.</li>
+          <li><b>Mood-Karte</b> - Label "Mood Score", Wert "3.6 / 5", Smile-Icon.</li>
+          <li><b>Social-Engagement-Karte</b> - Label "Social Engagement", Wert "3.2 / 5", Users-Icon.</li>
+          <li><b>Sleep-Quality-Karte</b> - Label "Sleep Quality", Wert "4.1 / 5", Moon-Icon.</li>
+          <li><b>AI-Synthesis-Accuracy-Karte</b> - Label "AI Synthesis Accuracy", Wert "98%", Sparkles-Icon.</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin-top: 3mm; margin-bottom: 1mm;">5.2.1 Verhalten</h3>
+    <p style="font-size: 9pt; line-height: 1.4;">Das Track wird dreifach gerendert und per 30-Sekunden-linearer CSS-Animation in Endlosschleife horizontal verschoben. Die Animation pausiert bei Fokus; Pointer-Hover unterbricht sie nicht.</p>
+  </div>
+
+  <div class="page-num">11</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 12: D-03 FEATURE JOURNAL                                -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.3 Wireframe D-03 Feature - Journal</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.3</div>
+    <h2 class="section">D-03 Feature - Journal</h2>
+    <p class="section-lead">Erster Feature-Block. Verbindet das Journal-Nutzenversprechen mit einem Live-Mockup, das die produktive EntryForm widerspiegelt: Titel, Inhalt, KI-Prompt und vier State-Slider. Das Mockup nimmt Eingaben direkt auf der Landingpage entgegen.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-03 &middot; Feature - Journal</div>
+          <div class="wf-name">Capture the human frequency.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Interaktives Mockup</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Section eyebrow + headline (centered top) -->
+          <text x="600" y="58" text-anchor="middle" font-size="10" fill="#94a3b8" letter-spacing="2" font-weight="600">"THE REFLECTA ARCHITECTURE"  (D-03.1)</text>
+          <rect x="280" y="80" width="640" height="48" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="600" y="111" text-anchor="middle" font-size="13" fill="#1e293b" font-weight="700">"Decode your cognitive DNA."  (D-03.2)</text>
+          <line x1="320" y1="146" x2="880" y2="146" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="600" y="166" text-anchor="middle" font-size="9" fill="#94a3b8" font-style="italic">"More than a diary. Reflecta is an ontological interface ..."</text>
+          <!-- 2-col -->
+          <!-- Left text column -->
+          <rect x="60" y="220" width="36" height="36" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="78" y="243" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="60" y="278" font-size="9" fill="#94a3b8">Smile-Icon-Badge</text>
+          <rect x="60" y="298" width="460" height="44" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="74" y="327" font-size="13" fill="#1e293b" font-weight="700">"Capture the human frequency."  (D-03.3)</text>
+          <line x1="60" y1="368" x2="500" y2="368" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="60" y1="386" x2="480" y2="386" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="60" y1="404" x2="440" y2="404" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="60" y="430" font-size="9" fill="#94a3b8" font-style="italic">"Log your reality effortlessly. Our intuitive sliders ..."</text>
+          <!-- Bullet checklist -->
+          <g>
+            <rect x="60" y="466" width="14" height="14" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="68" y="477" text-anchor="middle" font-size="10" fill="#1e293b">&#10003;</text>
+            <text x="86" y="478" font-size="11" fill="#475569">"Frictionless daily entry"</text>
+            <rect x="60" y="496" width="14" height="14" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="68" y="507" text-anchor="middle" font-size="10" fill="#1e293b">&#10003;</text>
+            <text x="86" y="508" font-size="11" fill="#475569">"Multi-dimensional state tracking"</text>
+            <rect x="60" y="526" width="14" height="14" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="68" y="537" text-anchor="middle" font-size="10" fill="#1e293b">&#10003;</text>
+            <text x="86" y="538" font-size="11" fill="#475569">"Historical timeline search"</text>
+          </g>
+          <text x="60" y="568" font-size="9" fill="#94a3b8">Bullet-Checkliste (D-03.4)</text>
+          <!-- Right column: Journal mockup -->
+          <rect x="640" y="200" width="500" height="540" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+          <rect x="660" y="220" width="32" height="32" rx="4" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="676" y="241" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="704" y="240" font-size="13" fill="#1e293b" font-weight="700">New Journal Entry</text>
+          <text x="1100" y="240" text-anchor="end" font-size="10" fill="#1e293b" font-weight="700">Live</text>
+          <line x1="660" y1="262" x2="1120" y2="262" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- Title field -->
+          <text x="660" y="284" font-size="9" fill="#94a3b8">Title</text>
+          <rect x="660" y="290" width="280" height="34" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="676" y="312" font-size="10" fill="#475569">Long run by the river</text>
+          <text x="960" y="284" font-size="9" fill="#94a3b8">Date</text>
+          <rect x="960" y="290" width="160" height="34" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="976" y="312" font-size="10" fill="#475569">22.05.2026</text>
+          <!-- Content textarea -->
+          <text x="660" y="346" font-size="9" fill="#94a3b8">Journal Entry</text>
+          <rect x="660" y="354" width="460" height="100" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <line x1="676" y1="376" x2="1100" y2="376" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="676" y1="394" x2="1080" y2="394" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="676" y1="412" x2="1060" y2="412" stroke="#e2e8f0" stroke-width="1"/>
+          <line x1="676" y1="430" x2="900" y2="430" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- AI Reflexionsfrage + AI ON pill -->
+          <text x="660" y="476" font-size="9" fill="#475569" font-style="italic">"What is one small thing today that you do not want to forget?"</text>
+          <rect x="1040" y="462" width="80" height="22" rx="11" fill="#1e293b"/>
+          <text x="1080" y="478" text-anchor="middle" font-size="9" fill="white" font-weight="700">AI ON</text>
+          <text x="660" y="494" font-size="9" fill="#94a3b8">Reflexionsfrage (debounce 1s)  +  AI-ON-Pill</text>
+          <!-- TRACK YOUR STATE -->
+          <text x="660" y="528" font-size="10" fill="#1e293b" font-weight="700" letter-spacing="1">TRACK YOUR STATE</text>
+          <g>
+            <text x="660" y="558" font-size="10" fill="#475569">Sentiment: 5</text>
+            <line x1="780" y1="554" x2="900" y2="554" stroke="#cbd5e1" stroke-width="2"/>
+            <circle cx="892" cy="554" r="6" fill="#1e293b"/>
+            <text x="940" y="558" font-size="10" fill="#475569">Sleep Quality: 5</text>
+            <line x1="1040" y1="554" x2="1120" y2="554" stroke="#cbd5e1" stroke-width="2"/>
+            <circle cx="1112" cy="554" r="6" fill="#1e293b"/>
+            <text x="660" y="598" font-size="10" fill="#475569">Stress Level: 1</text>
+            <line x1="780" y1="594" x2="900" y2="594" stroke="#cbd5e1" stroke-width="2"/>
+            <circle cx="788" cy="594" r="6" fill="#1e293b"/>
+            <text x="940" y="598" font-size="10" fill="#475569">Social Engagement: 2</text>
+            <line x1="1040" y1="594" x2="1120" y2="594" stroke="#cbd5e1" stroke-width="2"/>
+            <circle cx="1056" cy="594" r="6" fill="#1e293b"/>
+          </g>
+          <text x="660" y="630" font-size="9" fill="#94a3b8">State-Slider 1 - 5</text>
+          <!-- Submit -->
+          <rect x="660" y="670" width="200" height="44" rx="22" fill="#1e293b"/>
+          <text x="760" y="697" text-anchor="middle" font-size="12" fill="white" font-weight="600">Save Entry</text>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="246" cy="104" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="246" y="109" text-anchor="middle" fill="white">1</text>
+            <circle cx="40" cy="320" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="325" text-anchor="middle" fill="white">2</text>
+            <circle cx="40" cy="503" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="508" text-anchor="middle" fill="white">3</text>
+            <circle cx="620" cy="307" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="620" y="312" text-anchor="middle" fill="white">4</text>
+            <circle cx="1140" cy="473" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="1140" y="478" text-anchor="middle" fill="white">5</text>
+            <circle cx="620" cy="528" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="620" y="533" text-anchor="middle" fill="white">6</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Section-Eyebrow + Headline (D-03.1, D-03.2)</b> - "THE REFLECTA ARCHITECTURE" + "Decode your cognitive DNA."</li>
+          <li><b>Feature-Headline (D-03.3)</b> - "Capture the human frequency." mit Smile-Icon-Badge oberhalb.</li>
+          <li><b>Bullet-Checkliste (D-03.4)</b> - "Frictionless daily entry", "Multi-dimensional state tracking", "Historical timeline search".</li>
+          <li><b>Titelfeld</b> - inline editierbar, Vorbelegung "Long run by the river", spiegelt die produktive EntryForm.</li>
+          <li><b>AI-ON-Pill</b> - Standardmäßig aktiv; entprellte Prompt-Abfrage (1 s) aus dem Fragenpool, Frage erscheint unter dem Inhalts-Feld.</li>
+          <li><b>State-Slider (TRACK YOUR STATE)</b> - Sentiment, Sleep Quality, Stress Level, Social Engagement, Skala 1 - 5.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">12</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 13: D-04 FEATURE ANALYTICS                              -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.4 Wireframe D-04 Feature - Analytics</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.4</div>
+    <h2 class="section">D-04 Feature - Analytics</h2>
+    <p class="section-lead">Zweiter Feature-Block. Zeigt ein interaktives Analytics-Dashboard mit KPI-Kacheln, einem mehrreihigen Wellbeing-Trend-Chart, einem Sentiment-Mix-Balkendiagramm und einem Sleep-Quality-Ring. Dient zugleich als Beleg und als Produktvorschau.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-04 &middot; Feature - Analytics</div>
+          <div class="wf-name">Visualize ontological symmetry.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Live-Charts</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Right column: vertically centered around y=390 -->
+          <rect x="700" y="220" width="48" height="48" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="724" y="251" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="700" y="288" font-size="9" fill="#94a3b8">Chart-Icon-Badge</text>
+          <rect x="700" y="306" width="440" height="48" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="714" y="338" font-size="14" fill="#1e293b" font-weight="700">"Visualize ontological symmetry."</text>
+          <text x="700" y="370" font-size="9" fill="#94a3b8">Headline (D-04.1)</text>
+          <line x1="700" y1="396" x2="1140" y2="396" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="700" y1="414" x2="1120" y2="414" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="700" y1="432" x2="1100" y2="432" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="700" y1="450" x2="1080" y2="450" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="700" y="476" font-size="9" fill="#94a3b8" font-style="italic">"Watch your personal universe expand. Reflecta takes your chaotic ..."</text>
+          <text x="700" y="476" font-size="9" fill="#94a3b8" opacity="0">.</text>
+          <text x="700" y="514" font-size="13" fill="#1e293b" text-decoration="underline">Try demo &rarr;</text>
+          <text x="700" y="534" font-size="9" fill="#94a3b8">Inline-Link (D-04.4)</text>
+          <!-- Left column: dashboard -->
+          <rect x="60" y="60" width="600" height="660" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+          <text x="80" y="88" font-size="9" fill="#94a3b8" letter-spacing="1.5" font-weight="600">ANALYTICS-DASHBOARD</text>
+          <!-- KPI tiles row -->
+          <g>
+            <rect x="80" y="108" width="130" height="80" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="92" y="126" font-size="8" fill="#94a3b8" letter-spacing="1">AVG MOOD</text>
+            <text x="92" y="156" font-size="20" fill="#1e293b" font-weight="700">3.9</text>
+            <text x="92" y="174" font-size="8" fill="#1e293b">+0.4</text>
+            <rect x="220" y="108" width="130" height="80" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="232" y="126" font-size="8" fill="#94a3b8" letter-spacing="1">AVG SLEEP</text>
+            <text x="232" y="156" font-size="20" fill="#1e293b" font-weight="700">3.7</text>
+            <text x="232" y="174" font-size="8" fill="#1e293b">+0.2</text>
+            <rect x="360" y="108" width="130" height="80" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="372" y="126" font-size="8" fill="#94a3b8" letter-spacing="1">STREAK</text>
+            <text x="372" y="156" font-size="20" fill="#1e293b" font-weight="700">12d</text>
+            <text x="372" y="174" font-size="8" fill="#94a3b8">Best yet</text>
+            <rect x="500" y="108" width="130" height="80" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <text x="512" y="126" font-size="8" fill="#94a3b8" letter-spacing="1">ENTRIES</text>
+            <text x="512" y="156" font-size="20" fill="#1e293b" font-weight="700">23</text>
+            <text x="512" y="174" font-size="8" fill="#94a3b8">this month</text>
+          </g>
+          <!-- Wellbeing trend chart -->
+          <rect x="80" y="208" width="550" height="180" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="94" y="226" font-size="9" fill="#1e293b" letter-spacing="1" font-weight="700">Wellbeing Trends</text>
+          <text x="500" y="226" font-size="8" fill="#475569">&bull; Mood   &bull; Sleep   &bull; Stress</text>
+          <polyline points="100,360 150,340 200,330 250,320 300,310 350,300 400,290 450,300 500,280 550,270 600,260" fill="none" stroke="#1e293b" stroke-width="2"/>
+          <polyline points="100,350 150,360 200,340 250,350 300,330 350,340 400,320 450,330 500,310 550,320 600,300" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <polyline points="100,340 150,330 200,350 250,330 300,350 350,330 400,350 450,340 500,360 550,340 600,350" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4"/>
+          <!-- Sentiment-Mix bar chart -->
+          <rect x="80" y="408" width="270" height="180" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="94" y="426" font-size="9" fill="#1e293b" letter-spacing="1" font-weight="700">Sentiment Mix</text>
+          <text x="280" y="426" font-size="8" fill="#94a3b8" font-style="italic">last 14 days</text>
+          <g>
+            <rect x="100" y="500" width="24" height="70" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="134" y="470" width="24" height="100" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="168" y="490" width="24" height="80" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="202" y="450" width="24" height="120" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="236" y="510" width="24" height="60" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+          </g>
+          <line x1="98" y1="572" x2="334" y2="572" stroke="#94a3b8" stroke-width="1"/>
+          <text x="106" y="582" font-size="6" fill="#94a3b8">Proud</text>
+          <text x="138" y="582" font-size="6" fill="#94a3b8">Calm</text>
+          <text x="167" y="582" font-size="6" fill="#94a3b8">Stressed</text>
+          <text x="206" y="582" font-size="6" fill="#94a3b8">Tired</text>
+          <text x="238" y="582" font-size="6" fill="#94a3b8">Inspired</text>
+          <!-- Sleep ring (clean 78% arc) -->
+          <rect x="370" y="408" width="260" height="180" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="384" y="426" font-size="9" fill="#1e293b" letter-spacing="1" font-weight="700">Sleep</text>
+          <circle cx="500" cy="510" r="56" fill="none" stroke="#e2e8f0" stroke-width="14"/>
+          <path d="M 500 454 A 56 56 0 1 1 445 499.51" fill="none" stroke="#1e293b" stroke-width="14" stroke-linecap="round"/>
+          <text x="500" y="518" text-anchor="middle" font-size="22" fill="#1e293b" font-weight="700">78%</text>
+          <!-- Insight card -->
+          <rect x="80" y="608" width="550" height="84" fill="white" stroke="#94a3b8" stroke-width="1.5"/>
+          <line x1="80" y1="608" x2="80" y2="692" stroke="#1e293b" stroke-width="4"/>
+          <rect x="100" y="624" width="20" height="20" rx="10" fill="#1e293b"/>
+          <text x="110" y="638" text-anchor="middle" font-size="9" fill="white" font-weight="700">!</text>
+          <text x="130" y="640" font-size="9" fill="#1e293b" font-weight="700" letter-spacing="1">AI CORRELATION</text>
+          <text x="100" y="664" font-size="9" fill="#475569" font-style="italic">"Mood and sleep moved together this week (r = 0.81). The two days under 4h sleep ..."</text>
+          <text x="100" y="682" font-size="9" fill="#94a3b8">KI-Korrelations-Karte (D-04.5)</text>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="40" cy="148" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="153" text-anchor="middle" fill="white">1</text>
+            <circle cx="40" cy="298" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="303" text-anchor="middle" fill="white">2</text>
+            <circle cx="40" cy="498" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="503" text-anchor="middle" fill="white">3</text>
+            <circle cx="354" cy="498" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="354" y="503" text-anchor="middle" fill="white">4</text>
+            <circle cx="40" cy="650" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="655" text-anchor="middle" fill="white">5</text>
+            <circle cx="676" cy="330" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="676" y="335" text-anchor="middle" fill="white">6</text>
+            <circle cx="676" cy="514" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="676" y="519" text-anchor="middle" fill="white">7</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>KPI-Kacheln</b> - "Avg Mood" 3.9 (+0.4), "Avg Sleep" 3.7 (+0.2), "Streak" 12d (Best yet), "Entries" 23 (this month).</li>
+          <li><b>Wellbeing-Trend</b> - Linien "Mood", "Sleep", "Stress" mit hover-synchronem Cursor.</li>
+          <li><b>Sentiment-Mix</b> - Balkendiagramm "last 14 days" nach Emotionskategorie (Proud, Calm, Stressed, Tired, Inspired).</li>
+          <li><b>Sleep-Ring</b> - radialer 78%-Bogen der durchschnittlichen Schlafqualität.</li>
+          <li><b>KI-Korrelations-Karte (D-04.5)</b> - Tag "AI CORRELATION" + Klartext-Insight: "Mood and sleep moved together this week (r = 0.81). ..."</li>
+          <li><b>Headline + Body (D-04.1, D-04.2, D-04.3)</b> - Chart-Icon-Badge, Headline "Visualize ontological symmetry.", Sub "Watch your personal universe expand. Reflecta takes your chaotic ..."</li>
+          <li><b>Inline-Link (D-04.4)</b> - "Try demo &rarr;" - angemeldete Anwendung, Analytics-Tab.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">13</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 14: D-05 FEATURE AI                                     -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.5 Wireframe D-05 Feature - KI-Synthese</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.5</div>
+    <h2 class="section">D-05 Feature - KI-Synthese</h2>
+    <p class="section-lead">Dritter Feature-Block. Zeigt, was die KI-Schicht erzeugt, sobald sich ein Besucher auf das Produkt einlässt: links ein Beispiel-Insight, rechts eine Chat-Karten-Vorschau.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-05 &middot; Feature - KI-Synthese</div>
+          <div class="wf-name">Deep synthesis via AI Resonance.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Statische Vorschau</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 780" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Left column: icon-badge + headline + body + insight card -->
+          <rect x="60" y="80" width="48" height="48" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="84" y="111" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="60" y="148" font-size="9" fill="#94a3b8">Brain-Icon-Badge</text>
+          <rect x="60" y="166" width="500" height="48" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="74" y="198" font-size="14" fill="#1e293b" font-weight="700">"Deep synthesis via AI Resonance."  (D-05.1)</text>
+          <line x1="60" y1="240" x2="560" y2="240" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="60" y1="258" x2="540" y2="258" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="60" y1="276" x2="520" y2="276" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="60" y="302" font-size="9" fill="#94a3b8" font-style="italic">"Experience true cognitive entanglement. Our AI doesn't just read your journal ..."  (D-05.2)</text>
+          <!-- Insight card -->
+          <rect x="60" y="340" width="540" height="180" fill="white" stroke="#94a3b8" stroke-width="1.5"/>
+          <line x1="60" y1="340" x2="60" y2="520" stroke="#1e293b" stroke-width="4"/>
+          <line x1="80" y1="370" x2="580" y2="370" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="80" y1="390" x2="560" y2="390" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="80" y1="410" x2="540" y2="410" stroke="#cbd5e1" stroke-width="1"/>
+          <line x1="80" y1="430" x2="500" y2="430" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="80" y="456" font-size="9" fill="#475569" font-style="italic">"I noticed your stress levels spike on days following poor sleep quality ..."</text>
+          <rect x="80" y="476" width="20" height="20" rx="10" fill="#1e293b"/>
+          <text x="90" y="490" text-anchor="middle" font-size="10" fill="white" font-weight="700">*</text>
+          <text x="108" y="491" font-size="10" fill="#1e293b" font-weight="700" letter-spacing="1">REFLECTA AI INSIGHT</text>
+          <text x="60" y="544" font-size="9" fill="#94a3b8">KI-Insight-Karte (D-05.3) - umrandet, Markenstreifen, "REFLECTA AI INSIGHT"-Tag</text>
+          <!-- Right column: chat preview tile (NOT rotated, vertical center) -->
+          <rect x="660" y="160" width="480" height="500" rx="14" fill="white" stroke="#94a3b8" stroke-width="2"/>
+          <!-- Chat header -->
+          <rect x="680" y="180" width="32" height="32" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="696" y="201" text-anchor="middle" font-size="9" fill="#475569" font-weight="600">ICN</text>
+          <text x="722" y="198" font-size="13" fill="#1e293b" font-weight="700">Reflecta AI</text>
+          <text x="722" y="216" font-size="10" fill="#94a3b8" font-style="italic">Always listening, always learning.</text>
+          <line x1="680" y1="234" x2="1120" y2="234" stroke="#e2e8f0" stroke-width="1"/>
+          <!-- Bubble 1: AI (dark, left) -->
+          <rect x="680" y="254" width="320" height="80" rx="14" fill="#1e293b"/>
+          <line x1="696" y1="276" x2="980" y2="276" stroke="white" stroke-width="2" opacity="0.85"/>
+          <line x1="696" y1="294" x2="970" y2="294" stroke="white" stroke-width="2" opacity="0.85"/>
+          <line x1="696" y1="312" x2="985" y2="312" stroke="white" stroke-width="2" opacity="0.85"/>
+          <line x1="696" y1="330" x2="900" y2="330" stroke="white" stroke-width="2" opacity="0.85"/>
+          <!-- Bubble 2: User (dark border, right) -->
+          <rect x="800" y="354" width="320" height="62" rx="14" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+          <line x1="816" y1="376" x2="1100" y2="376" stroke="#1e293b" stroke-width="2"/>
+          <line x1="816" y1="394" x2="1085" y2="394" stroke="#1e293b" stroke-width="2"/>
+          <line x1="816" y1="410" x2="940" y2="410" stroke="#1e293b" stroke-width="2"/>
+          <!-- Bubble 3: AI (dark, left) -->
+          <rect x="680" y="436" width="340" height="44" rx="14" fill="#1e293b"/>
+          <line x1="696" y1="460" x2="1000" y2="460" stroke="white" stroke-width="2" opacity="0.85"/>
+          <!-- Input -->
+          <rect x="680" y="600" width="440" height="40" rx="20" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="700" y="626" font-size="10" fill="#94a3b8">Type your reflection</text>
+          <text x="660" y="690" font-size="9" fill="#94a3b8">Chat-Vorschau-Kachel (D-05.4) - dunkle KI-Bubbles + outline-Nutzer-Bubbles alternierend</text>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="40" cy="190" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="195" text-anchor="middle" fill="white">1</text>
+            <circle cx="40" cy="290" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="295" text-anchor="middle" fill="white">2</text>
+            <circle cx="40" cy="430" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="435" text-anchor="middle" fill="white">3</text>
+            <circle cx="1170" cy="200" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="1170" y="205" text-anchor="middle" fill="white">4</text>
+            <circle cx="640" cy="294" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="640" y="299" text-anchor="middle" fill="white">5</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Headline (D-05.1)</b> - Brain-Icon-Badge oberhalb + "Deep synthesis via AI Resonance."</li>
+          <li><b>Feature-Text (D-05.2)</b> - "Experience true cognitive entanglement. Our AI doesn't just read your journal - it synthesizes long-term patterns ..."</li>
+          <li><b>KI-Insight-Karte (D-05.3)</b> - umrandetes Zitat mit dunklem Markenstreifen links, Sparkles-Badge und Tag "REFLECTA AI INSIGHT": "I noticed your stress levels spike on days following poor sleep quality ..."</li>
+          <li><b>Chat-Vorschau-Kachel (D-05.4)</b> - statische Konversations-Vorschau mit Header "Reflecta AI" + "Always listening, always learning.", drei Bubble-Zeilen und Eingabefeld.</li>
+          <li><b>Marken-Chat-Bubbles</b> - abwechselnd dunkle KI-Bubbles (links) und outline-Nutzer-Bubbles (rechts).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">14</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 15: D-06 REVIEWS                                        -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.6 Wireframe D-06 Reviews</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.6</div>
+    <h2 class="section">D-06 Reviews</h2>
+    <p class="section-lead">Drei Testimonial-Karten in einem horizontalen Raster. Jede Karte trägt fünf gefüllte Sterne, ein kursives Zitat und eine Autorenzeile. Liefert Social Proof unmittelbar vor dem finalen CTA.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-06 &middot; Reviews</div>
+          <div class="wf-name">Join a universe of self-aware minds.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Social Proof</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 660" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Section eyebrow + headline centered -->
+          <text x="600" y="58" text-anchor="middle" font-size="10" fill="#94a3b8" letter-spacing="2" font-weight="600">"GRAVITATIONAL PULL"  (D-06.1)</text>
+          <rect x="240" y="78" width="720" height="48" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1"/>
+          <text x="600" y="109" text-anchor="middle" font-size="13" fill="#1e293b" font-weight="700">"Join a universe of self-aware minds."  (D-06.2)</text>
+          <!-- 3 review cards row -->
+          <!-- Card 1 -->
+          <g>
+            <rect x="60" y="180" width="340" height="380" fill="white" stroke="#94a3b8" stroke-width="1.5"/>
+            <g transform="translate(80,212)">
+              <text x="0" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="22" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="44" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="66" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="88" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+            </g>
+            <line x1="80" y1="262" x2="380" y2="262" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="80" y1="282" x2="370" y2="282" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="80" y1="302" x2="380" y2="302" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="80" y1="322" x2="290" y2="322" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="80" y1="476" x2="200" y2="476" stroke="#1e293b" stroke-width="1"/>
+            <rect x="80" y="492" width="100" height="14" fill="#cbd5e1"/>
+            <rect x="80" y="514" width="140" height="10" fill="#e2e8f0"/>
+          </g>
+          <!-- Card 2 -->
+          <g>
+            <rect x="430" y="180" width="340" height="380" fill="white" stroke="#94a3b8" stroke-width="1.5"/>
+            <g transform="translate(450,212)">
+              <text x="0" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="22" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="44" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="66" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="88" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+            </g>
+            <line x1="450" y1="262" x2="750" y2="262" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="450" y1="282" x2="740" y2="282" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="450" y1="302" x2="620" y2="302" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="450" y1="476" x2="570" y2="476" stroke="#1e293b" stroke-width="1"/>
+            <rect x="450" y="492" width="110" height="14" fill="#cbd5e1"/>
+            <rect x="450" y="514" width="150" height="10" fill="#e2e8f0"/>
+          </g>
+          <!-- Card 3 -->
+          <g>
+            <rect x="800" y="180" width="340" height="380" fill="white" stroke="#94a3b8" stroke-width="1.5"/>
+            <g transform="translate(820,212)">
+              <text x="0" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="22" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="44" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="66" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+              <text x="88" y="0" font-size="20" fill="#1e293b">&#9733;</text>
+            </g>
+            <line x1="820" y1="262" x2="1120" y2="262" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="820" y1="282" x2="1100" y2="282" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="820" y1="302" x2="1000" y2="302" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="820" y1="476" x2="940" y2="476" stroke="#1e293b" stroke-width="1"/>
+            <rect x="820" y="492" width="105" height="14" fill="#cbd5e1"/>
+            <rect x="820" y="514" width="135" height="10" fill="#e2e8f0"/>
+          </g>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="218" cy="102" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="218" y="107" text-anchor="middle" fill="white">1</text>
+            <circle cx="40" cy="370" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="375" text-anchor="middle" fill="white">2</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Section-Eyebrow + Headline (D-06.1, D-06.2)</b> - Eyebrow "GRAVITATIONAL PULL" + Headline "Join a universe of self-aware minds."</li>
+          <li><b>Review-Karte (3x)</b> - identische Kachel-Struktur: fünf Sterne, mehrzeiliges Zitat, Trennlinie, Autorenname (fett) + Rolle (gedämpft).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">15</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 16: D-07 FINAL CTA + FOOTER                             -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.7 Wireframe D-07 Final-CTA &amp; Footer</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.7</div>
+    <h2 class="section">D-07 Final-CTA &amp; Footer</h2>
+    <p class="section-lead">Abschlussblock. Ein zentrales Markenzeichen und eine kontrastreiche Headline rahmen das gleiche Dual-CTA-Muster wie im Hero ein, gefolgt von einem schmalen Footer mit Legal-Ankern und Copyright-Zeile.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-07 &middot; Final-CTA &amp; Footer</div>
+          <div class="wf-name">Collapse the wave function of your thoughts.</div>
+        </div>
+        <div class="wf-tag">Public &middot; Conversion</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 580" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Brand lockup centered -->
+          <rect x="540" y="50" width="120" height="44" rx="10" fill="#1e293b"/>
+          <text x="600" y="78" text-anchor="middle" font-size="13" fill="white" font-weight="700" letter-spacing="1">Reflecta</text>
+          <!-- Headline -->
+          <text x="600" y="150" text-anchor="middle" font-size="24" fill="#1e293b" font-weight="800">Collapse the wave function</text>
+          <text x="600" y="180" text-anchor="middle" font-size="24" fill="#1e293b" font-weight="800">of your thoughts.</text>
+          <!-- Sub-headline (real, multi-line) -->
+          <text x="600" y="222" text-anchor="middle" font-size="12" fill="#475569">Stop letting your cognitive DNA drift into the void.</text>
+          <text x="600" y="240" text-anchor="middle" font-size="12" fill="#475569">Start tracking, analyzing, and synthesizing your life today.</text>
+          <!-- Dual CTA centered -->
+          <rect x="380" y="280" width="200" height="48" rx="24" fill="#1e293b"/>
+          <text x="480" y="310" text-anchor="middle" font-size="13" fill="white" font-weight="600">Sign Up For Free</text>
+          <rect x="620" y="280" width="200" height="48" rx="24" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+          <text x="720" y="310" text-anchor="middle" font-size="13" fill="#1e293b">Try live demo</text>
+          <!-- Footer hint -->
+          <text x="600" y="358" text-anchor="middle" font-size="10" fill="#94a3b8">No credit card required. Free forever basic tier.</text>
+          <!-- Footer band -->
+          <line x1="0" y1="430" x2="1200" y2="430" stroke="#cbd5e1" stroke-width="1"/>
+          <rect x="0" y="430" width="1200" height="150" fill="#f8fafc"/>
+          <!-- Copyright left with logo -->
+          <rect x="60" y="470" width="60" height="22" rx="6" fill="#1e293b"/>
+          <text x="90" y="486" text-anchor="middle" font-size="9" fill="white" font-weight="700">Reflecta</text>
+          <text x="60" y="520" font-size="10" fill="#475569">&copy; 2026 Reflecta GmbH</text>
+          <text x="60" y="538" font-size="9" fill="#94a3b8">All rights reserved.</text>
+          <!-- Legal links right -->
+          <text x="780" y="484" font-size="11" fill="#475569">Privacy Policy</text>
+          <text x="900" y="484" font-size="11" fill="#475569">Terms of Service</text>
+          <text x="1040" y="484" font-size="11" fill="#475569">Manifesto</text>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="520" cy="72" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="520" y="77" text-anchor="middle" fill="white">1</text>
+            <circle cx="340" cy="165" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="340" y="170" text-anchor="middle" fill="white">2</text>
+            <circle cx="340" cy="231" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="340" y="236" text-anchor="middle" fill="white">3</text>
+            <circle cx="358" cy="304" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="358" y="309" text-anchor="middle" fill="white">4</text>
+            <circle cx="842" cy="304" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="842" y="309" text-anchor="middle" fill="white">5</text>
+            <circle cx="40" cy="488" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="493" text-anchor="middle" fill="white">6</text>
+            <circle cx="1160" cy="484" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="1160" y="489" text-anchor="middle" fill="white">7</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Markenzeichen (D-07.1)</b> - zentriertes Brand-Lockup als Markenanker oberhalb der Headline.</li>
+          <li><b>Headline (D-07.2)</b> - "Collapse the wave function of your thoughts." in zwei Zeilen, schwarze Hauptaussage.</li>
+          <li><b>Sub-Headline (D-07.3)</b> - "Stop letting your cognitive DNA drift into the void. Start tracking, analyzing, and synthesizing your life today.", gedämpft in Slate-Grau.</li>
+          <li><b>Primärer CTA (D-07.4)</b> - "Sign Up For Free", führt in den Auth-Dialog (D-08) im Registrierungsmodus.</li>
+          <li><b>Sekundärer CTA (D-07.5)</b> - "Try live demo" -> vorbefüllte angemeldete Demo. Darunter Hinweis "No credit card required. Free forever basic tier.".</li>
+          <li><b>Footer-Brand &amp; Copyright (D-07.6)</b> - kompaktes Lockup, Zeile "&copy; 2026 Reflecta GmbH".</li>
+          <li><b>Legal-Links</b> - Privacy Policy, Terms of Service, Manifesto (jeweils statische Routen unterhalb der Marke).</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">16</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 17: D-08 AUTH DIALOG                                    -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.8 Wireframe D-08 Auth-Dialog</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.8</div>
+    <h2 class="section">D-08 Auth-Dialog (Anmelden / Registrieren)</h2>
+    <p class="section-lead">Einzelner Dialog mit Tab-Switch zwischen Anmelde- und Registrierungsmodus. Gleicher E-Mail-und-Passwort-Kontrakt für beide Modi, dazu ein sekundärer GitHub-OAuth-Pfad.</p>
+
+    <div class="wf-block">
+      <div class="wf-meta">
+        <div>
+          <div class="wf-id">Dialog D-08 &middot; Auth-Dialog</div>
+          <div class="wf-name">Anmelden / Registrieren</div>
+        </div>
+        <div class="wf-tag">Gated &middot; Submit</div>
+      </div>
+      <div class="wf-image-wrap">
+        <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet" width="100%" style="display:block;background:#ffffff" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+          <!-- Page bg -->
+          <rect x="0" y="0" width="1200" height="600" fill="#f8fafc"/>
+          <!-- Back-Link top-left -->
+          <text x="60" y="44" font-size="12" fill="#475569">&larr; Back to home</text>
+          <!-- Centered card -->
+          <rect x="380" y="70" width="440" height="540" rx="6" fill="white" stroke="#94a3b8" stroke-width="1.5"/>
+          <!-- Brand lockup -->
+          <rect x="540" y="100" width="120" height="38" rx="10" fill="#1e293b"/>
+          <text x="600" y="124" text-anchor="middle" font-size="12" fill="white" font-weight="700" letter-spacing="1">Reflecta</text>
+          <text x="600" y="160" text-anchor="middle" font-size="11" fill="#475569" font-weight="600">Welcome back</text>
+          <text x="600" y="178" text-anchor="middle" font-size="9" fill="#94a3b8">Your AI-powered journal awaits</text>
+          <!-- Tab switch -->
+          <line x1="430" y1="220" x2="770" y2="220" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="500" y="214" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="700">Log In</text>
+          <line x1="450" y1="220" x2="550" y2="220" stroke="#1e293b" stroke-width="3"/>
+          <text x="700" y="214" text-anchor="middle" font-size="12" fill="#94a3b8">Sign Up</text>
+          <!-- Email field -->
+          <text x="430" y="258" font-size="9" fill="#475569" letter-spacing="1" font-weight="600">EMAIL</text>
+          <rect x="430" y="266" width="340" height="40" rx="4" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="446" y="290" font-size="11" fill="#94a3b8">you@example.com</text>
+          <!-- Password field -->
+          <text x="430" y="334" font-size="9" fill="#475569" letter-spacing="1" font-weight="600">PASSWORD</text>
+          <rect x="430" y="342" width="340" height="40" rx="4" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <text x="446" y="366" font-size="13" fill="#94a3b8" letter-spacing="2">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</text>
+          <text x="430" y="398" font-size="8" fill="#94a3b8">Mindestens 8 Zeichen.</text>
+          <!-- Inline error placeholder -->
+          <line x1="430" y1="412" x2="770" y2="412" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="600" y="426" text-anchor="middle" font-size="8" fill="#94a3b8">Inline-Fehlerbereich (D-08.6, ausgeblendet)</text>
+          <!-- Submit -->
+          <rect x="430" y="442" width="340" height="44" rx="22" fill="#1e293b"/>
+          <text x="600" y="470" text-anchor="middle" font-size="13" fill="white" font-weight="600">Log In</text>
+          <!-- OR divider -->
+          <line x1="430" y1="514" x2="560" y2="514" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="600" y="518" text-anchor="middle" font-size="9" fill="#94a3b8" letter-spacing="2" font-weight="600">OR</text>
+          <line x1="640" y1="514" x2="770" y2="514" stroke="#cbd5e1" stroke-width="1"/>
+          <!-- GitHub OAuth -->
+          <rect x="430" y="536" width="340" height="44" rx="22" fill="white" stroke="#94a3b8" stroke-width="1"/>
+          <circle cx="466" cy="558" r="9" fill="#1e293b"/>
+          <text x="600" y="564" text-anchor="middle" font-size="12" fill="#1e293b" font-weight="500">Continue with GitHub</text>
+          <!-- Inline annotation markers, placed adjacent to each element -->
+          <g font-family="system-ui, sans-serif" font-weight="800" font-size="13">
+            <circle cx="40" cy="40" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="40" y="45" text-anchor="middle" fill="white">1</text>
+            <circle cx="685" cy="119" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="685" y="124" text-anchor="middle" fill="white">2</text>
+            <circle cx="410" cy="218" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="410" y="223" text-anchor="middle" fill="white">3</text>
+            <circle cx="794" cy="286" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="794" y="291" text-anchor="middle" fill="white">4</text>
+            <circle cx="406" cy="362" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="406" y="367" text-anchor="middle" fill="white">5</text>
+            <circle cx="406" cy="418" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="406" y="423" text-anchor="middle" fill="white">6</text>
+            <circle cx="406" cy="464" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="406" y="469" text-anchor="middle" fill="white">7</text>
+            <circle cx="794" cy="518" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="794" y="523" text-anchor="middle" fill="white">8</text>
+            <circle cx="406" cy="558" r="14" fill="#1e293b" stroke="white" stroke-width="2"/><text x="406" y="563" text-anchor="middle" fill="white">9</text>
+          </g>
+        </svg>
+      </div>
+      <div class="wf-callouts">
+        <h5>Callouts</h5>
+        <ol>
+          <li><b>Back-Link (D-08.1)</b> - "&larr; Back to home" oben links, schließt den Dialog und kehrt zur Landingpage (D-01) zurück.</li>
+          <li><b>Brand-Lockup (D-08.2)</b> - kompaktes Reflecta-Lockup mit Sub-Zeile "Welcome back" / "Your AI-powered journal awaits".</li>
+          <li><b>Tab-Switch (D-08.3)</b> - "Log In" / "Sign Up", aktiver Tab unterstrichen in Schwarz, inaktiver in Slate-Grau.</li>
+          <li><b>E-Mail-Feld (D-08.4)</b> - Label "EMAIL", Platzhalter "you@example.com", HTML5-E-Mail-Validierung, Pflichtfeld.</li>
+          <li><b>Passwort-Feld (D-08.5)</b> - Label "PASSWORD", maskierte Eingabe, Pflichtfeld, mindestens 8 Zeichen.</li>
+          <li><b>Inline-Fehlerbereich (D-08.6)</b> - reservierte Zeile direkt unterhalb des Passwortfeldes; nur sichtbar, wenn Cognito einen Fehler liefert.</li>
+          <li><b>Primärer Submit (D-08.7)</b> - schwarze Pille, Label wechselt mit Tab zwischen "Log In" und "Create Account".</li>
+          <li><b>OR-Trenner (D-08.8)</b> - horizontale Linie mit zentriertem "OR" trennt primären und sekundären Pfad.</li>
+          <li><b>GitHub-OAuth (D-08.9)</b> - "Continue with GitHub" als sekundärer Pfad, identisch in beiden Tab-Modi.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">17</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 18: D-09 MOBILE DRAWER                                  -->
+<!-- ============================================================ -->
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>5.9 Wireframe D-09 Mobile-Drawer</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <div class="section-eyebrow">Abschnitt 5.9</div>
+    <h2 class="section">D-09 Mobile Navigation</h2>
+    <p class="section-lead">Mobile Variante der oberen Navigation. Wird über den Hamburger-Button in D-00.7 ein- und ausgeblendet und erscheint als Slide-down-Panel direkt unterhalb der Navigationsleiste. Überlagert den Hero, ohne die Scrollposition zu verlieren.</p>
+
+    <div style="display: grid; grid-template-columns: 88mm 1fr; gap: 6mm; align-items: start;">
+      <div class="wf-block" style="margin: 0;">
+        <div class="wf-meta">
+          <div>
+            <div class="wf-id">Dialog D-09 &middot; Mobile Drawer</div>
+            <div class="wf-name">414 px Viewport</div>
+          </div>
+          <div class="wf-tag">Mobile &middot; Modal</div>
+        </div>
+        <div class="wf-image-wrap" style="background: #ffffff; padding: 4mm; display:flex; justify-content:center;">
+          <svg viewBox="0 0 414 800" preserveAspectRatio="xMidYMid meet" style="display:block; max-height: 165mm; width:auto;" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, sans-serif">
+            <!-- Phone frame -->
+            <rect x="6" y="6" width="402" height="788" rx="40" fill="#f8fafc" stroke="#1e293b" stroke-width="2"/>
+            <rect x="140" y="14" width="134" height="20" rx="10" fill="#1e293b"/>
+            <!-- Top nav with drawer open -->
+            <rect x="20" y="56" width="374" height="64" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <rect x="40" y="76" width="92" height="26" rx="6" fill="#1e293b"/>
+            <text x="86" y="93" text-anchor="middle" font-size="11" fill="white" font-weight="700">Reflecta</text>
+            <text x="324" y="100" text-anchor="middle" font-size="22" fill="#1e293b" font-weight="700">&#10005;</text>
+            <!-- Drawer panel -->
+            <rect x="20" y="120" width="374" height="500" fill="white" stroke="#94a3b8" stroke-width="1"/>
+            <line x1="20" y1="120" x2="394" y2="120" stroke="#cbd5e1" stroke-width="1"/>
+            <!-- Anchor links -->
+            <text x="50" y="180" font-size="14" fill="#1e293b" font-weight="600">Features</text>
+            <line x1="48" y1="200" x2="370" y2="200" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="50" y="240" font-size="14" fill="#1e293b" font-weight="600">The Science</text>
+            <line x1="48" y1="260" x2="370" y2="260" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="50" y="300" font-size="14" fill="#1e293b" font-weight="600">Reviews</text>
+            <line x1="48" y1="320" x2="370" y2="320" stroke="#e2e8f0" stroke-width="1"/>
+            <!-- Log In secondary -->
+            <rect x="50" y="370" width="314" height="48" rx="24" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="207" y="400" text-anchor="middle" font-size="13" fill="#1e293b">Log In</text>
+            <!-- Start Free Trial primary -->
+            <rect x="50" y="438" width="314" height="48" rx="24" fill="#1e293b"/>
+            <text x="207" y="468" text-anchor="middle" font-size="13" fill="white" font-weight="600">Start Free Trial</text>
+            <!-- Hero pushed below -->
+            <rect x="20" y="640" width="374" height="120" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,4"/>
+            <text x="207" y="700" text-anchor="middle" font-size="11" fill="#94a3b8" font-weight="600" letter-spacing="1">HERO (verschoben)</text>
+            <!-- Annotations as inline circles in clear margin areas -->
+            <circle cx="160" cy="88" r="14" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="160" y="93" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="700">1</text>
+            <circle cx="372" cy="100" r="14" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="372" y="105" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="700">2</text>
+            <circle cx="376" cy="240" r="14" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="376" y="245" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="700">3</text>
+            <circle cx="376" cy="394" r="14" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="376" y="399" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="700">4</text>
+            <circle cx="376" cy="462" r="14" fill="white" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="376" y="467" text-anchor="middle" font-size="11" fill="#1e293b" font-weight="700">5</text>
+          </svg>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="sub" style="margin-top: 0;">Callouts</h3>
+        <ol style="font-size: 9.5pt; padding-left: 5mm;">
+          <li><b>Brand-Lockup (D-00.1)</b> - kompaktes Reflecta-Lockup, identisch zur Desktop-Navigation.</li>
+          <li><b>Schließen-X (D-09.6)</b> - X-Glyph rechts in der Navigationsleiste, schließt den Drawer ohne Routenwechsel.</li>
+          <li><b>Ankerlinks (D-09.1 - D-09.3)</b> - Textlinks "Features", "The Science", "Reviews", durch dünne Trennlinien gestapelt. Jeder schließt den Drawer und scrollt zum Ziel.</li>
+          <li><b>Log In (D-09.4)</b> - sekundäre Pille mit Label "Log In", öffnet den Auth-Dialog (D-08) im Anmeldemodus.</li>
+          <li><b>Start Free Trial (D-09.5)</b> - schwarze Primärpille mit Label "Start Free Trial", öffnet den Auth-Dialog (D-08) im Registrierungsmodus.</li>
+        </ol>
+
+        <h3 class="sub">Verhalten</h3>
+        <p style="font-size: 9.5pt;">Der Drawer wird innerhalb der sticky Navigationsleiste gemountet und schiebt den Hero-Inhalt aus dem Sichtbereich. Beim Antippen eines Links wird der Drawer zuerst geschlossen (State-Reset) und anschließend die Navigation ausgeführt, um gestapelte Transitions auf mobile Safari zu vermeiden.</p>
+
+        <h3 class="sub">Breakpoint</h3>
+        <p style="font-size: 9.5pt;">Drawer-Toggle und Panel sind nur unterhalb von 768 px sichtbar. Ab 1024 px wird stattdessen die Inline-Navigation D-00.2 - D-00.6 angezeigt.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-num">18</div>
+</div>
+
+</body>
+</html>
