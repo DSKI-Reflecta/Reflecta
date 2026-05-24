@@ -535,7 +535,7 @@
     <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
     <div class="cell"><div class="k">Datum</div><div class="v">24.05.2026</div></div>
     <div class="cell"><div class="k">Department</div><div class="v">Frontend-Userforms</div></div>
-    <div class="cell"><div class="k">Mitarbeiter</div><div class="v">8533720</div></div>
+    <div class="cell"><div class="k">Mitarbeiter</div><div class="v">2990570</div></div>
   </div>
 </div>
 
@@ -554,7 +554,7 @@
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Dokumentübersicht</div>
     <h2 class="section">Inhalt</h2>
-    <p class="section-lead">Dieses Dokument spezifiziert den authentifizierten Produktbereich von Reflecta. Es beschreibt die User-Masken, durch die Nutzer ihre Tageseinträge erfassen, persönliche Ziele pflegen, Verläufe im Kalender nachvollziehen und ihr Wohlbefinden in der Analytics-Ansicht auswerten. Im Unterschied zum Fachkonzept Admin-Bereich und zum Fachkonzept Landingpage liegt der Schwerpunkt auf Usability.</p>
+    <p class="section-lead">Dieses Dokument spezifiziert den authentifizierten Produktbereich von Reflecta. Es beschreibt die User-Masken, durch die Nutzer ihre Tageseinträge erfassen, persönliche Ziele pflegen, Verläufe im Kalender nachvollziehen und ihr Wohlbefinden in der Analytics-Ansicht auswerten.</p>
 
     <div class="toc">
       <div class="toc-row"><div class="toc-num">1</div><div class="toc-title">Geltungsbereich, Konventionen und Personas</div><div class="toc-page">3, 4</div></div>
@@ -609,7 +609,7 @@
       </div>
       <div class="info-card">
         <h4>Schutzstufen</h4>
-        <p><b>Gated</b> kennzeichnet Dialoge, die nur nach erfolgreicher Anmeldung erreichbar sind. Alle USR-Dialoge tragen diese Stufe. Die technische Umsetzung der Sitzungsprüfung beschreibt das Fachkonzept Backend.</p>
+        <p><b>Gated</b> kennzeichnet Dialoge, die nur nach erfolgreicher Anmeldung erreichbar sind. Alle USR-Dialoge tragen diese Stufe.</p>
       </div>
       <div class="info-card">
         <h4>Use-Case-IDs</h4>
@@ -715,7 +715,10 @@
           <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Alternativablauf A1 (KI deaktiviert)</b>
           <p style="font-size:9pt;">Nutzer schaltet den KI-Toggle aus. Der Eintrag wird ohne Reflexionsfrage und ohne KI-Anreicherung gespeichert. Aktivitäts- und Sentiment-Tags bleiben leer.</p>
         </div>
-        <div class="uc-error"><b>Fehlerfall:</b> Pflichtfeld leer, die Inline-Validierung blockiert den Submit. Bei einem Netzwerkfehler erscheint ein Toast mit Retry-Schaltfläche, die Eingabe bleibt erhalten.</div>
+        <div class="uc-flow" style="margin-top:3mm;">
+          <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Fehlerfall</b>
+          <p style="font-size:9pt;">Pflichtfeld leer, die Inline-Validierung blockiert den Submit. Bei einem Netzwerkfehler erscheint ein Toast mit Retry-Schaltfläche, die Eingabe bleibt erhalten.</p>
+        </div>
         <div class="uc-meta" style="margin-top:3mm;">
           <div class="k">Akzeptanzkriterien</div><div class="v">Ein Eintrag kann ohne KI gespeichert werden. Slider akzeptieren nur die Werte 1 bis 5. Modal-Submit ist erst aktiv, wenn Pflichtfelder gesetzt sind.</div>
           <div class="k">Häufigkeit</div><div class="v">Hoch, mehrfach pro Woche</div>
@@ -771,7 +774,10 @@
           <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Alternativablauf A1 (Calendar-Pfad)</b>
           <p style="font-size:9pt;">Nutzer wechselt direkt in den Kalender und gelangt über das Tagesdetail-Panel in den Eintrag, ohne die Filterleiste zu nutzen.</p>
         </div>
-        <div class="uc-error"><b>Fehlerfall:</b> Filter ergibt keine Treffer. Es erscheint ein Empty State mit dem Hinweistext &bdquo;Keine Einträge im gewählten Zeitraum&ldquo;.</div>
+        <div class="uc-flow" style="margin-top:3mm;">
+          <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Fehlerfall</b>
+          <p style="font-size:9pt;">Filter ergibt keine Treffer. Es erscheint ein Empty State mit dem Hinweistext &bdquo;Keine Einträge im gewählten Zeitraum&ldquo;.</p>
+        </div>
         <div class="uc-meta" style="margin-top:3mm;">
           <div class="k">Akzeptanzkriterien</div><div class="v">Filterstand wird lokal im Browser persistiert. Detailansicht ist read-only. Bearbeiten-Aktion führt zu USR-03 im Edit-Modus.</div>
           <div class="k">Häufigkeit</div><div class="v">Mittel, mehrfach pro Woche</div>
@@ -827,7 +833,10 @@
           <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Alternativablauf A1 (Empfehlung neu generieren)</b>
           <p style="font-size:9pt;">Nutzer findet die Vorschläge nicht passend und löst die Aktion &bdquo;Empfehlung neu generieren&ldquo; aus. Die drei Karten werden durch eine neue Auswahl ersetzt.</p>
         </div>
-        <div class="uc-error"><b>Fehlerfall:</b> Der KI-Service ist nicht erreichbar. Es erscheint ein Inline-Hinweis &bdquo;KI-Empfehlung aktuell nicht verfügbar&ldquo;. Das manuelle Speichern bleibt möglich.</div>
+        <div class="uc-flow" style="margin-top:3mm;">
+          <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Fehlerfall</b>
+          <p style="font-size:9pt;">Der KI-Service ist nicht erreichbar. Es erscheint ein Inline-Hinweis &bdquo;KI-Empfehlung aktuell nicht verfügbar&ldquo;. Das manuelle Speichern bleibt möglich.</p>
+        </div>
         <div class="uc-meta" style="margin-top:3mm;">
           <div class="k">Akzeptanzkriterien</div><div class="v">Beschreibung darf nicht leer sein. Verfeinerter KI-Vorschlag lässt sich verwerfen, ohne den manuellen Text zu verlieren. Die Aktion &bdquo;Empfehlung neu generieren&ldquo; ersetzt die drei Karten vollständig durch eine neue Auswahl.</div>
           <div class="k">Häufigkeit</div><div class="v">Niedrig bis mittel, einige Male pro Monat</div>
@@ -881,7 +890,10 @@
           <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Alternativablauf A1 (Jahresüberblick)</b>
           <p style="font-size:9pt;">Nutzer wählt den Zeitraum &bdquo;Jahr&ldquo; und vergleicht längere Trends. Korrelation und Top-Aktivitäten werden auf den größeren Zeitraum aggregiert.</p>
         </div>
-        <div class="uc-error"><b>Fehlerfall:</b> Zu wenige Datenpunkte im gewählten Zeitraum. Es erscheint ein Empty State mit dem Hinweis &bdquo;Mindestens sieben Einträge benötigt&ldquo;.</div>
+        <div class="uc-flow" style="margin-top:3mm;">
+          <b style="font-size:8.5pt;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Fehlerfall</b>
+          <p style="font-size:9pt;">Zu wenige Datenpunkte im gewählten Zeitraum. Es erscheint ein Empty State mit dem Hinweis &bdquo;Mindestens sieben Einträge benötigt&ldquo;.</p>
+        </div>
         <div class="uc-meta" style="margin-top:3mm;">
           <div class="k">Akzeptanzkriterien</div><div class="v">Period-Toggle wird lokal im Browser persistiert. Korrelations-Chart zeigt einen Pearson-Wert mit Vorzeichen. Reflexionsfrage ist als KI-Inhalt deutlich gekennzeichnet.</div>
           <div class="k">Häufigkeit</div><div class="v">Niedrig bis mittel, wöchentlich</div>
@@ -926,15 +938,15 @@
         <tr><th>Dialog-ID</th><th>Name</th><th>Typ</th><th>Auslöser</th><th>Use-Case</th></tr>
       </thead>
       <tbody>
-        <tr><td class="id">USR-00</td><td class="name">App-Shell (Sidebar plus Header)<br><span class="pill user">Persistent</span> <span class="pill gated">Gated</span></td><td>Persistent</td><td>Erfolgreiche Anmeldung über D-08</td><td>alle</td></tr>
-        <tr><td class="id">USR-01</td><td class="name">Journal Overview<br><span class="pill gated">Gated</span></td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Journal&ldquo;</td><td>UC-1, UC-2</td></tr>
-        <tr><td class="id">USR-02</td><td class="name">Entry Detail<br><span class="pill gated">Gated</span></td><td>Modal</td><td>Klick auf Entry-Card</td><td>UC-2</td></tr>
-        <tr><td class="id">USR-03</td><td class="name">Entry Form (Neu / Bearbeiten)<br><span class="pill gated">Gated</span></td><td>Modal</td><td>&bdquo;Neuer Eintrag&ldquo; oder Bearbeiten</td><td>UC-1</td></tr>
-        <tr><td class="id">USR-04</td><td class="name">Goals Overview mit KI-Empfehlungen<br><span class="pill gated">Gated</span></td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Ziele&ldquo;</td><td>UC-3</td></tr>
-        <tr><td class="id">USR-05</td><td class="name">Goal Detail<br><span class="pill gated">Gated</span></td><td>Modal</td><td>Klick auf Goal-Card</td><td>UC-3</td></tr>
-        <tr><td class="id">USR-06</td><td class="name">Goal Form (Neu / Bearbeiten)<br><span class="pill gated">Gated</span></td><td>Modal</td><td>&bdquo;Neues Ziel&ldquo;, &bdquo;Übernehmen&ldquo; oder Bearbeiten</td><td>UC-3</td></tr>
-        <tr><td class="id">USR-07</td><td class="name">Calendar View mit Day-Detail<br><span class="pill gated">Gated</span></td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Kalender&ldquo;</td><td>UC-2</td></tr>
-        <tr><td class="id">USR-08</td><td class="name">Analytics Dashboard<br><span class="pill gated">Gated</span></td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Analytics&ldquo;</td><td>UC-4</td></tr>
+        <tr><td class="id">USR-00</td><td class="name">App-Shell (Sidebar plus Header)</td><td>Persistent</td><td>Erfolgreiche Anmeldung über D-08</td><td>alle</td></tr>
+        <tr><td class="id">USR-01</td><td class="name">Journal Overview</td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Journal&ldquo;</td><td>UC-1, UC-2</td></tr>
+        <tr><td class="id">USR-02</td><td class="name">Entry Detail</td><td>Modal</td><td>Klick auf Entry-Card</td><td>UC-2</td></tr>
+        <tr><td class="id">USR-03</td><td class="name">Entry Form (Neu / Bearbeiten)</td><td>Modal</td><td>&bdquo;Neuer Eintrag&ldquo; oder Bearbeiten</td><td>UC-1</td></tr>
+        <tr><td class="id">USR-04</td><td class="name">Goals Overview mit KI-Empfehlungen</td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Ziele&ldquo;</td><td>UC-3</td></tr>
+        <tr><td class="id">USR-05</td><td class="name">Goal Detail</td><td>Modal</td><td>Klick auf Goal-Card</td><td>UC-3</td></tr>
+        <tr><td class="id">USR-06</td><td class="name">Goal Form (Neu / Bearbeiten)</td><td>Modal</td><td>&bdquo;Neues Ziel&ldquo;, &bdquo;Übernehmen&ldquo; oder Bearbeiten</td><td>UC-3</td></tr>
+        <tr><td class="id">USR-07</td><td class="name">Calendar View mit Day-Detail</td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Kalender&ldquo;</td><td>UC-2</td></tr>
+        <tr><td class="id">USR-08</td><td class="name">Analytics Dashboard</td><td>Standard-Ansicht</td><td>Klick auf Tab &bdquo;Analytics&ldquo;</td><td>UC-4</td></tr>
       </tbody>
     </table>
   </div>
@@ -1272,7 +1284,7 @@
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Abschnitt 5</div>
     <h2 class="section">Swimlane-Ablaufdiagramme</h2>
-    <p class="section-lead">Drei Flows dokumentieren die zentralen Nutzerpfade des authentifizierten Bereichs. Jedes Diagramm verwendet zwei Lanes: Nutzer und Anwendung. Lila kennzeichnet Nutzeraktionen, grau die UI-Reaktion, grün Erfolgszustände und rot Fehlerzustände. Backend-Verarbeitung wird absichtlich nicht eigens visualisiert, sondern als wahrgenommenes UI-Ergebnis abgebildet. Endpunkte und Verarbeitungsschritte führt das Fachkonzept Backend.</p>
+    <p class="section-lead">Drei Flows dokumentieren die zentralen Nutzerpfade des authentifizierten Bereichs. Jedes Diagramm verwendet zwei Lanes: Nutzer und Anwendung. Lila kennzeichnet Nutzeraktionen, grau die UI-Reaktion, grün Erfolgszustände und rot Fehlerzustände. Backend-Verarbeitung wird absichtlich nicht eigens visualisiert, sondern als wahrgenommenes UI-Ergebnis abgebildet.</p>
 
     <div class="legend-row">
       <span><span class="legend-dot" style="background:#6A0DAD"></span>Nutzeraktion</span>
@@ -1476,11 +1488,11 @@
   </div>
 
   <div style="margin-top: 12mm;">
-    <h3 class="sub" style="margin-top:0;">5.3 Flow C: Validierungsfehler im Entry-Form (Fehler)</h3>
-    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Realisiert den Fehlerfall von UC-1 aus Sicht der User-Forms. Die clientseitige Inline-Validierung greift vor dem Submit und führt den Nutzer in einen handlungsleitenden Fehlerzustand zurück. Die ergänzende Backend-Validierung beschreibt das Fachkonzept Backend.</p>
+    <h3 class="sub" style="margin-top:0;">5.3 Flow C: Validierungsfehler im Entry-Form</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Realisiert den Fehlerfall von UC-1 aus Sicht der User-Forms. Die clientseitige Inline-Validierung greift vor dem Submit und führt den Nutzer in einen handlungsleitenden Fehlerzustand zurück.</p>
 
     <div style="border:1px solid var(--line);border-radius:4mm;overflow:hidden;margin-bottom:5mm;">
-      <div style="background:#dc2626;color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow C: Inline-Validierung im Entry-Form</div>
+      <div style="background:var(--purple-2);color:white;font-size:8pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:2.5mm 4mm;">Flow C: Inline-Validierung im Entry-Form</div>
       <div style="display:grid;grid-template-columns:28mm 1fr 1fr;border-bottom:1.5px solid var(--line);">
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);"></div>
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Nutzer</div>
@@ -1542,9 +1554,6 @@
       </svg>
     </div>
 
-    <div class="callout-box amber">
-      <b>Hinweis zur defensiven Tiefe:</b> Die hier dargestellte Inline-Validierung im Frontend fängt den Großteil der Fehler vor dem Submit ab. Eine zweite Validierungsschicht im Backend deckt seltene Fälle ab, in denen die clientseitige Prüfung umgangen wird oder sich Daten-Constraints ändern. Diese Schicht ist nicht Gegenstand der User-Forms und im Fachkonzept Backend beschrieben.
-    </div>
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
@@ -1767,7 +1776,7 @@
     </div>
 
     <div class="callout-box" style="margin-top:3mm;">
-      <b>Hinweis zu den Slidern:</b> Die vier Slider (Sentiment, Sleep, Stress, Social) sind keine Pflichtfelder. Sie starten mit dem Default-Wert 3 und können vom Nutzer nicht in einen leeren Zustand zurückgesetzt werden. Der UI-Wertebereich von 1 bis 5 ergibt sich aus den Slider-Stops, eine separate Validierungsregel ist daher nicht erforderlich. Das Akzeptanzkriterium von UC-1 &bdquo;Slider akzeptieren nur Werte 1 bis 5&ldquo; wird strukturell durch das UI-Element garantiert.
+      <b>Hinweis zu den Slidern:</b> Die vier Slider (Sentiment, Sleep, Stress, Social) sind keine Pflichtfelder. Sie starten mit dem Default-Wert 3, der UI-Wertebereich 1 bis 5 ergibt sich aus den Slider-Stops.
     </div>
   </div>
 
@@ -1794,7 +1803,7 @@
           <div class="wf-id">Wireframe 1</div>
           <div class="wf-name">USR-01 Journal Overview</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
@@ -1907,7 +1916,7 @@
           <div class="wf-id">Wireframe 2</div>
           <div class="wf-name">USR-03 Entry Form Modal (Kernmaske)</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
@@ -2011,7 +2020,7 @@
           <div class="wf-id">Wireframe 3</div>
           <div class="wf-name">USR-02 Entry Detail Modal</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 580" xmlns="http://www.w3.org/2000/svg">
@@ -2125,7 +2134,7 @@
           <div class="wf-id">Wireframe 4</div>
           <div class="wf-name">USR-04 Goals Overview mit KI-Empfehlungen</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
@@ -2237,7 +2246,7 @@
           <div class="wf-id">Wireframe 5</div>
           <div class="wf-name">USR-06 Goal Form Modal mit KI-Verfeinerung</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
@@ -2322,7 +2331,7 @@
           <div class="wf-id">Wireframe 6</div>
           <div class="wf-name">USR-05 Goal Detail Modal</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
@@ -2403,7 +2412,7 @@
           <div class="wf-id">Wireframe 7</div>
           <div class="wf-name">USR-07 Calendar mit Tagesdetail</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
@@ -2543,7 +2552,7 @@
           <div class="wf-id">Wireframe 8</div>
           <div class="wf-name">USR-08 Analytics Dashboard</div>
         </div>
-        <div class="wf-tag">Gated</div>
+
       </div>
       <div class="wf-image-wrap">
         <svg class="wf-svg" viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
