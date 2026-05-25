@@ -770,7 +770,7 @@
       </tbody>
     </table>
     <div class="callout-box">
-      Der Endpunkt verwendet die <code>get_current_admin</code>-Dependency. FastAPI prüft das JWT-Token und stellt sicher, dass <code>user.is_admin == True</code> &mdash; andernfalls HTTP&nbsp;403.
+      Der Endpunkt verwendet die <code>get_current_admin</code>-Dependency. FastAPI prüft das JWT-Token und stellt sicher, dass <code>user.is_admin == True</code> &mdash; andernfalls HTTP&nbsp;403. Intern aggregiert das Backend die Werte ausschließlich über DynamoDB-Queries auf <b>GSI2</b> (cross-user Counts für User &amp; Entries) und <b>GSI3</b> (AI-Usage-Aggregation über alle Nutzer). Es gibt keine SQL-Datenbankabfragen.
     </div>
 
   </div>
@@ -792,38 +792,104 @@
   </div>
 
   <div style="margin-top: 12mm;">
-    <h3 class="sub" style="margin-top:0;">3.3 Datenmodell (relevante DB-Tabellen)</h3>
+    <h3 class="sub" style="margin-top:0;">3.3 Datenmodell (DynamoDB One-Table-Design)</h3>
+    <p style="font-size:9pt;color:var(--muted);margin-bottom:3mm;">Reflecta nutzt ein <b>DynamoDB One-Table-Design</b> &mdash; alle Entitäten liegen in einer einzigen Tabelle, unterschieden durch zusammengesetzte PK/SK-Schlüssel. Es gibt keine separaten SQL-Tabellen. Die Admin-Stats werden ausschließlich über Global Secondary Indices (GSI) abgefragt.</p>
+
+    <h4 class="subsub">Relevante Entitäten &amp; Schlüssel</h4>
     <table class="dl">
       <colgroup>
-        <col style="width: 36mm">
-        <col style="width: 70mm">
+        <col style="width: 28mm">
+        <col style="width: 40mm">
+        <col style="width: 50mm">
         <col>
       </colgroup>
       <thead>
         <tr>
-          <th>Tabelle</th>
-          <th>Relevante Felder</th>
-          <th>Genutzt für</th>
+          <th>Entität</th>
+          <th>PK</th>
+          <th>SK</th>
+          <th>Relevante Attribute</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="name">users</td>
-          <td>id, is_admin, created_at</td>
-          <td>total_users</td>
+          <td class="name">User</td>
+          <td><code>USER</code></td>
+          <td><code>&lt;sub&gt;</code></td>
+          <td>email, is_admin, created_at</td>
         </tr>
         <tr>
-          <td class="name">journal_entries</td>
-          <td>id, user_id, created_at</td>
-          <td>total_entries, active_users_7d</td>
+          <td class="name">JournalEntry</td>
+          <td><code>USER#&lt;sub&gt;</code></td>
+          <td><code>ENTRY#&lt;entryId&gt;</code></td>
+          <td>created_at</td>
         </tr>
         <tr>
-          <td class="name">ai_usage_logs</td>
-          <td>id, success, input_tokens, output_tokens, created_at</td>
-          <td>total_ai_calls, ai_calls_today, ai_success_rate, ai_tokens_total</td>
+          <td class="name">AIUsageLog</td>
+          <td><code>USER#&lt;sub&gt;</code></td>
+          <td><code>AILOG#&lt;created_at&gt;#&lt;logId&gt;</code></td>
+          <td>feature, success, input_tokens, output_tokens, created_at</td>
         </tr>
       </tbody>
     </table>
+
+    <h4 class="subsub">Admin-Stats &rarr; DynamoDB Access Patterns</h4>
+    <table class="dl" style="margin-top:2mm;">
+      <colgroup>
+        <col style="width: 42mm">
+        <col style="width: 28mm">
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Stat-Feld</th>
+          <th>Index</th>
+          <th>Query</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">total_users</td>
+          <td><span class="pill admin">GSI2</span></td>
+          <td><code>GSI2_pk = ENTITY#USER</code> &rarr; Count Items</td>
+        </tr>
+        <tr>
+          <td class="name">total_entries</td>
+          <td><span class="pill admin">GSI2</span></td>
+          <td><code>GSI2_pk = ENTITY#ENTRY</code> &rarr; Count Items</td>
+        </tr>
+        <tr>
+          <td class="name">active_users_7d</td>
+          <td><span class="pill admin">GSI2</span></td>
+          <td><code>GSI2_pk = ENTITY#ENTRY</code>, <code>GSI2_sk BETWEEN &lt;now-7d&gt; AND &lt;now&gt;</code> &rarr; Distinct PKs zählen</td>
+        </tr>
+        <tr>
+          <td class="name">ai_calls_today</td>
+          <td><span class="pill admin">GSI3</span></td>
+          <td><code>GSI3_pk = AILOG#&lt;feature&gt;</code>, <code>GSI3_sk BETWEEN &lt;today&gt; AND &lt;now&gt;</code> &rarr; Count Items</td>
+        </tr>
+        <tr>
+          <td class="name">total_ai_calls</td>
+          <td><span class="pill admin">GSI3</span></td>
+          <td>Je Feature: <code>GSI3_pk = AILOG#&lt;feature&gt;</code> &rarr; Count Items; Summe über alle Features im Backend aggregiert</td>
+        </tr>
+        <tr>
+          <td class="name">ai_success_rate</td>
+          <td><span class="pill admin">GSI3</span></td>
+          <td>Je Feature: <code>GSI3_pk = AILOG#&lt;feature&gt;</code>, FilterExpression <code>success = true</code> &rarr; Count / Gesamt &times; 100; im Backend berechnet</td>
+        </tr>
+        <tr>
+          <td class="name">ai_tokens_total</td>
+          <td><span class="pill admin">GSI3</span></td>
+          <td>Je Feature: <code>GSI3_pk = AILOG#&lt;feature&gt;</code> &rarr; Sum(<code>input_tokens + output_tokens</code>) über alle zurückgegebenen Items; im Backend aggregiert</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout-box" style="margin-top:3mm;">
+      <b>GSI2</b> (Admin / cross-user lookups): <code>GSI2_pk = ENTITY#&lt;type&gt;</code>, <code>GSI2_sk = &lt;created_at&gt;#&lt;id&gt;</code> &mdash; ermöglicht nutzerübergreifendes Zählen aller User- und Entry-Einträge.<br>
+      <b>GSI3</b> (AI usage analytics): <code>GSI3_pk = AILOG#&lt;feature&gt;</code>, <code>GSI3_sk = &lt;created_at&gt;#&lt;logId&gt;</code> &mdash; ermöglicht zeitraumbasierte Aggregation der KI-Nutzung über alle Nutzer.
+    </div>
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept Admin-Bereich</div>
@@ -845,12 +911,12 @@
   <div style="margin-top: 12mm;">
     <div class="section-eyebrow">Abschnitt 4</div>
     <h2 class="section">Swimlane-Ablaufdiagramm</h2>
-    <p class="section-lead">Zwei Flows dokumentieren den Admin-Datenpfad vollständig: Flow A zeigt den Erfolgsfall (Stats laden), Flow B den Fehlerfall (fehlende Admin-Rechte). Drei Lanes: Admin-Browser, React-Frontend, FastAPI + SQLite.</p>
+    <p class="section-lead">Zwei Flows dokumentieren den Admin-Datenpfad vollständig: Flow A zeigt den Erfolgsfall (Stats laden), Flow B den Fehlerfall (fehlende Admin-Rechte). Drei Lanes: Admin-Browser, React-Frontend, FastAPI + DynamoDB.</p>
 
     <div class="legend-row">
       <span><span class="legend-dot" style="background:#6A0DAD"></span>Admin / Browser</span>
       <span><span class="legend-dot" style="background:#1e293b"></span>React (Frontend)</span>
-      <span><span class="legend-dot" style="background:#065f46"></span>FastAPI + SQLite</span>
+      <span><span class="legend-dot" style="background:#065f46"></span>FastAPI + DynamoDB</span>
       <span><span class="legend-dot" style="background:#f0fdf4;border:1.5px solid #16a34a"></span>Rückweg (Erfolg)</span>
       <span><span class="legend-dot" style="background:#fef2f2;border:1.5px solid #dc2626"></span>Rückweg (Fehler)</span>
     </div>
@@ -867,7 +933,7 @@
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);"></div>
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--purple-2);border-right:1px solid var(--line);text-align:center;">&#x2460; Admin (Browser)</div>
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
-        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; FastAPI + SQLite</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#065f46;text-align:center;">&#x2462; FastAPI + DynamoDB</div>
       </div>
       <svg viewBox="0 0 680 230" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
         <defs>
@@ -1008,7 +1074,7 @@
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--line);"></div>
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6A0DAD;border-right:1px solid var(--line);text-align:center;">&#x2460; Nutzer (Browser)</div>
         <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#1e293b;border-right:1px solid var(--line);text-align:center;">&#x2461; React (Frontend)</div>
-        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#b91c1c;text-align:center;">&#x2462; FastAPI + SQLite</div>
+        <div style="background:var(--soft);padding:2mm 3mm;font-size:7.5pt;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#b91c1c;text-align:center;">&#x2462; FastAPI + DynamoDB</div>
       </div>
       <svg viewBox="0 0 680 210" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5">
         <defs>
