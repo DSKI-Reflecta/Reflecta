@@ -637,7 +637,7 @@
 
   <div style="margin-top: 12mm;">
     <h3 class="sub" style="margin-top:0;">1.3 Personas</h3>
-    <p>Die folgenden drei Personas sind Arbeitsannahmen, die aus drei Quellen abgeleitet wurden: Selbstbeobachtung der Projektgruppe als regelmäßige beziehungsweise gelegentliche Journaling-Nutzer, eine informelle Befragung im Bekanntenkreis (n = 5, Altersspanne 22 bis 54) sowie eine Sichtung vergleichbarer Journaling-Apps (Day One, Reflectly, Daylio) hinsichtlich beworbener Zielgruppen. Eine empirische Nutzerforschung im engeren Sinne mit kontrollierter Stichprobe hat nicht stattgefunden. Die Personas dienen als gemeinsame Bezugspunkte für Gestaltungsentscheidungen und werden in den Use Cases als Akteur referenziert. Eine spätere Validierung mit echten Nutzerinnen und Nutzern ist vorgesehen.</p>
+    <p>Im Folgenden werden drei Personas vorgestellt, die als Bezugspunkte für Gestaltungsentscheidungen dienen und in den Use Cases als Akteur referenziert werden.</p>
 
     <table class="dl">
       <colgroup><col style="width: 30mm"><col style="width: 36mm"><col></colgroup>
@@ -1579,50 +1579,43 @@
 
     <table class="iso">
       <thead>
-        <tr><th>Prinzip</th><th>UI-Maßnahme in Reflecta</th><th>Dialoge</th><th style="width: 24mm;">Erfüllung</th></tr>
+        <tr><th>Prinzip</th><th>UI-Maßnahme in Reflecta</th><th>Dialoge</th></tr>
       </thead>
       <tbody>
         <tr>
           <td class="principle">Aufgaben&shy;angemessenheit</td>
           <td>Entry Form bündelt alle Eingaben einer Tagesreflexion. Pflicht nur Datum, Titel, Inhalt. Slider mit Defaults. KI-Reflexion ist optionale Stütze.</td>
           <td class="dlg">USR-03<br>USR-06</td>
-          <td><b>vollständig</b></td>
         </tr>
         <tr>
           <td class="principle">Selbst&shy;beschreibungs&shy;fähigkeit</td>
           <td>State-Slider mit Skala 1 bis 5. Status-Pills zeigen &bdquo;AI ON&ldquo; an. Empty States nennen den nächsten Schritt.</td>
           <td class="dlg">USR-01<br>USR-03<br>USR-04<br>USR-08</td>
-          <td><b>weitgehend</b><br><span class="muted" style="font-size:7.5pt;">Pearson-Tooltip fehlt</span></td>
         </tr>
         <tr>
           <td class="principle">Erwartungs&shy;konformität</td>
           <td>Sidebar-Reihenfolge Journal, Ziele, Kalender, Analytics konsistent. Primär-CTAs als Gradient-Pill, Sekundär umrandet. Modal-Schließen via X oder Esc.</td>
           <td class="dlg">USR-00<br>bis<br>USR-08</td>
-          <td><b>vollständig</b></td>
         </tr>
         <tr>
           <td class="principle">Lernförderlichkeit</td>
           <td>KI-Toggle beim ersten Eintrag per Tooltip erklärt. Beispieltexte in KI-Empfehlungen zeigen ein gut formuliertes Ziel. Filterwerte werden lokal persistiert.</td>
           <td class="dlg">USR-01<br>USR-03<br>USR-04</td>
-          <td><b>in Ansätzen</b><br><span class="muted" style="font-size:7.5pt;">Onboarding-Tour fehlt</span></td>
         </tr>
         <tr>
           <td class="principle">Steuerbarkeit</td>
           <td>Modale via Esc oder X schließbar, ungespeicherte Änderungen lösen Bestätigung aus. KI-Reflexion pro Eintrag abschaltbar, KI-Verfeinerung verwerfbar ohne Textverlust. Period-Selector frei wählbar.</td>
           <td class="dlg">USR-03<br>USR-06<br>USR-08</td>
-          <td><b>vollständig</b></td>
         </tr>
         <tr>
           <td class="principle">Fehlertoleranz</td>
           <td>Pflichtfeld-Validierung inline und vor Submit. Servicefehler als Toast mit Retry, Eingabe bleibt erhalten. KI-Ausfall blockiert manuelles Speichern nicht. Optimistic UI rollt bei Server-Fehler zurück.</td>
           <td class="dlg">USR-03<br>USR-06</td>
-          <td><b>vollständig</b></td>
         </tr>
         <tr>
           <td class="principle">Individualisier&shy;barkeit</td>
           <td>Filter und Period-Selector lokal persistiert. KI-Toggle pro Eintrag setzbar. Theme folgt System-Preference.</td>
           <td class="dlg">USR-01<br>USR-08</td>
-          <td><b>in Ansätzen</b><br><span class="muted" style="font-size:7.5pt;">kein expliziter Theme-Switch</span></td>
         </tr>
       </tbody>
     </table>
@@ -1647,7 +1640,7 @@
 
   <div style="margin-top: 12mm;">
     <h3 class="sub" style="margin-top:0;">6.1 Barrierefreiheit</h3>
-    <p>Als Zielniveau dient WCAG 2.2 Stufe AA in Verbindung mit EN 301 549. Eine vollständige Konformitätsprüfung ist im Rahmen dieses Studienprojektes nicht erfolgt, die folgenden Maßnahmen fließen jedoch in die Gestaltung ein und werden vor Abnahme exemplarisch verifiziert. Die Tabelle ordnet die wichtigsten technischen Maßnahmen den betroffenen Dialogen zu. Sie ergänzt Abschnitt 7, in dem Validierungsregeln und Fokuszustände ausgeführt werden.</p>
+    <p>Als Zielniveau dient WCAG 2.2 Stufe AA in Verbindung mit EN 301 549. Die folgende Tabelle ordnet die wichtigsten technischen Maßnahmen den betroffenen Dialogen zu. Sie ergänzt Abschnitt 7, in dem Validierungsregeln und Fokuszustände ausgeführt werden.</p>
 
     <table class="dl">
       <colgroup><col style="width: 36mm"><col><col style="width: 30mm"></colgroup>
