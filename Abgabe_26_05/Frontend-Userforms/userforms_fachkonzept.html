@@ -533,7 +533,7 @@
 
   <div class="cover-meta">
     <div class="cell"><div class="k">Projekt</div><div class="v">Reflecta</div></div>
-    <div class="cell"><div class="k">Datum</div><div class="v">24.05.2026</div></div>
+    <div class="cell"><div class="k">Datum</div><div class="v">26.05.2026</div></div>
     <div class="cell"><div class="k">Department</div><div class="v">Frontend-Userforms</div></div>
     <div class="cell"><div class="k">Mitarbeiter</div><div class="v">2990570</div></div>
   </div>
@@ -568,8 +568,8 @@
       <div class="toc-row"><div class="toc-num">6</div><div class="toc-title">ISO 9241-110:2020 Bewertung, Barrierefreiheit und Mobile-Anpassung</div><div class="toc-page">19, 20</div></div>
       <div class="toc-row"><div class="toc-num">6.1</div><div class="toc-title">Barrierefreiheit nach WCAG 2.2 AA und EN 301 549</div><div class="toc-page">20</div></div>
       <div class="toc-row"><div class="toc-num">6.2</div><div class="toc-title">Mobile-Anpassung unter 768 px</div><div class="toc-page">20</div></div>
-      <div class="toc-row"><div class="toc-num">7</div><div class="toc-title">Zustände und Validierung</div><div class="toc-page">21</div></div>
-      <div class="toc-row"><div class="toc-num">8</div><div class="toc-title">Annotierte Wireframes</div><div class="toc-page">22 bis 29</div></div>
+      <div class="toc-row"><div class="toc-num">7</div><div class="toc-title">Zustände und Validierung</div><div class="toc-page">21, 22</div></div>
+      <div class="toc-row"><div class="toc-num">8</div><div class="toc-title">Annotierte Wireframes</div><div class="toc-page">23 bis 30</div></div>
     </div>
   </div>
 
@@ -1742,39 +1742,44 @@
         <tr><td class="name">USR-08 Analytics</td><td>Globaler Empty State &bdquo;Mindestens 7 Einträge benötigt&ldquo; mit Verweis auf USR-03</td><td>Skeleton-Kacheln, graue Platzhalter-Linie</td><td>Toast plus Retry pro Sektion</td></tr>
       </tbody>
     </table>
-
-    <h3 class="sub">7.2 Validierungsregeln</h3>
-    <table class="dl">
-      <colgroup>
-        <col style="width: 32mm">
-        <col style="width: 26mm">
-        <col style="width: 14mm">
-        <col style="width: 36mm">
-        <col style="width: 22mm">
-        <col>
-      </colgroup>
-      <thead><tr><th>Form</th><th>Feld</th><th>Pflicht</th><th>Regel</th><th>Trigger</th><th>Fehlermeldung</th></tr></thead>
-      <tbody>
-        <tr><td class="name">USR-03 Entry Form</td><td>Datum</td><td>ja</td><td>gültig, nicht in Zukunft</td><td>Blur, Submit</td><td>&bdquo;Bitte ein gültiges Datum wählen&ldquo;</td></tr>
-        <tr><td class="name">USR-03</td><td>Titel</td><td>ja</td><td>1 bis 120 Zeichen</td><td>Blur, Submit</td><td>&bdquo;Titel darf nicht leer sein&ldquo;</td></tr>
-        <tr><td class="name">USR-03</td><td>Inhalt</td><td>ja</td><td>mindestens 1 Zeichen</td><td>Submit</td><td>&bdquo;Inhalt darf nicht leer sein&ldquo;</td></tr>
-        <tr><td class="name">USR-03</td><td>Sentiment</td><td>nein, Default 3</td><td>UI-seitig auf 1 bis 5 begrenzt</td><td>strukturell</td><td>nicht möglich</td></tr>
-        <tr><td class="name">USR-03</td><td>Sleep, Stress, Social</td><td>nein, Default 3</td><td>UI-seitig auf 1 bis 5 begrenzt</td><td>strukturell</td><td>nicht möglich</td></tr>
-        <tr><td class="name">USR-06 Goal Form</td><td>Beschreibung</td><td>ja</td><td>1 bis 500 Zeichen</td><td>Blur, Submit</td><td>&bdquo;Beschreibung darf nicht leer sein&ldquo;</td></tr>
-      </tbody>
-    </table>
-
-    <div class="callout-box">
-      <b>Anzeige-Konvention:</b> Inline-Fehler werden direkt unter dem betroffenen Feld in Rot eingeblendet. Toasts werden ausschließlich für Service- und Netzwerkfehler genutzt und enthalten einen Retry-Button. Validierungsfehler erzeugen keine Toasts, sondern bleiben am Feld.
-    </div>
-
-    <div class="callout-box" style="margin-top:3mm;">
-      <b>Hinweis zu den Slidern:</b> Die vier Slider (Sentiment, Sleep, Stress, Social) sind keine Pflichtfelder. Sie starten mit dem Default-Wert 3, der UI-Wertebereich 1 bis 5 ergibt sich aus den Slider-Stops.
-    </div>
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
   <div class="page-num">21</div>
+</div>
+
+<div class="page">
+  <div class="page-head">
+    <div class="brand">
+      <svg width="14" height="14" viewBox="0 0 60 60"><rect width="60" height="60" rx="14" fill="#6A0DAD"/><line x1="30" y1="10" x2="30" y2="50" stroke="white" stroke-width="2"/><path d="M20 25 Q 25 18, 30 25 Q 35 32, 40 25" stroke="white" stroke-width="2.5" fill="none"/><path d="M20 35 Q 25 42, 30 35 Q 35 28, 40 35" stroke="white" stroke-width="2.5" fill="none" opacity="0.7"/></svg>
+      Reflecta
+    </div>
+    <div>7. Zustände und Validierung</div>
+  </div>
+
+  <div style="margin-top: 12mm;">
+    <h3 class="sub" style="margin-top:0;">7.2 Validierungsregeln</h3>
+    <table class="dl">
+      <colgroup>
+        <col style="width: 32mm">
+        <col style="width: 26mm">
+        <col style="width: 42mm">
+        <col style="width: 22mm">
+        <col>
+      </colgroup>
+      <thead><tr><th>Form</th><th>Feld</th><th>Regel</th><th>Trigger</th><th>Fehlermeldung</th></tr></thead>
+      <tbody>
+        <tr><td class="name">USR-03 Entry Form</td><td>Datum</td><td>gültig, nicht in Zukunft</td><td>Blur, Submit</td><td>&bdquo;Bitte ein gültiges Datum wählen&ldquo;</td></tr>
+        <tr><td class="name">USR-03</td><td>Titel</td><td>max 120 Zeichen</td><td>Blur, Submit</td><td>&bdquo;Titel darf nicht leer sein&ldquo;</td></tr>
+        <tr><td class="name">USR-03</td><td>Inhalt</td><td>nicht leer</td><td>Submit</td><td>&bdquo;Inhalt darf nicht leer sein&ldquo;</td></tr>
+        <tr><td class="name">USR-06 Goal Form</td><td>Beschreibung</td><td>max 500 Zeichen</td><td>Blur, Submit</td><td>&bdquo;Beschreibung darf nicht leer sein&ldquo;</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
+  <div class="page-num">22</div>
 </div>
 
 <div class="page">
@@ -1890,7 +1895,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">22</div>
+  <div class="page-num">23</div>
 </div>
 
 <div class="page">
@@ -1994,7 +1999,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">23</div>
+  <div class="page-num">24</div>
 </div>
 
 <div class="page">
@@ -2108,7 +2113,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">24</div>
+  <div class="page-num">25</div>
 </div>
 
 <div class="page">
@@ -2220,7 +2225,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">25</div>
+  <div class="page-num">26</div>
 </div>
 
 <div class="page">
@@ -2305,7 +2310,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">26</div>
+  <div class="page-num">27</div>
 </div>
 
 <div class="page">
@@ -2386,7 +2391,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">27</div>
+  <div class="page-num">28</div>
 </div>
 
 <div class="page">
@@ -2526,7 +2531,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">28</div>
+  <div class="page-num">29</div>
 </div>
 
 <div class="page">
@@ -2673,7 +2678,7 @@
   </div>
 
   <div class="page-foot">Reflecta &middot; Fachkonzept User-Forms</div>
-  <div class="page-num">29</div>
+  <div class="page-num">30</div>
 </div>
 
 </body>
